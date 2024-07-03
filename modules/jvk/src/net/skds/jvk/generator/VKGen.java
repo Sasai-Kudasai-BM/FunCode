@@ -14,7 +14,10 @@ public class VKGen {
 
 	public static final Map<String, IDataType> types = new HashMap<>();
 	public static final Map<String, IEnumType> enums = new HashMap<>();
+	public static final Map<String, ICommand> commands = new HashMap<>();
 
+	public static final File EXPORT_DIR = new File("generated/jvk");
+	public static final String ROOT_PACKAGE = "net.skds.jvk";
 
 	private static void defaultType(String name, NativeTypeEnum nativeType) {
 		DataType tp = new DataType();
@@ -48,11 +51,21 @@ public class VKGen {
 		defaultType("_screen_context", NativeTypeEnum.POINTER);
 		defaultType("_screen_window", NativeTypeEnum.POINTER);
 
+
+		defaultType("ANativeWindow", NativeTypeEnum.VOID); // Android struct
+		defaultType("AHardwareBuffer", NativeTypeEnum.VOID); // Android struct
+		defaultType("CAMetalLayer", NativeTypeEnum.VOID); // OBJC
+
+		defaultType("VkSampleMask", NativeTypeEnum.UINT32_T);
+		defaultType("VkBool32", NativeTypeEnum.UINT32_T);
 		defaultType("VkFlags", NativeTypeEnum.UINT32_T);
 		defaultType("VkFlags64", NativeTypeEnum.UINT64_T);
+		defaultType("VkDeviceSize", NativeTypeEnum.UINT64_T);
+		defaultType("VkDeviceAddress", NativeTypeEnum.UINT64_T);
+		defaultType("VkRemoteAddressNV", NativeTypeEnum.POINTER);
 
 		for (NativeTypeEnum nt : NativeTypeEnum.values()) {
-			defaultType(nt.name().toLowerCase(), nt);
+			types.put(nt.getName(), nt);
 		}
 	}
 
@@ -77,12 +90,38 @@ public class VKGen {
 		types.put(dt.name, dt);
 	}
 
+	private static void structType(Element e) {
+		IStruct struct = Struct.create(e);
+		types.put(struct.getName(), struct);
+	}
+
+	private static void unionType(Element e) {
+		Union union = new Union(e);
+		types.put(union.getName(), union);
+	}
+
+	private static void bitmaskType(Element e) {
+
+		String alias = e.getAttribute("alias");
+		if (!alias.isEmpty()) {
+			IDataType type = new DataType.Aliased(alias, e.getAttribute("name"));
+			types.put(type.getName(), type);
+			return;
+		}
+
+		IDataType type = VKGen.types.get(e.getElementsByTagName("type").item(0).getTextContent());
+		String name = e.getElementsByTagName("name").item(0).getTextContent();
+
+		RefType dt = new RefType(type, name);
+		types.put(dt.getName(), dt);
+	}
+
 	public static void main(String[] args) throws Exception {
 
 		addDefaultTypes();
 
 		DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-		Document doc = builder.parse(new File("C:/VulkanSDK/1.3.216.0/share/vulkan/registry/vk.xml"));
+		Document doc = builder.parse(new File("vk.xml"));
 		doc.normalize();
 
 		NodeList nl = doc.getDocumentElement().getElementsByTagName("enums");
@@ -90,8 +129,8 @@ public class VKGen {
 			var n = nl.item(i);
 			if (n instanceof Element e) {
 				var t = EnumType.create(e);
-				types.put(t.name(), t);
-				enums.put(t.name(), t);
+				types.put(t.getName(), t);
+				enums.put(t.getName(), t);
 			}
 		}
 
@@ -103,16 +142,39 @@ public class VKGen {
 				switch (category) {
 					case "handle" -> handleType(e);
 					case "funcpointer" -> fpnType(e);
+					case "struct" -> structType(e);
+					case "union" -> unionType(e);
+					case "bitmask" -> bitmaskType(e);
 				}
 			}
 		}
 
-		for (IDataType et : types.values()) {
-			System.out.println(et);
-
-			//for (EnumType.Value v : et.values()) {
-			//	System.out.println("\t" + v);
-			//}
+		nl = ((Element) doc.getDocumentElement().getElementsByTagName("commands").item(0)).getElementsByTagName("command");
+		for (int i = 0; i < nl.getLength(); i++) {
+			var n = nl.item(i);
+			if (n instanceof Element e) {
+				ICommand command = VKCommand.create(e);
+				commands.put(command.name(), command);
+			}
 		}
+
+		//for (IDataType t : types.values()) {
+		//	try {
+		//		t.toString();
+		//	} catch (Exception e) {
+		//		System.out.println(t.getName());
+		//		System.out.println(e);
+		//	}
+		//}
+		//for (var c : commands.values()) {
+		//	System.out.println(c);
+		//}
+		//for (IDataType et : types.values()) {
+		//	System.out.println(et);
+		//	et.generate();
+		//	//for (EnumType.Value v : et.values()) {
+		//	//	System.out.println("\t" + v);
+		//	//}
+		//}
 	}
 }

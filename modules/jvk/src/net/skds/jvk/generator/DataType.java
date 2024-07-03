@@ -9,7 +9,7 @@ public class DataType implements IDataType {
 	protected NativeTypeEnum nativeType;
 
 	@Override
-	public String name() {
+	public String getName() {
 		return name;
 	}
 
@@ -25,9 +25,8 @@ public class DataType implements IDataType {
 
 	@Override
 	public int size() {
-		return nativeType.byteSize();
+		return nativeType.size();
 	}
-
 
 	@Override
 	public String toString() {
@@ -41,6 +40,7 @@ public class DataType implements IDataType {
 		final String name;
 		IDataType parent;
 
+
 		protected IDataType getParent() {
 			if (parent == null) {
 				parent = VKGen.types.get(alias);
@@ -49,7 +49,7 @@ public class DataType implements IDataType {
 		}
 
 		@Override
-		public String name() {
+		public String getName() {
 			return name;
 		}
 

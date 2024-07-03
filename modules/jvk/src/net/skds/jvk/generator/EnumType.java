@@ -72,8 +72,7 @@ public class EnumType extends DataType implements IEnumType {
 
 		return et;
 	}
-
-
+	
 	@Override
 	public boolean isBitmask() {
 		return isBitmask;

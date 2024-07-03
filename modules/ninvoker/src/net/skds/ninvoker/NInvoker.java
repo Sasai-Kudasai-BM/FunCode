@@ -13,13 +13,13 @@ import java.nio.ByteOrder;
 import java.nio.charset.Charset;
 
 /*
-	--add-exports
-	java.desktop/jdk.internal.misc=ALL-UNNAMED
-	--add-exports
-	java.desktop/sun.awt=ALL-UNNAMED
-	--add-exports
-	java.desktop/sun.awt.windows=ALL-UNNAMED
-	--enable-native-access=ALL-UNNAMED
+--add-exports
+java.base/jdk.internal.misc=ALL-UNNAMED
+--add-exports
+java.desktop/sun.awt=ALL-UNNAMED
+--add-exports
+java.desktop/sun.awt.windows=ALL-UNNAMED
+--enable-native-access=ALL-UNNAMED
  */
 public final class NInvoker {
 

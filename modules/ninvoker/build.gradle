@@ -7,7 +7,7 @@ dependencies {
 }
 
 compileJava {
-    options.compilerArgs.addAll(["--add-exports", "java.desktop/jdk.internal.misc=ALL-UNNAMED"])
+    options.compilerArgs.addAll(["--add-exports", "java.base/jdk.internal.misc=ALL-UNNAMED"])
     options.compilerArgs.addAll(["--add-exports", "java.desktop/sun.awt=ALL-UNNAMED"])
     options.compilerArgs.addAll(["--add-exports", "java.desktop/sun.awt.windows=ALL-UNNAMED"])
 }

@@ -2,7 +2,7 @@ package net.skds.jvk.generator;
 
 public interface IDataType {
 
-	String name();
+	String getName();
 
 	String comment();
 
@@ -11,6 +11,9 @@ public interface IDataType {
 	int size();
 
 	default String className() {
-		return "class " + name();
+		return "class " + getName();
+	}
+
+	default void generate() {
 	}
 }

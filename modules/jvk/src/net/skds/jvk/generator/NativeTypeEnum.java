@@ -1,13 +1,14 @@
 package net.skds.jvk.generator;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
-@AllArgsConstructor
-public enum NativeTypeEnum {
+@RequiredArgsConstructor
+public enum NativeTypeEnum implements IDataType {
 	INT8_T(JavaTypeEnum.BYTE),
 	UINT8_T(JavaTypeEnum.BYTE),
 	CHAR(JavaTypeEnum.BYTE),
 	INT16_T(JavaTypeEnum.SHORT),
+	INT(JavaTypeEnum.SHORT),
 	UINT16_T(JavaTypeEnum.SHORT),
 	INT32_T(JavaTypeEnum.INT),
 	UINT32_T(JavaTypeEnum.INT),
@@ -22,11 +23,33 @@ public enum NativeTypeEnum {
 
 	public final JavaTypeEnum javaType;
 
+	private final String name = name().toLowerCase();
+
 	public int byteSize() {
 		return javaType.byteSize;
 	}
 
 	public Object parse(String value) {
 		return javaType.parse(value);
+	}
+
+	@Override
+	public String comment() {
+		return "";
+	}
+
+	@Override
+	public String getName() {
+		return name;
+	}
+
+	@Override
+	public NativeTypeEnum nativeType() {
+		return this;
+	}
+
+	@Override
+	public int size() {
+		return javaType.byteSize;
 	}
 }
