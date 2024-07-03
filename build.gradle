@@ -1,0 +1,81 @@
+version = project.version
+
+allprojects {
+    apply plugin: 'java'
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(22)
+        }
+    }
+}
+
+subprojects {
+    //build {
+    //}
+    sourceSets {
+        main {
+            java.srcDir 'src'
+            resources.srcDir 'resources'
+        }
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        implementation("com.google.code.gson:gson:2.10.1")
+        //implementation("it.unimi.dsi:fastutil:8.5.6")
+        compileOnly 'org.projectlombok:lombok:1.18.32'
+        annotationProcessor 'org.projectlombok:lombok:1.18.32'
+    }
+}
+
+sourceSets {
+    main {
+        resources {
+            srcDirs = ["src/main/resources"]
+            exclude "java/**"
+        }
+    }
+}
+
+//dependsOn "build"
+
+tasks.register('buildAll') {
+    group "custom"
+    dependsOn "clean", subprojects.tasks.build
+    subprojects.forEach {
+        Project p = it;
+        p.tasks.jar {
+            manifest {
+                attributes(
+                        "Main-Class": p.property("mainClass"),
+                        //'Class-Path': configurations.runtimeClasspath.files.collect { "lib/" + it.name }.join(' ')
+                        'Class-Path': p.configurations.runtimeClasspath.collect { "lib/" + it.name }.join(' ')
+                )
+            }
+            destinationDirectory.set(file("out/" + p.name))
+        }.doLast {
+            copy {
+                from p.configurations.runtimeClasspath
+                into "out/" + p.name + "/lib"
+            }
+        }
+    }
+}
+
+//jar {
+//    from {
+//        Set<?> set = new HashSet<>();
+//        set.addAll(project("skydex").sourceSets.main.output);
+//        set.addAll(project("skdslib").sourceSets.main.output);
+//        set.addAll(project("sdauthdb").sourceSets.main.output);
+//        return set;
+//    }
+//    manifest {
+//        attributes(
+//                "Main-Class": "net.skds.skydex.SkyDexServer",
+//                //'Class-Path': configurations.runtimeClasspath.files.collect { "lib/" + it.name }.join(' ')
+//                'Class-Path': new File("build/libs/lib").list().collect { "lib/" + it }.join(' ')
+//        )
+//    }
+//}

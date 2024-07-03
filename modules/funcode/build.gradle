@@ -1,0 +1,41 @@
+version = "1.0"
+group = "net.skds"
+archivesBaseName = "FunCode"
+
+project.ext.lwjglVersion = "3.3.3"
+project.ext.lwjglNatives = "natives-windows"
+
+dependencies {
+
+    implementation project(':skdslib')
+    implementation project(':ninvoker')
+
+    implementation 'com.fazecast:jSerialComm:[2.0.0,3.0.0)'
+
+    //implementation platform("org.lwjgl:lwjgl-bom:$lwjglVersion")
+    //implementation "org.lwjgl:lwjgl"
+    ////implementation "org.lwjgl:lwjgl-glfw"
+    ////implementation "org.lwjgl:lwjgl-openal"
+    //implementation "org.lwjgl:lwjgl-stb"
+    ////implementation "org.lwjgl:lwjgl-vulkan"
+    ////implementation "org.lwjgl:lwjgl-shaderc"
+    //runtimeOnly "org.lwjgl:lwjgl::$lwjglNatives"
+    ////runtimeOnly "org.lwjgl:lwjgl-glfw::$lwjglNatives"
+    ////runtimeOnly "org.lwjgl:lwjgl-openal::$lwjglNatives"
+    //runtimeOnly "org.lwjgl:lwjgl-stb::$lwjglNatives"
+    ////runtimeOnly "org.lwjgl:lwjgl-shaderc::$lwjglNatives"
+}
+
+
+compileJava {
+    //options.compilerArgs.addAll(['--enable-preview'])
+    //options.compilerArgs.addAll(['--add-modules', 'jdk.incubator.vector'])
+    //options.compilerArgs.addAll(['--add-modules', 'jdk.incubator.foreign'])
+    //options.compilerArgs.addAll(['--add-exports', 'jdk.incubator.foreign/jdk.internal.foreign=ALL-UNNAMED'])
+
+    //options.compilerArgs.addAll(["--add-exports", "java.desktop/sun.awt.image=ALL-UNNAMED"])
+    //options.compilerArgs.addAll(["--add-exports", "java.desktop/sun.java2d=ALL-UNNAMED"])
+
+    options.compilerArgs.addAll(["--add-exports", "java.desktop/sun.awt=ALL-UNNAMED"])
+    options.compilerArgs.addAll(["--add-exports", "java.desktop/sun.awt.windows=ALL-UNNAMED"])
+}

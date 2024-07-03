@@ -1,0 +1,13 @@
+version = "1.0"
+group = "net.skds"
+
+dependencies {
+
+    implementation project(':skdslib')
+    implementation project(':ninvoker')
+}
+
+compileJava {
+    options.compilerArgs.addAll(["--add-exports", "java.desktop/sun.awt=ALL-UNNAMED"])
+    options.compilerArgs.addAll(["--add-exports", "java.desktop/sun.awt.windows=ALL-UNNAMED"])
+}

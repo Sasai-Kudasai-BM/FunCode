@@ -1,0 +1,9 @@
+version = "1.0"
+group = "net.skds"
+
+dependencies {
+
+    compileOnly project(':skdslib')
+    runtimeOnly project(':skdslib')
+}
+
