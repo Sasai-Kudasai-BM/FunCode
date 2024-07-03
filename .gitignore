@@ -1,17 +1,17 @@
 # Ignore Gradle project-specific cache directory
 .gradle
+.idea
 
 # Ignore Gradle build output directory
 build
 bin
 dat
 *.log
+*.hprof
+*.hwcache
 runModelConverter
 # run/maps
-run/rp
-run/auth
-run/generated
-run/config
+run
 run-web/updates/launcher/java
 run-launcher
 out
