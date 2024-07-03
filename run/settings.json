@@ -1,9 +1,0 @@
-{
-	"inputName": "Main Mic",
-	"outputName2": "Main out",
-	"outputName": "CABLE Input",
-	"bits": 16,
-	"channels": 1,
-	"frequency": 48000,
-	"samples": 2048
-}
