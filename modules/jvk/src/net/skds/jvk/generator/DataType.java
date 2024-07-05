@@ -43,7 +43,7 @@ public class DataType implements IDataType {
 
 		protected IDataType getParent() {
 			if (parent == null) {
-				parent = VKGen.types.get(alias);
+				parent = VKGen.getDataType(alias);
 			}
 			return parent;
 		}

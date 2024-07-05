@@ -1,0 +1,153 @@
+<div id="content" class="loadable">
+    <script>hideLoadableContent();</script>
+    <div class="sect1">
+        <h2 id="_c_specification"><a class="anchor" href="#_c_specification"></a>C Specification</h2>
+        <div class="sectionbody">
+            <div class="paragraph">
+                <p>If the <code>pNext</code> chain of <a href="VkMemoryAllocateInfo.html">VkMemoryAllocateInfo</a>
+                    includes a
+                    <code>VkMemoryAllocateFlagsInfo</code> structure, then that structure includes
+                    flags and a device mask controlling how many instances of the memory will be
+                    allocated.</p>
+            </div>
+            <div class="paragraph">
+                <p>The <code>VkMemoryAllocateFlagsInfo</code> structure is defined as:</p>
+            </div>
+            <div id="VkMemoryAllocateFlagsInfo" class="listingblock">
+                <div class="content">
+<pre class="highlight"><code class="language-c++" data-lang="c++">// Provided by VK_VERSION_1_1
+typedef struct VkMemoryAllocateFlagsInfo {
+    VkStructureType          sType;
+    const void*              pNext;
+    VkMemoryAllocateFlags    flags;
+    uint32_t                 deviceMask;
+} VkMemoryAllocateFlagsInfo;</code></pre>
+                </div>
+            </div>
+            <div class="paragraph">
+                <p>or the equivalent</p>
+            </div>
+            <div id="VkMemoryAllocateFlagsInfoKHR" class="listingblock">
+                <div class="content">
+<pre class="highlight"><code class="language-c++" data-lang="c++">// Provided by VK_KHR_device_group
+typedef VkMemoryAllocateFlagsInfo VkMemoryAllocateFlagsInfoKHR;</code></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="sect1">
+        <h2 id="_members"><a class="anchor" href="#_members"></a>Members</h2>
+        <div class="sectionbody">
+            <div class="ulist">
+                <ul>
+                    <li>
+                        <p><code>sType</code> is a <a href="VkStructureType.html">VkStructureType</a> value identifying
+                            this structure.</p>
+                    </li>
+                    <li>
+                        <p><code>pNext</code> is <code>NULL</code> or a pointer to a structure extending this
+                            structure.</p>
+                    </li>
+                    <li>
+                        <p><code>flags</code> is a bitmask of <a href="VkMemoryAllocateFlagBits.html">VkMemoryAllocateFlagBits</a>
+                            controlling
+                            the allocation.</p>
+                    </li>
+                    <li>
+                        <p><code>deviceMask</code> is a mask of physical devices in the logical device,
+                            indicating that memory <strong class="purple">must</strong> be allocated on each device in
+                            the mask, if
+                            <code>VK_MEMORY_ALLOCATE_DEVICE_MASK_BIT</code> is set in <code>flags</code>.</p>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="sect1">
+        <h2 id="_description"><a class="anchor" href="#_description"></a>Description</h2>
+        <div class="sectionbody">
+            <div class="paragraph">
+                <p>If <code>VK_MEMORY_ALLOCATE_DEVICE_MASK_BIT</code> is not set, the number of
+                    instances allocated depends on whether
+                    <code>VK_MEMORY_HEAP_MULTI_INSTANCE_BIT</code> is set in the memory heap.
+                    If <code>VK_MEMORY_HEAP_MULTI_INSTANCE_BIT</code> is set, then memory is allocated
+                    for every physical device in the logical device (as if <code>deviceMask</code> has
+                    bits set for all device indices).
+                    If <code>VK_MEMORY_HEAP_MULTI_INSTANCE_BIT</code> is not set, then a single
+                    instance of memory is allocated (as if <code>deviceMask</code> is set to one).</p>
+            </div>
+            <div class="paragraph">
+                <p>On some implementations, allocations from a multi-instance heap <strong class="purple">may</strong>
+                    consume
+                    memory on all physical devices even if the <code>deviceMask</code> excludes some
+                    devices.
+                    If <a href="VkPhysicalDeviceGroupProperties.html">VkPhysicalDeviceGroupProperties</a>::<code>subsetAllocation</code>
+                    is
+                    <code>VK_TRUE</code>, then memory is only consumed for the devices in the device
+                    mask.</p>
+            </div>
+            <div class="admonitionblock note">
+                <table>
+                    <tr>
+                        <td class="icon">
+                            <i class="fa icon-note" title="Note"></i>
+                        </td>
+                        <td class="content">
+                            <div class="title">Note</div>
+                            <div class="paragraph">
+                                <p>In practice, most allocations on a multi-instance heap will be allocated
+                                    across all physical devices.
+                                    Unicast allocation support is an optional optimization for a minority of
+                                    allocations.</p>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="sidebarblock">
+                <div class="content">
+                    <div class="title">Valid Usage</div>
+                    <div class="ulist">
+                        <ul>
+                            <li>
+                                <p><a id="VUID-VkMemoryAllocateFlagsInfo-deviceMask-00675"
+                                      href="#VUID-VkMemoryAllocateFlagsInfo-deviceMask-00675"></a> <span class="vuid">VUID-VkMemoryAllocateFlagsInfo-deviceMask-00675</span><br>
+
+                                    If <code>VK_MEMORY_ALLOCATE_DEVICE_MASK_BIT</code> is set, <code>deviceMask</code>
+                                    <strong class="purple">must</strong> be a valid device mask</p>
+                            </li>
+                            <li>
+                                <p><a id="VUID-VkMemoryAllocateFlagsInfo-deviceMask-00676"
+                                      href="#VUID-VkMemoryAllocateFlagsInfo-deviceMask-00676"></a> <span class="vuid">VUID-VkMemoryAllocateFlagsInfo-deviceMask-00676</span><br>
+
+                                    If <code>VK_MEMORY_ALLOCATE_DEVICE_MASK_BIT</code> is set, <code>deviceMask</code>
+                                    <strong class="purple">must</strong> not be zero</p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="sidebarblock">
+                <div class="content">
+                    <div class="title">Valid Usage (Implicit)</div>
+                    <div class="ulist">
+                        <ul>
+                            <li>
+                                <p><a id="VUID-VkMemoryAllocateFlagsInfo-sType-sType"
+                                      href="#VUID-VkMemoryAllocateFlagsInfo-sType-sType"></a> <span class="vuid">VUID-VkMemoryAllocateFlagsInfo-sType-sType</span><br>
+                                    <code>sType</code> <strong class="purple">must</strong> be <code>VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_FLAGS_INFO</code>
+                                </p>
+                            </li>
+                            <li>
+                                <p><a id="VUID-VkMemoryAllocateFlagsInfo-flags-parameter"
+                                      href="#VUID-VkMemoryAllocateFlagsInfo-flags-parameter"></a> <span class="vuid">VUID-VkMemoryAllocateFlagsInfo-flags-parameter</span><br>
+                                    <code>flags</code> <strong class="purple">must</strong> be a valid combination of <a
+                                            href="VkMemoryAllocateFlagBits.html">VkMemoryAllocateFlagBits</a> values</p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

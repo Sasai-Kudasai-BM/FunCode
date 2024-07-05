@@ -1,13 +1,6 @@
 package net.skds.jvk.generator;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-
-@RequiredArgsConstructor
-public class PointerType implements IDataType {
-
-	@Getter
-	private final IDataType pnt;
+public record PointerType(IDataType pnt) implements IDataType {
 
 	@Override
 	public String getName() {

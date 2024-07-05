@@ -27,7 +27,7 @@ public class VKCommand implements ICommand {
 		Element prt = (Element) e.getElementsByTagName("proto").item(0);
 
 		command.name = prt.getElementsByTagName("name").item(0).getTextContent();
-		command.returnType = VKGen.types.get(prt.getElementsByTagName("type").item(0).getTextContent());
+		command.returnType = VKGen.getDataType(prt.getElementsByTagName("type").item(0).getTextContent());
 
 		String successCodes = e.getAttribute("successcodes");
 		if (!successCodes.isEmpty()) {
@@ -50,7 +50,7 @@ public class VKCommand implements ICommand {
 				continue;
 			}
 
-			IDataType at = VKGen.types.get(tp.item(0).getTextContent());
+			IDataType at = VKGen.getDataType(tp.item(0).getTextContent());
 			if (param.getTextContent().contains("*")) {
 				at = new PointerType(at);
 			}

@@ -1,0 +1,136 @@
+<div>
+    <div>
+        <h2>C Specification</h2>
+        <div>
+            <div>
+                <p>If the <code>pNext</code> chain of <a href="VkMemoryAllocateInfo.html">VkMemoryAllocateInfo</a>
+                    includes a <code>VkMemoryAllocateFlagsInfo</code> structure, then that structure includes flags and
+                    a device mask controlling how many instances of the memory will be allocated.</p>
+            </div>
+            <div>
+                <p>The <code>VkMemoryAllocateFlagsInfo</code> structure is defined as:</p>
+            </div>
+            <div>
+                <div>
+<pre><code data-lang="c++">// Provided by VK_VERSION_1_1
+typedef struct VkMemoryAllocateFlagsInfo {
+ VkStructureType sType;
+ const void* pNext;
+ VkMemoryAllocateFlags flags;
+ uint32_t deviceMask;
+} VkMemoryAllocateFlagsInfo;</code></pre>
+                </div>
+            </div>
+            <div>
+                <p>or the equivalent</p>
+            </div>
+            <div>
+                <div>
+<pre><code data-lang="c++">// Provided by VK_KHR_device_group
+typedef VkMemoryAllocateFlagsInfo VkMemoryAllocateFlagsInfoKHR;</code></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        <h2>Members</h2>
+        <div>
+            <div>
+                <ul>
+                    <li>
+                        <p><code>sType</code> is a <a href="VkStructureType.html">VkStructureType</a> value identifying
+                            this structure.</p>
+                    </li>
+                    <li>
+                        <p><code>pNext</code> is <code>NULL</code> or a pointer to a structure extending this structure.
+                        </p>
+                    </li>
+                    <li>
+                        <p><code>flags</code> is a bitmask of <a href="VkMemoryAllocateFlagBits.html">VkMemoryAllocateFlagBits</a>
+                            controlling the allocation.</p>
+                    </li>
+                    <li>
+                        <p><code>deviceMask</code> is a mask of physical devices in the logical device, indicating that
+                            memory <strong>must</strong> be allocated on each device in the mask, if <code>VK_MEMORY_ALLOCATE_DEVICE_MASK_BIT</code>
+                            is set in <code>flags</code>.</p>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div>
+        <h2>Description</h2>
+        <div>
+            <div>
+                <p>If <code>VK_MEMORY_ALLOCATE_DEVICE_MASK_BIT</code> is not set, the number of instances allocated
+                    depends on whether <code>VK_MEMORY_HEAP_MULTI_INSTANCE_BIT</code> is set in the memory heap. If
+                    <code>VK_MEMORY_HEAP_MULTI_INSTANCE_BIT</code> is set, then memory is allocated for every physical
+                    device in the logical device (as if <code>deviceMask</code> has bits set for all device indices). If
+                    <code>VK_MEMORY_HEAP_MULTI_INSTANCE_BIT</code> is not set, then a single instance of memory is
+                    allocated (as if <code>deviceMask</code> is set to one).</p>
+            </div>
+            <div>
+                <p>On some implementations, allocations from a multi-instance heap <strong>may</strong> consume memory
+                    on all physical devices even if the <code>deviceMask</code> excludes some devices. If <a
+                            href="VkPhysicalDeviceGroupProperties.html">VkPhysicalDeviceGroupProperties</a>::<code>subsetAllocation</code>
+                    is <code>VK_TRUE</code>, then memory is only consumed for the devices in the device mask.</p>
+            </div>
+            <div>
+                <table>
+                    <tbody>
+                    <tr>
+                        <td>
+                            <div>Note</div>
+                            <div>
+                                <p>In practice, most allocations on a multi-instance heap will be allocated across all
+                                    physical devices. Unicast allocation support is an optional optimization for a
+                                    minority of allocations.</p>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div>
+                <div>
+                    <div>Valid Usage</div>
+                    <div>
+                        <ul>
+                            <li>
+                                <p><a href="#VUID-VkMemoryAllocateFlagsInfo-deviceMask-00675"></a>
+                                    VUID-VkMemoryAllocateFlagsInfo-deviceMask-00675<br/> If <code>VK_MEMORY_ALLOCATE_DEVICE_MASK_BIT</code>
+                                    is set, <code>deviceMask</code> <strong>must</strong> be a valid device mask</p>
+                            </li>
+                            <li>
+                                <p><a href="#VUID-VkMemoryAllocateFlagsInfo-deviceMask-00676"></a>
+                                    VUID-VkMemoryAllocateFlagsInfo-deviceMask-00676<br/> If <code>VK_MEMORY_ALLOCATE_DEVICE_MASK_BIT</code>
+                                    is set, <code>deviceMask</code> <strong>must</strong> not be zero</p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div>
+                    <div>Valid Usage (Implicit)</div>
+                    <div>
+                        <ul>
+                            <li>
+                                <p><a href="#VUID-VkMemoryAllocateFlagsInfo-sType-sType"></a>
+                                    VUID-VkMemoryAllocateFlagsInfo-sType-sType<br/> <code>sType</code>
+                                    <strong>must</strong> be <code>VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_FLAGS_INFO</code>
+                                </p>
+                            </li>
+                            <li>
+                                <p><a href="#VUID-VkMemoryAllocateFlagsInfo-flags-parameter"></a>
+                                    VUID-VkMemoryAllocateFlagsInfo-flags-parameter<br/> <code>flags</code>
+                                    <strong>must</strong> be a valid combination of <a
+                                            href="VkMemoryAllocateFlagBits.html">VkMemoryAllocateFlagBits</a> values</p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

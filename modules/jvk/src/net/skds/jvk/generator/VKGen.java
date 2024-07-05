@@ -8,9 +8,13 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
+import java.util.Queue;
 
 public class VKGen {
+
+	private static final Queue<Runnable> tasks = new LinkedList<>();
 
 	public static final Map<String, IDataType> types = new HashMap<>();
 	public static final Map<String, IEnumType> enums = new HashMap<>();
@@ -51,6 +55,37 @@ public class VKGen {
 		defaultType("_screen_context", NativeTypeEnum.POINTER);
 		defaultType("_screen_window", NativeTypeEnum.POINTER);
 
+		// std video
+		defaultType("StdVideoH264ProfileIdc", NativeTypeEnum.VOID);
+		defaultType("StdVideoH264Level", NativeTypeEnum.VOID);
+		defaultType("StdVideoH264SequenceParameterSet", NativeTypeEnum.VOID);
+		defaultType("StdVideoH264PictureParameterSet", NativeTypeEnum.VOID);
+		defaultType("StdVideoDecodeH264PictureInfo", NativeTypeEnum.VOID);
+		defaultType("StdVideoDecodeH264ReferenceInfo", NativeTypeEnum.VOID);
+		defaultType("StdVideoDecodeH264Mvc", NativeTypeEnum.VOID);
+		defaultType("StdVideoH265ProfileIdc", NativeTypeEnum.VOID);
+		defaultType("StdVideoH265Level", NativeTypeEnum.VOID);
+		defaultType("StdVideoH265VideoParameterSet", NativeTypeEnum.VOID);
+		defaultType("StdVideoH265SequenceParameterSet", NativeTypeEnum.VOID);
+		defaultType("StdVideoH265PictureParameterSet", NativeTypeEnum.VOID);
+		defaultType("StdVideoDecodeH265PictureInfo", NativeTypeEnum.VOID);
+		defaultType("StdVideoDecodeH265ReferenceInfo", NativeTypeEnum.VOID);
+		defaultType("StdVideoH264SequenceParameterSet", NativeTypeEnum.VOID);
+		defaultType("StdVideoH264PictureParameterSet", NativeTypeEnum.VOID);
+		defaultType("StdVideoEncodeH264ReferenceInfo", NativeTypeEnum.VOID);
+		defaultType("StdVideoEncodeH264PictureInfo", NativeTypeEnum.VOID);
+		defaultType("StdVideoEncodeH264RefMemMgmtCtrlOperations", NativeTypeEnum.VOID);
+		defaultType("StdVideoH264ProfileIdc", NativeTypeEnum.VOID);
+		defaultType("StdVideoEncodeH264SliceHeader", NativeTypeEnum.VOID);
+		defaultType("StdVideoH265VideoParameterSet", NativeTypeEnum.VOID);
+		defaultType("StdVideoH265SequenceParameterSet", NativeTypeEnum.VOID);
+		defaultType("StdVideoH265PictureParameterSet", NativeTypeEnum.VOID);
+		defaultType("StdVideoEncodeH265PictureInfo", NativeTypeEnum.VOID);
+		defaultType("StdVideoEncodeH265SliceSegmentHeader", NativeTypeEnum.VOID);
+		defaultType("StdVideoH265ProfileIdc", NativeTypeEnum.VOID);
+		defaultType("StdVideoEncodeH265ReferenceInfo", NativeTypeEnum.VOID);
+		defaultType("StdVideoEncodeH265ReferenceModifications", NativeTypeEnum.VOID);
+		//
 
 		defaultType("ANativeWindow", NativeTypeEnum.VOID); // Android struct
 		defaultType("AHardwareBuffer", NativeTypeEnum.VOID); // Android struct
@@ -69,6 +104,18 @@ public class VKGen {
 		}
 	}
 
+	public static void addTask(Runnable task) {
+		tasks.add(task);
+	}
+
+	public static String filterName(String nane) {
+		return nane.replace("\t", "").replace(" ", "").replace("\n", "");
+	}
+
+	public static IDataType getDataType(String nane) {
+		return types.get(filterName(nane));
+	}
+
 	private static void handleType(Element e) {
 		String alias = e.getAttribute("alias");
 		if (!alias.isEmpty()) {
@@ -78,14 +125,14 @@ public class VKGen {
 			return;
 		}
 		DataType dt = new DataType();
-		dt.name = e.getElementsByTagName("name").item(0).getTextContent();
+		dt.name = filterName(e.getElementsByTagName("name").item(0).getTextContent());
 		dt.nativeType = NativeTypeEnum.POINTER;
 		types.put(dt.name, dt);
 	}
 
 	private static void fpnType(Element e) {
 		DataType dt = new DataType();
-		dt.name = e.getElementsByTagName("name").item(0).getTextContent();
+		dt.name = filterName(e.getElementsByTagName("name").item(0).getTextContent());
 		dt.nativeType = NativeTypeEnum.POINTER;
 		types.put(dt.name, dt);
 	}
@@ -95,10 +142,25 @@ public class VKGen {
 		types.put(struct.getName(), struct);
 	}
 
+	private static void enumType(Element e) {
+		if (e.hasAttribute("alias")) {
+			var t = EnumType.create(e);
+			types.put(t.getName(), t);
+			enums.put(t.getName(), t);
+		}
+	}
+
 	private static void unionType(Element e) {
 		Union union = new Union(e);
 		types.put(union.getName(), union);
 	}
+
+	private static void flushTasks() {
+		for (Runnable r; (r = tasks.poll()) != null; ) {
+			r.run();
+		}
+	}
+
 
 	private static void bitmaskType(Element e) {
 
@@ -109,8 +171,8 @@ public class VKGen {
 			return;
 		}
 
-		IDataType type = VKGen.types.get(e.getElementsByTagName("type").item(0).getTextContent());
-		String name = e.getElementsByTagName("name").item(0).getTextContent();
+		IDataType type = VKGen.getDataType(e.getElementsByTagName("type").item(0).getTextContent());
+		String name = VKGen.filterName(e.getElementsByTagName("name").item(0).getTextContent());
 
 		RefType dt = new RefType(type, name);
 		types.put(dt.getName(), dt);
@@ -145,9 +207,16 @@ public class VKGen {
 					case "struct" -> structType(e);
 					case "union" -> unionType(e);
 					case "bitmask" -> bitmaskType(e);
+					case "enum" -> enumType(e);
 				}
 			}
 		}
+
+		flushTasks();
+
+		types.forEach((n, t) -> {
+
+		});
 
 		nl = ((Element) doc.getDocumentElement().getElementsByTagName("commands").item(0)).getElementsByTagName("command");
 		for (int i = 0; i < nl.getLength(); i++) {
@@ -166,9 +235,9 @@ public class VKGen {
 		//		System.out.println(e);
 		//	}
 		//}
-		//for (var c : commands.values()) {
-		//	System.out.println(c);
-		//}
+		for (var c : commands.values()) {
+			System.out.println(c);
+		}
 		//for (IDataType et : types.values()) {
 		//	System.out.println(et);
 		//	et.generate();

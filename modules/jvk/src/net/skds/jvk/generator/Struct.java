@@ -19,34 +19,35 @@ public class Struct extends DataType implements IStruct {
 		Struct struct = new Struct();
 		struct.name = name;
 
-		var members = e.getElementsByTagName("member");
-		for (int i = 0; i < members.getLength(); i++) {
-			Element member = (Element) members.item(i);
-			StringBuilder mc = new StringBuilder();
+		VKGen.addTask(() -> {
+			var members = e.getElementsByTagName("member");
+			for (int i = 0; i < members.getLength(); i++) {
+				Element member = (Element) members.item(i);
+				StringBuilder mc = new StringBuilder();
 
-			boolean optional = member.hasAttribute("optional");
-			if (optional) {
-				mc.append("optional");
-			}
-			String values = member.getAttribute("values");
-			if (!values.isEmpty()) {
-				if (!mc.isEmpty()) {
-					mc.append(", ");
+				boolean optional = member.hasAttribute("optional");
+				if (optional) {
+					mc.append("optional");
 				}
-				mc.append("values = ").append(values);
-			}
-			IDataType st = VKGen.types.get(member.getElementsByTagName("type").item(0).getTextContent());
-			if (st == null) {
-				System.out.println(member.getElementsByTagName("type").item(0).getTextContent());
-			}
-			if (member.getTextContent().contains("*")) {
-				st = new PointerType(st);
-			}
-			String sn = member.getElementsByTagName("name").item(0).getTextContent();
+				String values = member.getAttribute("values");
+				if (!values.isEmpty()) {
+					if (!mc.isEmpty()) {
+						mc.append(", ");
+					}
+					mc.append("values = ").append(values);
+				}
+				IDataType st = VKGen.getDataType(member.getElementsByTagName("type").item(0).getTextContent());
+				if (st == null) {
+					System.out.println(member.getElementsByTagName("type").item(0).getTextContent());
+				}
+				if (member.getTextContent().contains("*")) {
+					st = new PointerType(st);
+				}
+				String sn = member.getElementsByTagName("name").item(0).getTextContent();
 
-			struct.members.add(new StructMember(sn, st, mc.toString()));
-		}
-
+				struct.members.add(new StructMember(sn, st, mc.toString()));
+			}
+		});
 		return struct;
 	}
 
@@ -59,7 +60,7 @@ public class Struct extends DataType implements IStruct {
 		@Override
 		protected IStruct getParent() {
 			if (parent == null) {
-				parent = VKGen.types.get(alias);
+				parent = VKGen.getDataType(alias);
 			}
 			return (IStruct) parent;
 		}
@@ -82,7 +83,7 @@ public class Struct extends DataType implements IStruct {
 		StringBuilder sb = new StringBuilder(name).append("[struct][ ");
 
 		for (StructMember member : members()) {
-			sb.append(member.type()).append(" ").append(member.name());
+			sb.append(member.type().getName()).append(" ").append(member.name());
 			if (!member.comment().isEmpty()) {
 				sb.append("/* ").append(member.comment()).append(" */");
 			}

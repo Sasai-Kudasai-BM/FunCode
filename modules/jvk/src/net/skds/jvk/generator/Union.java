@@ -14,17 +14,23 @@ public class Union extends DataType {
 	public Union(Element e) {
 		this.name = e.getAttribute("name");
 
-		var mems = e.getElementsByTagName("member");
-		for (int i = 0; i < mems.getLength(); i++) {
-			Element member = (Element) mems.item(i);
-			IDataType type = VKGen.types.get(member.getElementsByTagName("type").item(0).getTextContent());
-			if (member.getTextContent().contains("*")) {
-				type = new PointerType(type);
+		VKGen.addTask(() -> {
+			var mems = e.getElementsByTagName("member");
+			for (int i = 0; i < mems.getLength(); i++) {
+				Element member = (Element) mems.item(i);
+				IDataType type = VKGen.getDataType(member.getElementsByTagName("type").item(0).getTextContent());
+				if (member.getTextContent().contains("*")) {
+					type = new PointerType(type);
+				}
+				members.add(type);
 			}
-			members.add(type);
-		}
+		});
 	}
 
+	@Override
+	public String toString() {
+		return getName();
+	}
 
 	@Override
 	public int size() {
