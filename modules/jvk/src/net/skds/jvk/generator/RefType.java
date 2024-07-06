@@ -34,6 +34,6 @@ public class RefType implements IDataType {
 
 	@Override
 	public String toString() {
-		return "Ref(" + name + "){" + super.toString() + "}";
+		return "Ref(" + name + "){" + ref.toString() + "}";
 	}
 }

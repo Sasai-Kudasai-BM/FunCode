@@ -15,6 +15,9 @@ public interface IEnumType extends IDataType {
 
 		for (EnumType.Value value : values()) {
 			String init = String.valueOf(value.v());
+			if (value.v().getClass() == Float.class) {
+				init += "F";
+			}
 			cb.field(value.name(), value.type() == null ? null : value.type().javaType.clazz, init, value.comment());
 		}
 

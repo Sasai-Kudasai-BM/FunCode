@@ -1,7 +1,11 @@
 package net.skds.jvk;
 
+import static net.skds.ninvoker.NInvoker.winInit;
+
 public class VKDefinitions {
 
+	public static final boolean INITIALIZED = winInit("vulkan-1");
+	
 	public static final int VK_HEADER_VERSION = 216;
 
 	public static final int VK_API_VERSION_1_0 = vkMakeApiVersion(0, 1, 0, 0);
@@ -31,6 +35,5 @@ public class VKDefinitions {
 	public static int vkApiVersionPatch(int version) {
 		return version & 0xFFF;
 	}
-
 
 }

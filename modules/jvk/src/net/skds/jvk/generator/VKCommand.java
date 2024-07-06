@@ -31,7 +31,7 @@ public class VKCommand implements ICommand {
 
 		String successCodes = e.getAttribute("successcodes");
 		if (!successCodes.isEmpty()) {
-			comment.append("\nsuccesscodes = ").append(successCodes);
+			comment.append("successcodes = ").append(successCodes);
 		}
 		String errorCodes = e.getAttribute("errorcodes");
 		if (!errorCodes.isEmpty()) {
@@ -75,6 +75,25 @@ public class VKCommand implements ICommand {
 	}
 
 	@Override
+	public ClassBuilder.Arg[] arguments() {
+		ClassBuilder.Arg[] args = new ClassBuilder.Arg[arguments.size()];
+
+		for (int i = 0; i < args.length; i++) {
+			CommandArgument a = arguments.get(i);
+
+			String insert = "@NativeType(\"" + a.type().getName() + "\")";
+			if (!a.comment().isEmpty()) {
+				insert += " /*" + a.comment() + "*/";
+			}
+			Class<?> t = a.type().nativeType().javaType.clazz;
+
+			args[i] = new ClassBuilder.Arg(t, a.name(), insert);
+		}
+
+		return args;
+	}
+
+	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder(returnType.getName()).append(" ").append(name).append("(");
 		for (CommandArgument arg : arguments) {
@@ -105,10 +124,6 @@ public class VKCommand implements ICommand {
 		return returnType;
 	}
 
-	@Override
-	public List<CommandArgument> arguments() {
-		return arguments;
-	}
 
 	@RequiredArgsConstructor
 	private static class Aliased implements ICommand {
@@ -139,7 +154,7 @@ public class VKCommand implements ICommand {
 		}
 
 		@Override
-		public List<CommandArgument> arguments() {
+		public ClassBuilder.Arg[] arguments() {
 			return getParent().arguments();
 		}
 

@@ -7,18 +7,18 @@ import org.w3c.dom.NodeList;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Queue;
+import java.util.*;
 
 public class VKGen {
 
 	private static final Queue<Runnable> tasks = new LinkedList<>();
 
+	public static final List<VKVersion> versions = new ArrayList<>();
 	public static final Map<String, IDataType> types = new HashMap<>();
 	public static final Map<String, IEnumType> enums = new HashMap<>();
 	public static final Map<String, ICommand> commands = new HashMap<>();
+
+	public static final Map<String, EnumType.Value> enumValues = new HashMap<>();
 
 	public static final File EXPORT_DIR = new File("generated/jvk");
 	public static final String ROOT_PACKAGE = "net.skds.jvk";
@@ -227,6 +227,34 @@ public class VKGen {
 			}
 		}
 
+		nl = doc.getDocumentElement().getElementsByTagName("feature");
+		for (int i = 0; i < nl.getLength(); i++) {
+			var n = nl.item(i);
+			if (n instanceof Element e) {
+				VKVersion version = VKVersion.create(e);
+				versions.add(version);
+			}
+		}
+
+		flushTasks();
+		var nl0 = doc.getDocumentElement().getElementsByTagName("extensions");
+		for (int j = 0; j < nl0.getLength(); j++) {
+			nl = ((Element) nl0.item(j)).getElementsByTagName("extension");
+			for (int i = 0; i < nl.getLength(); i++) {
+				var n = nl.item(i);
+				if (n instanceof Element e) {
+					VKVersion version = VKVersion.create(e);
+					versions.add(version);
+				}
+			}
+		}
+		flushTasks();
+
+		for (VKVersion version : versions) {
+			version.export();
+		}
+
+
 		//for (IDataType t : types.values()) {
 		//	try {
 		//		t.toString();
@@ -235,9 +263,9 @@ public class VKGen {
 		//		System.out.println(e);
 		//	}
 		//}
-		for (var c : commands.values()) {
-			System.out.println(c);
-		}
+		//for (var c : versions) {
+		//	System.out.println(c);
+		//}
 		//for (IDataType et : types.values()) {
 		//	System.out.println(et);
 		//	et.generate();

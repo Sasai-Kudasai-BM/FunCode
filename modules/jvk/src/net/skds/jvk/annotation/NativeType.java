@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.SOURCE)
-@Target({ElementType.TYPE_PARAMETER, ElementType.FIELD, ElementType.PARAMETER})
+@Target({ElementType.METHOD, ElementType.TYPE_PARAMETER, ElementType.FIELD, ElementType.PARAMETER})
 public @interface NativeType {
 
 	String value();

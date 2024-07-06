@@ -25,6 +25,7 @@ public final class User32 {
 		} catch (Throwable e) {
 			throw new RuntimeException(e);
 		}
+
 	}
 
 

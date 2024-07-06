@@ -17,7 +17,7 @@ public class EnumType extends DataType implements IEnumType {
 		if (!alias.isEmpty()) {
 			return new Aliased(alias, name);
 		}
-		name = name.replace(" ", "");
+		//name = name.replace(" ", "");
 		EnumType et = new EnumType();
 		String bitwidth = e.getAttribute("bitwidth");
 		switch (bitwidth) {
@@ -61,7 +61,9 @@ public class EnumType extends DataType implements IEnumType {
 
 					Object val = value.isEmpty() ? 1L << Integer.parseInt(bitpos) : nt.parse(value);
 
-					et.values.add(new Value(val, name2, comment2, nt));
+					Value vlu = new Value(val, name2, comment2, nt);
+					VKGen.enumValues.put(vlu.name, vlu);
+					et.values.add(vlu);
 
 				} else if (e2.getNodeName().equals("comment")) {
 					et.values.add(new Value(null, null, e2.getTextContent(), null));
@@ -72,7 +74,68 @@ public class EnumType extends DataType implements IEnumType {
 
 		return et;
 	}
-	
+
+	public static Value parseValue(Element e) {
+
+		IEnumType et = VKGen.enums.get(e.getAttribute("extends"));
+
+		String name2 = e.getAttribute("name");
+		String comment2 = e.getAttribute("comment");
+
+		//System.out.println(name2);
+
+		String alias2 = e.getAttribute("alias");
+		if (!alias2.isEmpty()) {
+			Value v0 = VKGen.enumValues.get(alias2);
+			if (v0 != null) {
+				//et.values().add(v2);
+				var v2 = new Value(v0.v, name2, comment2, v0.type);
+				VKGen.enumValues.put(v2.name, v2);
+				return v2;
+			}
+			if (et == null) {
+				throw new RuntimeException("alias null t \"" + alias2 + "\"");
+			}
+			for (Value v : et.values()) {
+				if (alias2.equals(v.name)) {
+					//et.values().add(v2);
+					var v2 = new Value(v.v, name2, comment2, v.type);
+					VKGen.enumValues.put(v2.name, v2);
+					return v2;
+				}
+			}
+			return null;
+			//throw new RuntimeException("alias \"" + alias2 + "\"");
+		}
+
+
+		String bitpos = e.getAttribute("bitpos");
+		String value = e.getAttribute("offset");
+		if (value.isEmpty()) {
+			value = e.getAttribute("value");
+		}
+		if (et == null) {
+			Value v2 = VKGen.enumValues.get(name2);
+			if (v2 == null) {
+				v2 = new Value(value.replace("&quot;", ""), name2, comment2, null);
+			}
+			VKGen.enumValues.put(v2.name, v2);
+			return v2;
+		} else {
+			String type = e.getAttribute("type");
+			NativeTypeEnum nt = et.nativeType();
+			if (!type.isEmpty()) {
+				nt = NativeTypeEnum.valueOf(type.toUpperCase());
+			}
+			Object val = value.isEmpty() ? 1L << Integer.parseInt(bitpos) : nt.parse(value);
+			Value v2 = new Value(val, name2, comment2, nt);
+			//et.values().add(v2);
+			VKGen.enumValues.put(v2.name, v2);
+			return v2;
+		}
+
+	}
+
 	@Override
 	public boolean isBitmask() {
 		return isBitmask;

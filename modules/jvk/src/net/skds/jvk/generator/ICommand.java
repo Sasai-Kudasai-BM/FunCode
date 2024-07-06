@@ -1,7 +1,5 @@
 package net.skds.jvk.generator;
 
-import java.util.List;
-
 public interface ICommand {
 	String name();
 
@@ -10,5 +8,5 @@ public interface ICommand {
 	IDataType returnType();
 
 
-	List<CommandArgument> arguments();
+	ClassBuilder.Arg[] arguments();
 }
