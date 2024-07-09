@@ -6,10 +6,12 @@ import org.w3c.dom.Element;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Union extends DataType {
+class Union extends DataType {
 
 	@Getter
 	private final List<IDataType> members = new ArrayList<>();
+	int size = -1;
+
 
 	public Union(Element e) {
 		this.name = e.getAttribute("name");
@@ -27,6 +29,7 @@ public class Union extends DataType {
 		});
 	}
 
+
 	@Override
 	public String toString() {
 		return getName();
@@ -34,6 +37,13 @@ public class Union extends DataType {
 
 	@Override
 	public int size() {
-		return 0;
+		if (size == -1) {
+			int s = 0;
+			for (IDataType dt : members) {
+				s = Math.max(s, dt.size());
+			}
+			size = s;
+		}
+		return size;
 	}
 }

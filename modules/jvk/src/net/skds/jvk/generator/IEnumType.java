@@ -2,7 +2,7 @@ package net.skds.jvk.generator;
 
 import java.util.List;
 
-public interface IEnumType extends IDataType {
+interface IEnumType extends IDataType {
 
 	boolean isBitmask();
 
@@ -11,9 +11,12 @@ public interface IEnumType extends IDataType {
 	@Override
 	default void generate() {
 		String pack = VKGen.ROOT_PACKAGE + ".enums";
-		ClassBuilder cb = new ClassBuilder(pack, getName(), ClassBuilder.Type.CLASS);
+		ClassBuilder cb = new ClassBuilder(pack, getName().replace(" ", ""), ClassBuilder.Type.CLASS);
 
 		for (EnumType.Value value : values()) {
+			if (value.v() == null) {
+				continue;
+			}
 			String init = String.valueOf(value.v());
 			if (value.v().getClass() == Float.class) {
 				init += "F";

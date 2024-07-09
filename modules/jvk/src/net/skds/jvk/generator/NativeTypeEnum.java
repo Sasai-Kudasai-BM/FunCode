@@ -3,7 +3,7 @@ package net.skds.jvk.generator;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public enum NativeTypeEnum implements IDataType {
+enum NativeTypeEnum implements IDataType {
 	INT8_T(JavaTypeEnum.BYTE),
 	UINT8_T(JavaTypeEnum.BYTE),
 	CHAR(JavaTypeEnum.BYTE),

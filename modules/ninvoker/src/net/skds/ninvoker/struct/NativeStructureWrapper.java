@@ -2,9 +2,11 @@ package net.skds.ninvoker.struct;
 
 import net.skds.lib.utils.Holders;
 import net.skds.lib.utils.UnsafeAnal;
+import net.skds.ninvoker.NInvoker;
 import sun.misc.Unsafe;
 
 import java.lang.reflect.Array;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.nio.ByteOrder;
@@ -19,7 +21,7 @@ public final class NativeStructureWrapper {
 
 	private final Class<? extends AbstractNativeStructure> type;
 	private final Codec[] fields;
-	private final int size;
+	public final int size;
 	//private final boolean useCleaner;
 
 	public NativeStructureWrapper(Class<? extends AbstractNativeStructure> type) {
@@ -59,7 +61,7 @@ public final class NativeStructureWrapper {
 								} else if (c == double[].class) {
 									return new ArrayCodec(f, size, 8);
 								}
-							} else if (c.isAssignableFrom(AbstractNativeStructure.class)) {
+							} else if (c.isAssignableFrom(NativeData.class)) {
 								return new StructCodec(f, size);
 							}
 
@@ -71,7 +73,7 @@ public final class NativeStructureWrapper {
 		this.size = size.getValue();
 	}
 
-	public void read(AbstractNativeStructure structure) {
+	public void get(AbstractNativeStructure structure) {
 		try {
 			for (int i = 0; i < fields.length; i++) {
 				fields[i].read(structure);
@@ -81,7 +83,7 @@ public final class NativeStructureWrapper {
 		}
 	}
 
-	public void write(AbstractNativeStructure structure) {
+	public void put(AbstractNativeStructure structure) {
 		try {
 			for (int i = 0; i < fields.length; i++) {
 				fields[i].write(structure);
@@ -144,11 +146,24 @@ public final class NativeStructureWrapper {
 
 	private static class StructCodec extends Codec {
 
+		private final Supplier<NativeData> constructor;
+		private final int size;
 
-		private StructCodec(Field field, Holders.IntHolder offset) { //todo
+		@SuppressWarnings("unchecked")
+		private StructCodec(Field field, Holders.IntHolder offset) {
 			super(field, offset);
 			try {
-				AbstractNativeStructure structure = (AbstractNativeStructure) field.getClass().getConstructors()[0].newInstance();
+				DataClass dc = field.getAnnotation(DataClass.class);
+				Class<?> c = (dc == null) ? field.getClass() : dc.value();
+				var cns = (Constructor<NativeData>) c.getConstructor();
+				this.constructor = () -> {
+					try {
+						return cns.newInstance();
+					} catch (Exception e) {
+						throw new RuntimeException(e);
+					}
+				};
+				this.size = constructor.get().size();
 
 			} catch (Exception e) {
 				throw new RuntimeException(e);
@@ -157,17 +172,25 @@ public final class NativeStructureWrapper {
 
 		@Override
 		void read(AbstractNativeStructure structure) throws IllegalAccessException {
-
+			NativeData nd = (NativeData) field.get(structure);
+			if (nd == null) {
+				nd = constructor.get();
+				field.set(structure, nd);
+			}
+			nd.get();
 		}
 
 		@Override
 		void write(AbstractNativeStructure structure) throws IllegalAccessException {
-
+			NativeData nd = (NativeData) field.get(structure);
+			if (nd != null) {
+				nd.put();
+			}
 		}
 
 		@Override
 		int size() {
-			return 0;
+			return size;
 		}
 	}
 
@@ -192,9 +215,12 @@ public final class NativeStructureWrapper {
 
 		@Override
 		void read(AbstractNativeStructure structure) throws IllegalAccessException {
-			Object arr = Array.newInstance(type, length);
-			UNSAFE.copyMemory(null, address(structure), arr, arrayBase, (long) bytes * length);
-			field.set(structure, arr);
+			Object arr = field.get(structure);
+			if (arr == null || Array.getLength(arr) != length) {
+				arr = Array.newInstance(type, length);
+				field.set(structure, arr);
+			}
+			NInvoker.transferArray(address(structure), arr, length, 0, bytes, arrayBase);
 		}
 
 		@Override
@@ -203,7 +229,7 @@ public final class NativeStructureWrapper {
 			if (arr == null) {
 				UNSAFE.setMemory(address(structure), (long) bytes * length, (byte) 0);
 			} else {
-				UNSAFE.copyMemory(arr, arrayBase, null, address(structure), (long) bytes * length);
+				NInvoker.transferArray(arr, address(structure), length, 0, bytes, arrayBase);
 			}
 		}
 

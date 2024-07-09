@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class VKVersion {
+class VKVersion {
 	boolean extension;
 	String name;
 	final List<Object> contents = new ArrayList<>();    // String, Enum, Command, Type, Holder
@@ -66,10 +66,14 @@ public class VKVersion {
 			}
 		}
 
+		vkv.contents.removeIf(o -> o instanceof EnumType.Value v && v.type() == null);
 		return vkv;
 	}
 
 	public void export() {
+		if (contents.isEmpty()) {
+			return;
+		}
 		ClassBuilder cb;
 		if (!extension) {
 			String pack = VKGen.ROOT_PACKAGE;
@@ -146,7 +150,7 @@ public class VKVersion {
 			body.append(");\n");
 			body.append("\t\t} catch (Throwable e) { throw new RuntimeException(e); }");
 
-			cb.field(command.name(), MethodHandle.class, mh.toString(), "", true);
+			cb.field(command.name(), MethodHandle.class, mh.toString(), "", "", true);
 			//createWinHandle("GetAsyncKeyState", SHORT, INT)
 			cb.method(command.name(), t, body.toString(), command.comment(), "@NativeType(\"" + command.returnType().getName() + "\")", args);
 		}

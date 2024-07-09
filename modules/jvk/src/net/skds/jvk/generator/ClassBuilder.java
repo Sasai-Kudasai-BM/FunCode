@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Set;
 
 @RequiredArgsConstructor
-public class ClassBuilder {
+class ClassBuilder {
 
 	@Setter
 	String extend;
@@ -40,7 +40,7 @@ public class ClassBuilder {
 
 
 	public void method(String name, Class<?> rt, String body, String comment, Arg... args) {
-		var mtd = new Method(name, rt, args, body, comment, "");
+		var mtd = new Method(name, rt, args, body, comment, "", false);
 		methods.add(mtd);
 		contents.add(mtd);
 		checkImport(rt);
@@ -48,7 +48,15 @@ public class ClassBuilder {
 	}
 
 	public void method(String name, Class<?> rt, String body, String comment, String prefix, Arg... args) {
-		var mtd = new Method(name, rt, args, body, comment, prefix);
+		var mtd = new Method(name, rt, args, body, comment, prefix, false);
+		methods.add(mtd);
+		contents.add(mtd);
+		checkImport(rt);
+		checkImport(args);
+	}
+
+	public void methodP(String name, Class<?> rt, String body, String comment, String prefix, Arg... args) {
+		var mtd = new Method(name, rt, args, body, comment, prefix, true);
 		methods.add(mtd);
 		contents.add(mtd);
 		checkImport(rt);
@@ -56,14 +64,21 @@ public class ClassBuilder {
 	}
 
 	public void field(String name, Class<?> type, String initializer, String comment) {
-		var fld = new Field(name, type, initializer, comment, false);
+		var fld = new Field(name, type, initializer, comment, "", false, true);
 		fields.add(fld);
 		contents.add(fld);
 		checkImport(type);
 	}
 
-	public void field(String name, Class<?> type, String initializer, String comment, boolean p) {
-		var fld = new Field(name, type, initializer, comment, p);
+	public void field(String name, Class<?> type, String initializer, String comment, String prefix, boolean p) {
+		var fld = new Field(name, type, initializer, comment, prefix, p, true);
+		fields.add(fld);
+		contents.add(fld);
+		checkImport(type);
+	}
+
+	public void fieldD(String name, Class<?> type, String initializer, String comment, String prefix, boolean p) {
+		var fld = new Field(name, type, initializer, comment, prefix, p, false);
 		fields.add(fld);
 		contents.add(fld);
 		checkImport(type);
@@ -92,7 +107,11 @@ public class ClassBuilder {
 		if (!mtd.prefix.isEmpty()) {
 			sb.append(mtd.prefix).append("\n\t");
 		}
-		sb.append("public static ");
+		if (mtd.p) {
+			sb.append("protected ");
+		} else {
+			sb.append("public static ");
+		}
 		sb.append(mtd.rt.getSimpleName()).append(" ").append(mtd.name).append("(");
 		if (mtd.args != null) {
 			for (int i = 0; i < mtd.args.length; i++) {
@@ -124,14 +143,20 @@ public class ClassBuilder {
 	private void writeField(Field fld, StringBuilder sb) {
 		sb.append("\n\t");
 		if (fld.comment != null && !fld.comment.isEmpty()) {
-			sb.append("// ").append(fld.comment.replace("\n", "\n\t//")).append("\n\t");
+			sb.append("/**\n\t* ").append(fld.comment.replace("\n", "\n\t* ")).append("\n\t*/\n\t");
+		}
+		if (!fld.prefix.isEmpty()) {
+			sb.append(fld.prefix).append("\n\t");
 		}
 		if (fld.type != null) {
 			if (type == Type.CLASS) {
 				if (fld.p) {
-					sb.append("private static final");
+					sb.append("private");
 				} else {
-					sb.append("public static final");
+					sb.append("public");
+				}
+				if (fld.sf) {
+					sb.append(" static final");
 				}
 			}
 			sb.append(" ").append(fld.type.getSimpleName()).append(" ").append(fld.name);
@@ -200,11 +225,12 @@ public class ClassBuilder {
 		}
 	}
 
-	public record Method(String name, Class<?> rt, Arg[] args, String body, String comment, String prefix) {
+	public record Method(String name, Class<?> rt, Arg[] args, String body, String comment, String prefix, boolean p) {
 
 	}
 
-	public record Field(String name, Class<?> type, String initializer, String comment, boolean p) {
+	public record Field(String name, Class<?> type, String initializer, String comment, String prefix, boolean p,
+						boolean sf) {
 
 	}
 

@@ -9,7 +9,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
 import java.util.*;
 
-public class VKGen {
+class VKGen {
 
 	private static final Queue<Runnable> tasks = new LinkedList<>();
 
@@ -21,7 +21,7 @@ public class VKGen {
 	public static final Map<String, EnumType.Value> enumValues = new HashMap<>();
 
 	public static final File EXPORT_DIR = new File("generated/jvk");
-	public static final String ROOT_PACKAGE = "net.skds.jvk";
+	public static final String ROOT_PACKAGE = "net.skds.jvk.generated";
 
 	private static void defaultType(String name, NativeTypeEnum nativeType) {
 		DataType tp = new DataType();
@@ -252,6 +252,13 @@ public class VKGen {
 
 		for (VKVersion version : versions) {
 			version.export();
+		}
+
+		//for (IEnumType enumType : enums.values()) {
+		//	enumType.generate();
+		//}
+		for (IDataType t : types.values()) {
+			t.generate();
 		}
 
 

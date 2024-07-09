@@ -6,7 +6,7 @@ import org.w3c.dom.Element;
 import java.util.ArrayList;
 import java.util.List;
 
-public class VKCommand implements ICommand {
+class VKCommand implements ICommand {
 
 	private String name;
 	private String comment = "";

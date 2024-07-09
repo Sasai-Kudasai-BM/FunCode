@@ -1,6 +1,6 @@
 package net.skds.jvk.generator;
 
-public interface ICommand {
+interface ICommand {
 	String name();
 
 	String comment();

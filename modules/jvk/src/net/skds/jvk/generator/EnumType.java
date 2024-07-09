@@ -5,7 +5,7 @@ import org.w3c.dom.Element;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EnumType extends DataType implements IEnumType {
+class EnumType extends DataType implements IEnumType {
 
 	protected boolean isBitmask;
 

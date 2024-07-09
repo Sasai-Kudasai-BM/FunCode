@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class RefType implements IDataType {
+class RefType implements IDataType {
 
 	@Getter
 	private final IDataType ref;

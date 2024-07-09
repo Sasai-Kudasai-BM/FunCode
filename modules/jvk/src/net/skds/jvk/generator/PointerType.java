@@ -1,6 +1,6 @@
 package net.skds.jvk.generator;
 
-public record PointerType(IDataType pnt) implements IDataType {
+record PointerType(IDataType pnt) implements IDataType {
 
 	@Override
 	public String getName() {

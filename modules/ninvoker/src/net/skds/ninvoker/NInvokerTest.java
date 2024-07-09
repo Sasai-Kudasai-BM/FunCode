@@ -62,7 +62,7 @@ public class NInvokerTest {
 
 		for (int i = 0; i < size; i++) {
 			VkLayerProperties p = properties[i];
-			p.read();
+			p.get();
 			System.out.println(NInvoker.nullTerminatedString(p.name, StandardCharsets.UTF_8));
 			//System.out.println(Integer.toHexString(p.specVer));
 			//System.out.println(Integer.toHexString(p.implVer));
@@ -78,7 +78,7 @@ public class NInvokerTest {
 
 	private static final NativeStructureWrapper VK_LAYER_PROPERTIES = new NativeStructureWrapper(VkLayerProperties.class);
 
-	private static class VkLayerProperties extends AbstractNativeStructure {
+	private static final class VkLayerProperties extends AbstractNativeStructure {
 
 		@ArrayLength(VK_MAX_EXTENSION_NAME_SIZE)
 		byte[] name;

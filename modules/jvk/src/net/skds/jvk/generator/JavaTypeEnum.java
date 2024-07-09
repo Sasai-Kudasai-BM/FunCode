@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import java.util.function.Function;
 
 @AllArgsConstructor
-public enum JavaTypeEnum {
+enum JavaTypeEnum {
 	BYTE(byte.class, 1, Byte::valueOf),
 	SHORT(short.class, 2, Short::valueOf),
 	INT(int.class, 4, Integer::valueOf),

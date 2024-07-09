@@ -2,7 +2,7 @@ package net.skds.jvk.generator;
 
 import lombok.RequiredArgsConstructor;
 
-public class DataType implements IDataType {
+class DataType implements IDataType {
 
 	protected String name;
 	protected String comment = "";

@@ -46,108 +46,84 @@ public final class NInvoker {
 	public static final TypeGlue G_DOUBLE = new TypeGlue(ValueLayout.JAVA_DOUBLE, double.class);
 	public static final TypeGlue G_VOID = new TypeGlue(null, void.class);
 
+	public static final int BYTE_ARRAY_BASE = UNSAFE.arrayBaseOffset(byte[].class);
+	public static final int CHAR_ARRAY_BASE = UNSAFE.arrayBaseOffset(char[].class);
+	public static final int SHORT_ARRAY_BASE = UNSAFE.arrayBaseOffset(short[].class);
+	public static final int INT_ARRAY_BASE = UNSAFE.arrayBaseOffset(int[].class);
+	public static final int FLOAT_ARRAY_BASE = UNSAFE.arrayBaseOffset(float[].class);
+	public static final int LONG_ARRAY_BASE = UNSAFE.arrayBaseOffset(long[].class);
+	public static final int DOUBLE_ARRAY_BASE = UNSAFE.arrayBaseOffset(double[].class);
+
 	public static void transferArray(long src, byte[] dst, int size, int offset) {
-		UNSAFE.copyMemory(src, 0, dst, offset, size);
+		UNSAFE.copyMemory(src, 0, dst, offset + BYTE_ARRAY_BASE, size);
+	}
+
+	public static void transferArray(long src, Object dst, long size, long offset, int byteSize, int arrayOffset) {
+		if (NATIVE_ORDER || byteSize == 1) {
+			UNSAFE.copyMemory(src, 0, dst, offset * byteSize + arrayOffset, size * byteSize);
+		} else {
+			UNSAFE.copySwapMemory(src, 0, dst, offset, size * byteSize, byteSize);
+		}
 	}
 
 	public static void transferArray(long src, short[] dst, int size, int offset) {
-		if (NATIVE_ORDER) {
-			UNSAFE.copyMemory(src, 0, dst, offset, size);
-		} else {
-			UNSAFE.copySwapMemory(src, 0, dst, offset, size, 2);
-		}
+		transferArray(src, dst, size, offset, 2, SHORT_ARRAY_BASE);
 	}
 
 	public static void transferArray(long src, char[] dst, int size, int offset) {
-		if (NATIVE_ORDER) {
-			UNSAFE.copyMemory(src, 0, dst, offset, size);
-		} else {
-			UNSAFE.copySwapMemory(src, 0, dst, offset, size, 2);
-		}
+		transferArray(src, dst, size, offset, 2, CHAR_ARRAY_BASE);
 	}
 
 	public static void transferArray(long src, int[] dst, int size, int offset) {
-		if (NATIVE_ORDER) {
-			UNSAFE.copyMemory(src, 0, dst, offset, size);
-		} else {
-			UNSAFE.copySwapMemory(src, 0, dst, offset, size, 4);
-		}
+		transferArray(src, dst, size, offset, 4, INT_ARRAY_BASE);
 	}
 
 	public static void transferArray(long src, float[] dst, int size, int offset) {
-		if (NATIVE_ORDER) {
-			UNSAFE.copyMemory(src, 0, dst, offset, size);
-		} else {
-			UNSAFE.copySwapMemory(src, 0, dst, offset, size, 4);
-		}
+		transferArray(src, dst, size, offset, 4, FLOAT_ARRAY_BASE);
 	}
 
 	public static void transferArray(long src, long[] dst, int size, int offset) {
-		if (NATIVE_ORDER) {
-			UNSAFE.copyMemory(src, 0, dst, offset, size);
-		} else {
-			UNSAFE.copySwapMemory(src, 0, dst, offset, size, 8);
-		}
+		transferArray(src, dst, size, offset, 8, LONG_ARRAY_BASE);
 	}
 
 	public static void transferArray(long src, double[] dst, int size, int offset) {
-		if (NATIVE_ORDER) {
-			UNSAFE.copyMemory(src, 0, dst, offset, size);
-		} else {
-			UNSAFE.copySwapMemory(src, 0, dst, offset, size, 8);
-		}
+		transferArray(src, dst, size, offset, 8, DOUBLE_ARRAY_BASE);
 	}
 
 	public static void transferArray(byte[] src, long dst, int size, int offset) {
-		UNSAFE.copyMemory(src, offset, null, dst, size);
+		UNSAFE.copyMemory(src, offset + BYTE_ARRAY_BASE, null, dst, size);
+	}
+
+	public static void transferArray(Object src, long dst, long size, long offset, int byteSize, int arrayOffset) {
+		if (NATIVE_ORDER || byteSize == 1) {
+			UNSAFE.copyMemory(src, offset * byteSize + arrayOffset, null, dst, size * byteSize);
+		} else {
+			UNSAFE.copySwapMemory(src, offset * byteSize + arrayOffset, null, dst, size * byteSize, byteSize);
+		}
 	}
 
 	public static void transferArray(short[] src, long dst, int size, int offset) {
-		if (NATIVE_ORDER) {
-			UNSAFE.copyMemory(src, offset, null, dst, size);
-		} else {
-			UNSAFE.copySwapMemory(src, offset, null, dst, size, 2);
-		}
+		transferArray(src, dst, size, offset, 2, SHORT_ARRAY_BASE);
 	}
 
 	public static void transferArray(char[] src, long dst, int size, int offset) {
-		if (NATIVE_ORDER) {
-			UNSAFE.copyMemory(src, offset, null, dst, size);
-		} else {
-			UNSAFE.copySwapMemory(src, offset, null, dst, size, 2);
-		}
+		transferArray(src, dst, size, offset, 2, CHAR_ARRAY_BASE);
 	}
 
 	public static void transferArray(int[] src, long dst, int size, int offset) {
-		if (NATIVE_ORDER) {
-			UNSAFE.copyMemory(src, offset, null, dst, size);
-		} else {
-			UNSAFE.copySwapMemory(src, offset, null, dst, size, 4);
-		}
+		transferArray(src, dst, size, offset, 4, INT_ARRAY_BASE);
 	}
 
 	public static void transferArray(float[] src, long dst, int size, int offset) {
-		if (NATIVE_ORDER) {
-			UNSAFE.copyMemory(src, offset, null, dst, size);
-		} else {
-			UNSAFE.copySwapMemory(src, offset, null, dst, size, 4);
-		}
+		transferArray(src, dst, size, offset, 4, FLOAT_ARRAY_BASE);
 	}
 
 	public static void transferArray(long[] src, long dst, int size, int offset) {
-		if (NATIVE_ORDER) {
-			UNSAFE.copyMemory(src, offset, null, dst, size);
-		} else {
-			UNSAFE.copySwapMemory(src, offset, null, dst, size, 8);
-		}
+		transferArray(src, dst, size, offset, 8, LONG_ARRAY_BASE);
 	}
 
 	public static void transferArray(double[] src, long dst, int size, int offset) {
-		if (NATIVE_ORDER) {
-			UNSAFE.copyMemory(src, offset, null, dst, size);
-		} else {
-			UNSAFE.copySwapMemory(src, offset, null, dst, size, 8);
-		}
+		transferArray(src, dst, size, offset, 8, DOUBLE_ARRAY_BASE);
 	}
 
 	public static <T> UpcallLink<T> createUpcallLink(Class<T> clazz, String name, TypeGlue returnType, TypeGlue... argTypes) {

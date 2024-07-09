@@ -1,32 +1,48 @@
 package net.skds.ninvoker.struct;
 
-public abstract class AbstractNativeStructure {
+public abstract class AbstractNativeStructure implements NativeData {
 
 	long address;
 
 	protected abstract NativeStructureWrapper getWrapper();
 
+	@Override
+	public final int size() {
+		return getWrapper().size;
+	}
+
+	@Override
 	public final long address() {
 		return address;
 	}
 
+	@Override
+	public final void delegate(long address) {
+		this.address = address;
+	}
+
+	@Override
 	public final long alloc() {
 		return getWrapper().alloc(this);
 	}
 
+	@Override
 	public final long cAlloc() {
 		return getWrapper().cAlloc(this);
 	}
 
+	@Override
 	public final void free() {
 		getWrapper().free(this);
 	}
 
-	public final void read() {
-		getWrapper().read(this);
+	@Override
+	public final void get() {
+		getWrapper().get(this);
 	}
 
-	public final void write() {
-		getWrapper().write(this);
+	@Override
+	public final void put() {
+		getWrapper().put(this);
 	}
 }

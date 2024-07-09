@@ -1,6 +1,6 @@
 package net.skds.jvk.generator;
 
-public interface IDataType {
+interface IDataType {
 
 	String getName();
 

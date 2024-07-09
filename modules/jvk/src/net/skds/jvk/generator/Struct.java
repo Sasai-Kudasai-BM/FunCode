@@ -1,11 +1,12 @@
 package net.skds.jvk.generator;
 
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Struct extends DataType implements IStruct {
+class Struct extends DataType implements IStruct {
 
 	private final List<StructMember> members = new ArrayList<>();
 
@@ -43,7 +44,35 @@ public class Struct extends DataType implements IStruct {
 				if (member.getTextContent().contains("*")) {
 					st = new PointerType(st);
 				}
-				String sn = member.getElementsByTagName("name").item(0).getTextContent();
+				Node nn = member.getElementsByTagName("name").item(0);
+				String sn = nn.getTextContent();
+
+				String mt = member.getTextContent();
+
+
+				if (mt.contains("[")) {
+					var sib1 = nn.getNextSibling();
+					var sib2 = sib1.getNextSibling();
+					boolean ok = false;
+					if (sib2 != null) {
+						if (sib2.getNodeName().equals("enum")) {
+							//System.out.println(sib2.getTextContent());
+							EnumType.Value v = VKGen.enumValues.get(sib2.getTextContent());
+							System.out.println(v);
+							ok = true;
+							//System.out.println("--------");
+							//System.out.println(mt);
+							//System.out.println("========");
+						}
+					}
+
+					if (!ok) {
+						mt = sib1.getTextContent().replace("\n", "").replace(" ", "");
+						if (!mt.isBlank()) {
+							System.out.println(mt);
+						}
+					}
+				}
 
 				struct.members.add(new StructMember(sn, st, mc.toString()));
 			}
