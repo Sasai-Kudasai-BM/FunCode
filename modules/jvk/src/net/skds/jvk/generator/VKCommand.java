@@ -81,7 +81,7 @@ class VKCommand implements ICommand {
 		for (int i = 0; i < args.length; i++) {
 			CommandArgument a = arguments.get(i);
 
-			String insert = "@NativeType(\"" + a.type().getName() + "\")";
+			String insert = "@NativeType(\"" + a.type().nativeTypeName() + "\")";
 			if (!a.comment().isEmpty()) {
 				insert += " /*" + a.comment() + "*/";
 			}

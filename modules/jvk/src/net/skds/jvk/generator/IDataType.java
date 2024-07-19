@@ -10,8 +10,11 @@ interface IDataType {
 
 	int size();
 
-	default String className() {
-		return "class " + getName();
+	default String nativeTypeName() {
+		if (nativeType() == NativeTypeEnum.POINTER) {
+			return getName() + "*";
+		}
+		return getName();
 	}
 
 	default void generate() {

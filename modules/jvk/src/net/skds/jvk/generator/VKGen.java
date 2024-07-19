@@ -179,6 +179,28 @@ class VKGen {
 	}
 
 	public static void main(String[] args) throws Exception {
+		/*
+		var res = HttpUtils.downloadFromNet("https://registry.khronos.org/vulkan/specs/1.3-extensions/man/html/VkInstanceCreateInfo.html");
+		res.readAll();
+		String ps = new String(res.getContent());
+		int start = ps.indexOf("<!--ChunkedSearchboxMarker-->");
+		int end = ps.indexOf("<h2 id=\"_document_notes\">", start);
+		String cut = ps.substring(start, end).replace("<br>", "");
+		end = cut.lastIndexOf("<div class=\"sect1\">");
+		cut = cut.substring(0, end) + "</div>";
+
+		System.out.println(cut);
+
+		var fac = DocumentBuilderFactory.newInstance();
+		DocumentBuilder builder0 = fac.newDocumentBuilder();
+
+		Document document = builder0.parse(new InputSource(new StringReader(cut)));
+		document.normalizeDocument();
+
+
+		if (true) return;
+
+ 		*/
 
 		addDefaultTypes();
 

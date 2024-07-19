@@ -17,14 +17,24 @@ interface IEnumType extends IDataType {
 			if (value.v() == null) {
 				continue;
 			}
+			NativeTypeEnum nt = nativeType();
+			if (value.type() != null) {
+				nt = value.type();
+			}
 			String init = String.valueOf(value.v());
 			if (value.v().getClass() == Float.class) {
 				init += "F";
+			} else if (nt.javaType == JavaTypeEnum.LONG) {
+				init += "L";
 			}
-			cb.field(value.name(), value.type() == null ? null : value.type().javaType.clazz, init, value.comment());
+			cb.field(value.name(), nt.javaType.clazz, init, value.comment());
 		}
 
 		cb.export();
 	}
 
+	//@Override
+	//default String nativeTypeName() {
+	//	return getName();
+	//}
 }

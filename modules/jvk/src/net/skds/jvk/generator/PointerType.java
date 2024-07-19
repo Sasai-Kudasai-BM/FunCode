@@ -8,6 +8,11 @@ record PointerType(IDataType pnt) implements IDataType {
 	}
 
 	@Override
+	public String nativeTypeName() {
+		return pnt.nativeTypeName() + "*";
+	}
+
+	@Override
 	public String comment() {
 		return pnt.comment();
 	}

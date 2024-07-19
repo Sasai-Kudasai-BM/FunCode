@@ -2,11 +2,13 @@ version = project.version
 
 allprojects {
     apply plugin: 'java'
+    apply plugin: 'idea'
     java {
         toolchain {
             languageVersion = JavaLanguageVersion.of(22)
         }
     }
+   
 }
 
 subprojects {

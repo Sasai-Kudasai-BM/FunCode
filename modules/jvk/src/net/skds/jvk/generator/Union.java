@@ -46,4 +46,9 @@ class Union extends DataType {
 		}
 		return size;
 	}
+
+	//@Override
+	//public String nativeTypeName() {
+	//	return getName();
+	//}
 }

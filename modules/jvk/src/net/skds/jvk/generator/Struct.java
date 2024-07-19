@@ -1,5 +1,6 @@
 package net.skds.jvk.generator;
 
+import net.skds.lib.utils.SKDSUtils;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
@@ -10,6 +11,10 @@ class Struct extends DataType implements IStruct {
 
 	private final List<StructMember> members = new ArrayList<>();
 
+	@Override
+	public int size() {
+		return members.stream().mapToInt(sm -> sm.type().size()).sum();
+	}
 
 	public static IStruct create(Element e) {
 		String name = e.getAttribute("name");
@@ -41,9 +46,6 @@ class Struct extends DataType implements IStruct {
 				if (st == null) {
 					System.out.println(member.getElementsByTagName("type").item(0).getTextContent());
 				}
-				if (member.getTextContent().contains("*")) {
-					st = new PointerType(st);
-				}
 				Node nn = member.getElementsByTagName("name").item(0);
 				String sn = nn.getTextContent();
 
@@ -58,20 +60,40 @@ class Struct extends DataType implements IStruct {
 						if (sib2.getNodeName().equals("enum")) {
 							//System.out.println(sib2.getTextContent());
 							EnumType.Value v = VKGen.enumValues.get(sib2.getTextContent());
-							System.out.println(v);
+							//System.out.println(v);
 							ok = true;
 							//System.out.println("--------");
 							//System.out.println(mt);
 							//System.out.println("========");
+
+							st = new ArrayType(st, v.name(), (Integer) v.v());
+							System.out.println(st);
 						}
 					}
 
 					if (!ok) {
 						mt = sib1.getTextContent().replace("\n", "").replace(" ", "");
 						if (!mt.isBlank()) {
-							System.out.println(mt);
+
+							String mt2 = SKDSUtils.cutStringAfter(mt, '[');
+							String mt3 = SKDSUtils.cutStringBefore(mt2, ']');
+							int s = Integer.parseInt(mt3);
+							if (!mt2.isBlank()) {
+								mt2 = SKDSUtils.cutStringAfter(mt2, '[');
+								mt3 = SKDSUtils.cutStringBefore(mt2, ']');
+								s *= Integer.parseInt(mt3);
+							}
+
+							st = new ArrayType(st, "", s);
+							//System.out.println(st);
+							//System.out.println(s);
+							//System.out.println(mt);
 						}
 					}
+				}
+
+				if (member.getTextContent().contains("*")) {
+					st = new PointerType(st);
 				}
 
 				struct.members.add(new StructMember(sn, st, mc.toString()));

@@ -21,6 +21,7 @@ java.desktop/sun.awt=ALL-UNNAMED
 java.desktop/sun.awt.windows=ALL-UNNAMED
 --enable-native-access=ALL-UNNAMED
  */
+@SuppressWarnings("unused")
 public final class NInvoker {
 
 	private static final jdk.internal.misc.Unsafe UNSAFE = jdk.internal.misc.Unsafe.getUnsafe();
@@ -55,15 +56,15 @@ public final class NInvoker {
 	public static final int DOUBLE_ARRAY_BASE = UNSAFE.arrayBaseOffset(double[].class);
 
 	public static void transferArray(long src, byte[] dst, int size, int offset) {
-		UNSAFE.copyMemory(src, 0, dst, offset + BYTE_ARRAY_BASE, size);
+		UNSAFE.copyMemory(null, src, dst, offset + BYTE_ARRAY_BASE, size);
 	}
 
 	public static void transferArray(long src, Object dst, long size, long offset, int byteSize, int arrayOffset) {
-		if (NATIVE_ORDER || byteSize == 1) {
-			UNSAFE.copyMemory(src, 0, dst, offset * byteSize + arrayOffset, size * byteSize);
-		} else {
-			UNSAFE.copySwapMemory(src, 0, dst, offset, size * byteSize, byteSize);
-		}
+		//if (NATIVE_ORDER || byteSize == 1) {
+		UNSAFE.copyMemory(null, src, dst, offset * byteSize + arrayOffset, size * byteSize);
+		//} else {
+		//	UNSAFE.copySwapMemory(src, 0, dst, offset, size * byteSize, byteSize);
+		//}
 	}
 
 	public static void transferArray(long src, short[] dst, int size, int offset) {
@@ -95,11 +96,11 @@ public final class NInvoker {
 	}
 
 	public static void transferArray(Object src, long dst, long size, long offset, int byteSize, int arrayOffset) {
-		if (NATIVE_ORDER || byteSize == 1) {
-			UNSAFE.copyMemory(src, offset * byteSize + arrayOffset, null, dst, size * byteSize);
-		} else {
-			UNSAFE.copySwapMemory(src, offset * byteSize + arrayOffset, null, dst, size * byteSize, byteSize);
-		}
+		//if (NATIVE_ORDER || byteSize == 1) {
+		UNSAFE.copyMemory(src, offset * byteSize + arrayOffset, null, dst, size * byteSize);
+		//} else {
+		//	UNSAFE.copySwapMemory(src, offset * byteSize + arrayOffset, null, dst, size * byteSize, byteSize);
+		//}
 	}
 
 	public static void transferArray(short[] src, long dst, int size, int offset) {
@@ -176,10 +177,25 @@ public final class NInvoker {
 		return new String(data, charset);
 	}
 
+	public static long nullTerminatedString(String string, Charset charset) {
+		byte[] data = string.getBytes(charset);
+		long address = UNSAFE.allocateMemory(data.length + 1);
+		transferArray(data, address, data.length, 0);
+		UNSAFE.putByte(address + data.length, (byte) 0);
+		return address;
+	}
+
+	public static long nullTerminatedString(String string, Charset charset, MemoryStack stack) {
+		byte[] data = string.getBytes(charset);
+		long address = stack.push(data.length + 1);
+		transferArray(data, address, data.length, 0);
+		UNSAFE.putByte(address + data.length, (byte) 0);
+		return address;
+	}
+
 	public static long getHWnd(Window window) {
 		final AWTAccessor.ComponentAccessor acc = AWTAccessor.getComponentAccessor();
-		long hWnd = acc.<WComponentPeer>getPeer(window).getHWnd();
-		return hWnd;
+		return acc.<WComponentPeer>getPeer(window).getHWnd();
 	}
 
 	private static Class<?>[] jArray(TypeGlue[] gt) {

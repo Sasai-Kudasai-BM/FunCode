@@ -1,5 +1,7 @@
 package net.skds.ninvoker.struct;
 
+import net.skds.ninvoker.MemoryStack;
+
 public interface NativeData {
 
 	int size();
@@ -9,6 +11,8 @@ public interface NativeData {
 	void delegate(long address);
 
 	long alloc();
+
+	long alloc(MemoryStack stack);
 
 	long cAlloc();
 

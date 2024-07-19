@@ -55,7 +55,7 @@ public class NInvokerTest {
 		System.out.println(result);
 		System.out.println(size);
 
-		VkLayerProperties[] properties = VK_LAYER_PROPERTIES.allocArray(VkLayerProperties::new, size);
+		VkLayerProperties[] properties = VK_LAYER_PROPERTIES.allocArray(size);
 
 		result = (int) handle.invokeExact(intPtr, properties[0].address());
 		//System.out.println(result);

@@ -1,5 +1,7 @@
 package net.skds.ninvoker.struct;
 
+import net.skds.ninvoker.MemoryStack;
+
 public abstract class AbstractNativeStructure implements NativeData {
 
 	long address;
@@ -24,6 +26,11 @@ public abstract class AbstractNativeStructure implements NativeData {
 	@Override
 	public final long alloc() {
 		return getWrapper().alloc(this);
+	}
+
+	@Override
+	public final long alloc(MemoryStack stack) {
+		return getWrapper().alloc(this, stack);
 	}
 
 	@Override

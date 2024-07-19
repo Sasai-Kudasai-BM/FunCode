@@ -59,7 +59,16 @@ class EnumType extends DataType implements IEnumType {
 					String value = e2.getAttribute("value");
 
 
-					Object val = value.isEmpty() ? 1L << Integer.parseInt(bitpos) : nt.parse(value);
+					Object val;
+					if (value.isEmpty()) {
+						int p = Integer.parseInt(bitpos);
+						val = 1L << p;
+						if (p > 31) {
+							nt = NativeTypeEnum.UINT64_T;
+						}
+					} else {
+						val = nt.parse(value);
+					}
 
 					Value vlu = new Value(val, name2, comment2, nt);
 					VKGen.enumValues.put(vlu.name, vlu);
@@ -127,7 +136,16 @@ class EnumType extends DataType implements IEnumType {
 			if (!type.isEmpty()) {
 				nt = NativeTypeEnum.valueOf(type.toUpperCase());
 			}
-			Object val = value.isEmpty() ? 1L << Integer.parseInt(bitpos) : nt.parse(value);
+			Object val;
+			if (value.isEmpty()) {
+				int p = Integer.parseInt(bitpos);
+				val = 1L << p;
+				if (p > 31) {
+					nt = NativeTypeEnum.UINT64_T;
+				}
+			} else {
+				val = nt.parse(value);
+			}
 			Value v2 = new Value(val, name2, comment2, nt);
 			//et.values().add(v2);
 			VKGen.enumValues.put(v2.name, v2);

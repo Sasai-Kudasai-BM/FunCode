@@ -2,9 +2,15 @@ version = "1.0"
 group = "net.skds"
 
 dependencies {
-
-    implementation project(':skdslib')
-    implementation project(':ninvoker')
-    implementation project(':nativelib')
+    implementation project(":skdslib")
+    implementation project(":ninvoker")
+    implementation project(":nativelib")
 }
+
+
+//repositories {
+//    project(':skdslib')
+//    project(':ninvoker')
+//    project(':nativelib')
+//}
 

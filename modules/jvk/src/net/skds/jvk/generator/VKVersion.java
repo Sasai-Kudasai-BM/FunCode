@@ -9,13 +9,16 @@ import org.w3c.dom.Element;
 
 import java.lang.invoke.MethodHandle;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 class VKVersion {
 	boolean extension;
 	String name;
 	final List<Object> contents = new ArrayList<>();    // String, Enum, Command, Type, Holder
+	final Set<String> names = new HashSet<>();
 
 	public static VKVersion create(Element e) {
 		VKVersion vkv = new VKVersion();
@@ -48,6 +51,9 @@ class VKVersion {
 									vkv.contents.add(h);
 									VKGen.addTask(() -> h.setValue(EnumType.parseValue(e3)));
 								} else {
+									if (!vkv.names.add(vv.name())) {
+										break;
+									}
 									vkv.contents.add(vv);
 								}
 							}
@@ -59,7 +65,12 @@ class VKVersion {
 									vkv.contents.add(t);
 								}
 							}
-							case "command" -> vkv.contents.add(VKGen.commands.get(e3.getAttribute("name")));
+							case "command" -> {
+								String nme = e3.getAttribute("name");
+								if (vkv.names.add(nme)) {
+									vkv.contents.add(VKGen.commands.get(nme));
+								}
+							}
 						}
 					}
 				}
@@ -104,6 +115,7 @@ class VKVersion {
 		cb.checkImport(NativeType.class);
 		cb.checkImport(VKDefinitions.class);
 		cb.importStatic(NInvoker.class);
+
 		for (Object o : contents) {
 			writeContent(o, cb);
 		}
@@ -123,8 +135,10 @@ class VKVersion {
 			String init = String.valueOf(value.v());
 			if (value.v().getClass() == Float.class) {
 				init += "F";
+			} else if (value.type().javaType == JavaTypeEnum.LONG) {
+				init += "L";
 			}
-			cb.field(value.name(), value.type() == null ? null : value.type().javaType.clazz, init, value.comment());
+			cb.field(value.name(), value.type().javaType.clazz, init, value.comment());
 		} else if (o instanceof ICommand command) {
 
 			var t = command.returnType().nativeType().javaType.clazz;
@@ -152,7 +166,7 @@ class VKVersion {
 
 			cb.field(command.name(), MethodHandle.class, mh.toString(), "", "", true);
 			//createWinHandle("GetAsyncKeyState", SHORT, INT)
-			cb.method(command.name(), t, body.toString(), command.comment(), "@NativeType(\"" + command.returnType().getName() + "\")", args);
+			cb.method(command.name(), t, body.toString(), command.comment(), "@NativeType(\"" + command.returnType().nativeTypeName() + "\")", args);
 		}
 
 	}
@@ -172,8 +186,17 @@ class VKVersion {
 	}
 
 	private static void extension(Element e, VKVersion vkv) {
-		String number = e.getAttribute("name");
-		vkv.name = number.toLowerCase();
+		String number = e.getAttribute("name").toLowerCase();
+		StringBuilder sb = new StringBuilder();
+		for (String s : number.split("_")) {
+			if (!s.isEmpty()) {
+				sb.append(Character.toUpperCase(s.charAt(0)));
+				if (s.length() > 1) {
+					sb.append(s.substring(1));
+				}
+			}
+		}
+		vkv.name = sb.toString();
 		vkv.extension = true;
 	}
 }
