@@ -6,6 +6,7 @@
 build
 bin
 dat
+*.iml
 *.log
 *.hprof
 *.hwcache
