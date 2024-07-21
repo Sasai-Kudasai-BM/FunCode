@@ -15,7 +15,7 @@ public final class VkDescriptorPoolCreateInfo extends AbstractNativeStructure {
 	* values = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO
 	*/
 	@NativeType("VkStructureType")
-	public int sType;
+	public int sType = 33;
 
 	/**
 	* optional

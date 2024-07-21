@@ -14,6 +14,8 @@ public interface NativeData {
 
 	long alloc(MemoryStack stack);
 
+	long allocPut(MemoryStack stack);
+
 	long cAlloc();
 
 	void free();

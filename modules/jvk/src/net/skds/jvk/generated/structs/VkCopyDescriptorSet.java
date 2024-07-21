@@ -15,7 +15,7 @@ public final class VkCopyDescriptorSet extends AbstractNativeStructure {
 	* values = VK_STRUCTURE_TYPE_COPY_DESCRIPTOR_SET
 	*/
 	@NativeType("VkStructureType")
-	public int sType;
+	public int sType = 36;
 
 	/**
 	* optional

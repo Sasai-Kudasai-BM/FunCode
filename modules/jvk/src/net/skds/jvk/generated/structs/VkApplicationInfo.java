@@ -15,7 +15,7 @@ public final class VkApplicationInfo extends AbstractNativeStructure {
 	* values = VK_STRUCTURE_TYPE_APPLICATION_INFO
 	*/
 	@NativeType("VkStructureType")
-	public int sType;
+	public int sType = 0;
 
 	/**
 	* optional

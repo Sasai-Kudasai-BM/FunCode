@@ -15,7 +15,7 @@ public final class VkFenceCreateInfo extends AbstractNativeStructure {
 	* values = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO
 	*/
 	@NativeType("VkStructureType")
-	public int sType;
+	public int sType = 8;
 
 	/**
 	* optional

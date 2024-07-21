@@ -15,7 +15,7 @@ public final class VkBindSparseInfo extends AbstractNativeStructure {
 	* values = VK_STRUCTURE_TYPE_BIND_SPARSE_INFO
 	*/
 	@NativeType("VkStructureType")
-	public int sType;
+	public int sType = 7;
 
 	/**
 	* optional

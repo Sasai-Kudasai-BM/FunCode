@@ -15,7 +15,7 @@ public final class VkDescriptorSetLayoutCreateInfo extends AbstractNativeStructu
 	* values = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO
 	*/
 	@NativeType("VkStructureType")
-	public int sType;
+	public int sType = 32;
 
 	/**
 	* optional

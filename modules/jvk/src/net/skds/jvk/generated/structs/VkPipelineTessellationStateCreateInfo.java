@@ -15,7 +15,7 @@ public final class VkPipelineTessellationStateCreateInfo extends AbstractNativeS
 	* values = VK_STRUCTURE_TYPE_PIPELINE_TESSELLATION_STATE_CREATE_INFO
 	*/
 	@NativeType("VkStructureType")
-	public int sType;
+	public int sType = 21;
 
 	/**
 	* optional

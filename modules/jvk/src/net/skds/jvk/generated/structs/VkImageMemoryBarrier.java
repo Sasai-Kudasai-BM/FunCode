@@ -16,7 +16,7 @@ public final class VkImageMemoryBarrier extends AbstractNativeStructure {
 	* values = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER
 	*/
 	@NativeType("VkStructureType")
-	public int sType;
+	public int sType = 45;
 
 	/**
 	* optional

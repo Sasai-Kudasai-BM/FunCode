@@ -15,7 +15,7 @@ public final class VkDescriptorSetAllocateInfo extends AbstractNativeStructure {
 	* values = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO
 	*/
 	@NativeType("VkStructureType")
-	public int sType;
+	public int sType = 34;
 
 	/**
 	* optional

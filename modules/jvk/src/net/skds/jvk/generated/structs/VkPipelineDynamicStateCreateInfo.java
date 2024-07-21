@@ -15,7 +15,7 @@ public final class VkPipelineDynamicStateCreateInfo extends AbstractNativeStruct
 	* values = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO
 	*/
 	@NativeType("VkStructureType")
-	public int sType;
+	public int sType = 27;
 
 	/**
 	* optional

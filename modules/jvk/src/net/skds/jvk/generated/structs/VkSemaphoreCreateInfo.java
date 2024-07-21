@@ -15,7 +15,7 @@ public final class VkSemaphoreCreateInfo extends AbstractNativeStructure {
 	* values = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO
 	*/
 	@NativeType("VkStructureType")
-	public int sType;
+	public int sType = 9;
 
 	/**
 	* optional

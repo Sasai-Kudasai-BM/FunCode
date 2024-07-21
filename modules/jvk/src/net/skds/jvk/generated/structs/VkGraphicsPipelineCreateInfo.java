@@ -15,7 +15,7 @@ public final class VkGraphicsPipelineCreateInfo extends AbstractNativeStructure 
 	* values = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO
 	*/
 	@NativeType("VkStructureType")
-	public int sType;
+	public int sType = 28;
 
 	/**
 	* optional

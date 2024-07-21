@@ -15,7 +15,7 @@ public final class VkDeviceCreateInfo extends AbstractNativeStructure {
 	* values = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO
 	*/
 	@NativeType("VkStructureType")
-	public int sType;
+	public int sType = 3;
 
 	/**
 	* optional

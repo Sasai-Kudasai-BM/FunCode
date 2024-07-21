@@ -51,8 +51,85 @@ public class MemoryStack implements AutoCloseable {
 		return adr;
 	}
 
-	public long push(int size) {
+	public long pushSize(int size) {
 		long adr = unsafe.allocateMemory(size);
+		ll.addLong(adr);
+		return adr;
+	}
+
+	public long push(short value) {
+		long adr = unsafe.allocateMemory(2);
+		unsafe.putShort(adr, value);
+		ll.addLong(adr);
+		return adr;
+	}
+
+	public long push(int value) {
+		long adr = unsafe.allocateMemory(4);
+		unsafe.putInt(adr, value);
+		ll.addLong(adr);
+		return adr;
+	}
+
+	public long push(float value) {
+		long adr = unsafe.allocateMemory(4);
+		unsafe.putFloat(adr, value);
+		ll.addLong(adr);
+		return adr;
+	}
+
+	public long push(long value) {
+		long adr = unsafe.allocateMemory(8);
+		unsafe.putLong(adr, value);
+		ll.addLong(adr);
+		return adr;
+	}
+
+	public long push(double value) {
+		long adr = unsafe.allocateMemory(8);
+		unsafe.putDouble(adr, value);
+		ll.addLong(adr);
+		return adr;
+	}
+
+	public long push(byte[] data) {
+		long adr = unsafe.allocateMemory(data.length);
+		NInvoker.transferArray(data, adr, data.length, 0);
+		ll.addLong(adr);
+		return adr;
+	}
+
+	public long push(int... data) {
+		long adr = unsafe.allocateMemory(data.length * 4L);
+		NInvoker.transferArray(data, adr, data.length, 0);
+		ll.addLong(adr);
+		return adr;
+	}
+
+	public long push(short... data) {
+		long adr = unsafe.allocateMemory(data.length * 2L);
+		NInvoker.transferArray(data, adr, data.length, 0);
+		ll.addLong(adr);
+		return adr;
+	}
+
+	public long push(float... data) {
+		long adr = unsafe.allocateMemory(data.length * 4L);
+		NInvoker.transferArray(data, adr, data.length, 0);
+		ll.addLong(adr);
+		return adr;
+	}
+
+	public long push(long... data) {
+		long adr = unsafe.allocateMemory(data.length * 8L);
+		NInvoker.transferArray(data, adr, data.length, 0);
+		ll.addLong(adr);
+		return adr;
+	}
+
+	public long push(double... data) {
+		long adr = unsafe.allocateMemory(data.length * 8L);
+		NInvoker.transferArray(data, adr, data.length, 0);
 		ll.addLong(adr);
 		return adr;
 	}
@@ -66,6 +143,14 @@ public class MemoryStack implements AutoCloseable {
 
 	public long pushNT(String string, Charset charset) {
 		byte[] data = string.getBytes(charset);
+		long address = unsafe.allocateMemory(data.length + 1);
+		NInvoker.transferArray(data, address, data.length, 0);
+		unsafe.putByte(address + data.length, (byte) 0);
+		ll.addLong(address);
+		return address;
+	}
+
+	public long pushNT(byte[] data) {
 		long address = unsafe.allocateMemory(data.length + 1);
 		NInvoker.transferArray(data, address, data.length, 0);
 		unsafe.putByte(address + data.length, (byte) 0);

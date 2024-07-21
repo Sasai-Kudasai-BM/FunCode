@@ -113,9 +113,13 @@ interface IStruct extends IDataType {
 			if (t.nativeType() == NativeTypeEnum.VOID) {
 				return;
 			}
+			String ini = "";
+			if (member.value() != null) {
+				ini = member.value().toString();
+			}
 			cb.fieldD(member.name(),
 					t.nativeType().javaType.clazz,
-					"", member.comment(),
+					ini, member.comment(),
 					"@NativeType(\"" + t.nativeTypeName() + "\")",
 					false
 			);

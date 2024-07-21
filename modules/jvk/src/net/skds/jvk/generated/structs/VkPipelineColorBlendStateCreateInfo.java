@@ -16,7 +16,7 @@ public final class VkPipelineColorBlendStateCreateInfo extends AbstractNativeStr
 	* values = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO
 	*/
 	@NativeType("VkStructureType")
-	public int sType;
+	public int sType = 26;
 
 	/**
 	* optional

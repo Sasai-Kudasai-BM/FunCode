@@ -15,7 +15,7 @@ public final class VkCommandPoolCreateInfo extends AbstractNativeStructure {
 	* values = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO
 	*/
 	@NativeType("VkStructureType")
-	public int sType;
+	public int sType = 39;
 
 	/**
 	* optional

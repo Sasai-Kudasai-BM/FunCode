@@ -15,7 +15,7 @@ public final class VkPipelineLayoutCreateInfo extends AbstractNativeStructure {
 	* values = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO
 	*/
 	@NativeType("VkStructureType")
-	public int sType;
+	public int sType = 30;
 
 	/**
 	* optional

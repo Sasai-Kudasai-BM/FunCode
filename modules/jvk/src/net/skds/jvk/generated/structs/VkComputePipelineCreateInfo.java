@@ -16,7 +16,7 @@ public final class VkComputePipelineCreateInfo extends AbstractNativeStructure {
 	* values = VK_STRUCTURE_TYPE_COMPUTE_PIPELINE_CREATE_INFO
 	*/
 	@NativeType("VkStructureType")
-	public int sType;
+	public int sType = 29;
 
 	/**
 	* optional

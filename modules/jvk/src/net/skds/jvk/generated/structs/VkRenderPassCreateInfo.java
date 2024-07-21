@@ -15,7 +15,7 @@ public final class VkRenderPassCreateInfo extends AbstractNativeStructure {
 	* values = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO
 	*/
 	@NativeType("VkStructureType")
-	public int sType;
+	public int sType = 38;
 
 	/**
 	* optional

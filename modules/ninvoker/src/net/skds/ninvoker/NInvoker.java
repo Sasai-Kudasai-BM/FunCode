@@ -187,7 +187,7 @@ public final class NInvoker {
 
 	public static long nullTerminatedString(String string, Charset charset, MemoryStack stack) {
 		byte[] data = string.getBytes(charset);
-		long address = stack.push(data.length + 1);
+		long address = stack.pushSize(data.length + 1);
 		transferArray(data, address, data.length, 0);
 		UNSAFE.putByte(address + data.length, (byte) 0);
 		return address;

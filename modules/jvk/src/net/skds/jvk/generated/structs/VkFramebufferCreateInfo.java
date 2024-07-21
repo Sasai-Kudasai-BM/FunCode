@@ -15,7 +15,7 @@ public final class VkFramebufferCreateInfo extends AbstractNativeStructure {
 	* values = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO
 	*/
 	@NativeType("VkStructureType")
-	public int sType;
+	public int sType = 37;
 
 	/**
 	* optional

@@ -15,7 +15,7 @@ public final class VkCommandBufferInheritanceInfo extends AbstractNativeStructur
 	* values = VK_STRUCTURE_TYPE_COMMAND_BUFFER_INHERITANCE_INFO
 	*/
 	@NativeType("VkStructureType")
-	public int sType;
+	public int sType = 41;
 
 	/**
 	* optional

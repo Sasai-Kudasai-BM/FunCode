@@ -15,7 +15,7 @@ public final class VkPipelineCacheCreateInfo extends AbstractNativeStructure {
 	* values = VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO
 	*/
 	@NativeType("VkStructureType")
-	public int sType;
+	public int sType = 17;
 
 	/**
 	* optional

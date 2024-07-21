@@ -16,7 +16,7 @@ public final class VkRenderPassBeginInfo extends AbstractNativeStructure {
 	* values = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO
 	*/
 	@NativeType("VkStructureType")
-	public int sType;
+	public int sType = 43;
 
 	/**
 	* optional

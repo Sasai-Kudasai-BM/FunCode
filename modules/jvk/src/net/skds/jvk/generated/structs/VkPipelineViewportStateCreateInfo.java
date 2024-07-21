@@ -15,7 +15,7 @@ public final class VkPipelineViewportStateCreateInfo extends AbstractNativeStruc
 	* values = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO
 	*/
 	@NativeType("VkStructureType")
-	public int sType;
+	public int sType = 22;
 
 	/**
 	* optional

@@ -15,7 +15,7 @@ public final class VkMemoryBarrier extends AbstractNativeStructure {
 	* values = VK_STRUCTURE_TYPE_MEMORY_BARRIER
 	*/
 	@NativeType("VkStructureType")
-	public int sType;
+	public int sType = 46;
 
 	/**
 	* optional

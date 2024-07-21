@@ -15,7 +15,7 @@ public final class VkMappedMemoryRange extends AbstractNativeStructure {
 	* values = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE
 	*/
 	@NativeType("VkStructureType")
-	public int sType;
+	public int sType = 6;
 
 	/**
 	* optional

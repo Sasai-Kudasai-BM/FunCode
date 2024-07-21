@@ -16,7 +16,7 @@ public final class VkPipelineDepthStencilStateCreateInfo extends AbstractNativeS
 	* values = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO
 	*/
 	@NativeType("VkStructureType")
-	public int sType;
+	public int sType = 25;
 
 	/**
 	* optional

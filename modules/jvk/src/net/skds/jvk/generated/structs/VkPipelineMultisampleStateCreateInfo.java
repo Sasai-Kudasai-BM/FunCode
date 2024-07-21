@@ -15,7 +15,7 @@ public final class VkPipelineMultisampleStateCreateInfo extends AbstractNativeSt
 	* values = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO
 	*/
 	@NativeType("VkStructureType")
-	public int sType;
+	public int sType = 24;
 
 	/**
 	* optional

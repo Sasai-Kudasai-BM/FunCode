@@ -15,7 +15,7 @@ public final class VkQueryPoolCreateInfo extends AbstractNativeStructure {
 	* values = VK_STRUCTURE_TYPE_QUERY_POOL_CREATE_INFO
 	*/
 	@NativeType("VkStructureType")
-	public int sType;
+	public int sType = 11;
 
 	/**
 	* optional

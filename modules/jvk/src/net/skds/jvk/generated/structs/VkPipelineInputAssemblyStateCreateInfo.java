@@ -15,7 +15,7 @@ public final class VkPipelineInputAssemblyStateCreateInfo extends AbstractNative
 	* values = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO
 	*/
 	@NativeType("VkStructureType")
-	public int sType;
+	public int sType = 20;
 
 	/**
 	* optional

@@ -15,7 +15,7 @@ public final class VkWriteDescriptorSet extends AbstractNativeStructure {
 	* values = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET
 	*/
 	@NativeType("VkStructureType")
-	public int sType;
+	public int sType = 35;
 
 	/**
 	* optional

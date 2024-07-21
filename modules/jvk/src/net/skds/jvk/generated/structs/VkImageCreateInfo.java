@@ -16,7 +16,7 @@ public final class VkImageCreateInfo extends AbstractNativeStructure {
 	* values = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO
 	*/
 	@NativeType("VkStructureType")
-	public int sType;
+	public int sType = 14;
 
 	/**
 	* optional

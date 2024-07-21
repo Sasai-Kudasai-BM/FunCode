@@ -15,7 +15,7 @@ public final class VkBufferCreateInfo extends AbstractNativeStructure {
 	* values = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO
 	*/
 	@NativeType("VkStructureType")
-	public int sType;
+	public int sType = 12;
 
 	/**
 	* optional

@@ -15,7 +15,7 @@ public final class VkPipelineRasterizationStateCreateInfo extends AbstractNative
 	* values = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO
 	*/
 	@NativeType("VkStructureType")
-	public int sType;
+	public int sType = 23;
 
 	/**
 	* optional

@@ -15,7 +15,7 @@ public final class VkPipelineVertexInputStateCreateInfo extends AbstractNativeSt
 	* values = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO
 	*/
 	@NativeType("VkStructureType")
-	public int sType;
+	public int sType = 19;
 
 	/**
 	* optional

@@ -1,5 +1,7 @@
 package net.skds.jvk;
 
+import net.skds.jvk.generated.enums.VkResult;
+
 import static net.skds.ninvoker.NInvoker.winInit;
 
 public class VKDefinitions {
@@ -40,6 +42,32 @@ public class VKDefinitions {
 		return vkApiVersionMajor(version) + "."
 				+ vkApiVersionMinor(version) + "."
 				+ vkApiVersionPatch(version);
+	}
+
+	public static String getErr(int err) {
+		return switch (err) {
+			case VkResult.VK_SUCCESS -> "VK_SUCCESS";
+			case VkResult.VK_NOT_READY -> "VK_NOT_READY";
+			case VkResult.VK_TIMEOUT -> "VK_TIMEOUT";
+			case VkResult.VK_EVENT_SET -> "VK_EVENT_SET";
+			case VkResult.VK_EVENT_RESET -> "VK_EVENT_RESET";
+			case VkResult.VK_INCOMPLETE -> "VK_INCOMPLETE";
+			case VkResult.VK_ERROR_OUT_OF_HOST_MEMORY -> "VK_ERROR_OUT_OF_HOST_MEMORY";
+			case VkResult.VK_ERROR_OUT_OF_DEVICE_MEMORY -> "VK_ERROR_OUT_OF_DEVICE_MEMORY";
+			case VkResult.VK_ERROR_INITIALIZATION_FAILED -> "VK_ERROR_INITIALIZATION_FAILED";
+			case VkResult.VK_ERROR_DEVICE_LOST -> "VK_ERROR_DEVICE_LOST";
+			case VkResult.VK_ERROR_MEMORY_MAP_FAILED -> "VK_ERROR_MEMORY_MAP_FAILED";
+			case VkResult.VK_ERROR_LAYER_NOT_PRESENT -> "VK_ERROR_LAYER_NOT_PRESENT";
+			case VkResult.VK_ERROR_EXTENSION_NOT_PRESENT -> "VK_ERROR_EXTENSION_NOT_PRESENT";
+			case VkResult.VK_ERROR_FEATURE_NOT_PRESENT -> "VK_ERROR_FEATURE_NOT_PRESENT";
+			case VkResult.VK_ERROR_INCOMPATIBLE_DRIVER -> "VK_ERROR_INCOMPATIBLE_DRIVER";
+			case VkResult.VK_ERROR_TOO_MANY_OBJECTS -> "VK_ERROR_TOO_MANY_OBJECTS";
+			case VkResult.VK_ERROR_FORMAT_NOT_SUPPORTED -> "VK_ERROR_FORMAT_NOT_SUPPORTED";
+			case VkResult.VK_ERROR_FRAGMENTED_POOL -> "VK_ERROR_FRAGMENTED_POOL";
+			case VkResult.VK_ERROR_UNKNOWN -> "VK_ERROR_UNKNOWN";
+
+			default -> "unknown";
+		};
 	}
 
 }

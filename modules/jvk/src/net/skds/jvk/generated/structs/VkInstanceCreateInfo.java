@@ -15,7 +15,7 @@ public final class VkInstanceCreateInfo extends AbstractNativeStructure {
 	* values = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO
 	*/
 	@NativeType("VkStructureType")
-	public int sType;
+	public int sType = 1;
 
 	/**
 	* optional

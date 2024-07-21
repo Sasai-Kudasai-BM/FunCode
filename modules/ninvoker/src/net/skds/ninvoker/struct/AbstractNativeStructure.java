@@ -34,6 +34,14 @@ public abstract class AbstractNativeStructure implements NativeData {
 	}
 
 	@Override
+	public final long allocPut(MemoryStack stack) {
+		final var wrapper = getWrapper();
+		final long address = wrapper.alloc(this, stack);
+		wrapper.put(this);
+		return address;
+	}
+
+	@Override
 	public final long cAlloc() {
 		return getWrapper().cAlloc(this);
 	}

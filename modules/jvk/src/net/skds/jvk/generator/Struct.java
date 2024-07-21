@@ -35,10 +35,15 @@ class Struct extends DataType implements IStruct {
 				if (optional) {
 					mc.append("optional");
 				}
+				Object val = null;
 				String values = member.getAttribute("values");
 				if (!values.isEmpty()) {
 					if (!mc.isEmpty()) {
 						mc.append(", ");
+					}
+					EnumType.Value v = VKGen.enumValues.get(values);
+					if (v != null) {
+						val = v.v();
 					}
 					mc.append("values = ").append(values);
 				}
@@ -96,7 +101,7 @@ class Struct extends DataType implements IStruct {
 					st = new PointerType(st);
 				}
 
-				struct.members.add(new StructMember(sn, st, mc.toString()));
+				struct.members.add(new StructMember(sn, st, mc.toString(), val));
 			}
 		});
 		return struct;

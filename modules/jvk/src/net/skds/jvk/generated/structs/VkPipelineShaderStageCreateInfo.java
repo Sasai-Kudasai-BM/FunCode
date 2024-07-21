@@ -15,7 +15,7 @@ public final class VkPipelineShaderStageCreateInfo extends AbstractNativeStructu
 	* values = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO
 	*/
 	@NativeType("VkStructureType")
-	public int sType;
+	public int sType = 18;
 
 	/**
 	* optional

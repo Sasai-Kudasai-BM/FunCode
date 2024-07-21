@@ -15,7 +15,7 @@ public final class VkDeviceQueueCreateInfo extends AbstractNativeStructure {
 	* values = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO
 	*/
 	@NativeType("VkStructureType")
-	public int sType;
+	public int sType = 2;
 
 	/**
 	* optional

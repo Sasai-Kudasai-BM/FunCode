@@ -121,7 +121,7 @@ public final class NativeStructureWrapper {
 	@SuppressWarnings("unchecked")
 	public <T extends AbstractNativeStructure> T[] allocArray(int len, MemoryStack stack) {
 		T[] arr = (T[]) Array.newInstance(type, len);
-		long address = stack.push(size * len);
+		long address = stack.pushSize(size * len);
 		for (int i = 0; i < len; i++) {
 			T struct = (T) constructor.get();
 			arr[i] = struct;
@@ -137,7 +137,7 @@ public final class NativeStructureWrapper {
 	}
 
 	public long alloc(AbstractNativeStructure structure, MemoryStack stack) {
-		long address = stack.push(size);
+		long address = stack.pushSize(size);
 		structure.address = address;
 		return address;
 	}

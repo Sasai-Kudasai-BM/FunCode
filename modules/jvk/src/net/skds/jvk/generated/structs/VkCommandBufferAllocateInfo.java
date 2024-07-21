@@ -15,7 +15,7 @@ public final class VkCommandBufferAllocateInfo extends AbstractNativeStructure {
 	* values = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO
 	*/
 	@NativeType("VkStructureType")
-	public int sType;
+	public int sType = 40;
 
 	/**
 	* optional

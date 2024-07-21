@@ -15,7 +15,7 @@ public final class VkCommandBufferBeginInfo extends AbstractNativeStructure {
 	* values = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO
 	*/
 	@NativeType("VkStructureType")
-	public int sType;
+	public int sType = 42;
 
 	/**
 	* optional

@@ -15,7 +15,7 @@ public final class VkSamplerCreateInfo extends AbstractNativeStructure {
 	* values = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO
 	*/
 	@NativeType("VkStructureType")
-	public int sType;
+	public int sType = 31;
 
 	/**
 	* optional

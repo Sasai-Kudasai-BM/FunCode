@@ -15,7 +15,7 @@ public final class VkSubmitInfo extends AbstractNativeStructure {
 	* values = VK_STRUCTURE_TYPE_SUBMIT_INFO
 	*/
 	@NativeType("VkStructureType")
-	public int sType;
+	public int sType = 4;
 
 	/**
 	* optional
