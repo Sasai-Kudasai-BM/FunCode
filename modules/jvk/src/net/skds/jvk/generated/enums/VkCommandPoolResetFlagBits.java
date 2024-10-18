@@ -11,4 +11,6 @@ public final class VkCommandPoolResetFlagBits {
 	*/
 	public static final int VK_COMMAND_POOL_RESET_RELEASE_RESOURCES_BIT = 1;
 
+	public static final int VK_COMMAND_POOL_RESET_RESERVED_1_BIT_COREAVI = 2;
+
 }

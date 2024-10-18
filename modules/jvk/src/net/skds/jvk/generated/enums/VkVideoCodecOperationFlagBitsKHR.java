@@ -8,4 +8,12 @@ public final class VkVideoCodecOperationFlagBitsKHR {
 
 	public static final int VK_VIDEO_CODEC_OPERATION_INVALID_BIT_KHR = 0;
 
+	public static final int VK_VIDEO_CODEC_OPERATION_ENCODE_H264_BIT_EXT = 65536;
+
+	public static final int VK_VIDEO_CODEC_OPERATION_ENCODE_H265_BIT_EXT = 131072;
+
+	public static final int VK_VIDEO_CODEC_OPERATION_DECODE_H264_BIT_EXT = 1;
+
+	public static final int VK_VIDEO_CODEC_OPERATION_DECODE_H265_BIT_EXT = 2;
+
 }

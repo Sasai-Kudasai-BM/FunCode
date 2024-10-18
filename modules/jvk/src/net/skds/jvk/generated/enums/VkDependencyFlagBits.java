@@ -11,4 +11,13 @@ public final class VkDependencyFlagBits {
 	*/
 	public static final int VK_DEPENDENCY_BY_REGION_BIT = 1;
 
+	/**
+	* Dependency is across devices
+	*/
+	public static final int VK_DEPENDENCY_DEVICE_GROUP_BIT = 4;
+
+	public static final int VK_DEPENDENCY_VIEW_LOCAL_BIT = 2;
+
+	public static final int VK_DEPENDENCY_RESERVED_3_BIT_EXT = 8;
+
 }

@@ -39,7 +39,7 @@ interface IStruct extends IDataType {
 
 	private static void expUnion(ClassBuilder cb, Union u, StructMember member) {
 		cb.checkImport(ArrayLength.class);
-		cb.fieldD(member.name(), byte[].class, "", member.comment(), "@ArrayLength(" + u.size + ")\n\t@NativeType(\"" + u.nativeTypeName() + "\")", false);
+		cb.fieldD(member.name(), byte[].class, "", member.comment(), "@ArrayLength(" + u.size() + ")\n\t@NativeType(\"" + u.nativeTypeName() + "\")", false);
 	}
 
 
@@ -50,7 +50,7 @@ interface IStruct extends IDataType {
 					byte[].class,
 					"",
 					member.comment(),
-					"@ArrayLength(" + a.getLength() + ")\n\t@NativeType(\"" + a.nativeTypeName() + "\")",
+					"@ArrayLength(" + a.size() + ")\n\t@NativeType(\"" + a.nativeTypeName() + "\")",
 					false
 			);
 		} else if (a.getRef() instanceof Struct s) {
@@ -60,7 +60,7 @@ interface IStruct extends IDataType {
 
 			cb.checkImport(ArrayLength.class);
 			cb.fieldD(member.name(),
-					new ClassBuilder.CT(name, pack),
+					new ClassBuilder.CT(name, pack, true),
 					"",
 					member.comment(),
 					"@ArrayLength(" + a.getLength() + ")\n\t@NativeType(\"" + a.nativeTypeName() + "\")",
@@ -95,7 +95,7 @@ interface IStruct extends IDataType {
 				String name = s.getName();
 
 				cb.fieldD(member.name(),
-						new ClassBuilder.CT(name, pack),
+						new ClassBuilder.CT(name, pack, false),
 						"",
 						member.comment(),
 						"@NativeType(\"" + s.nativeTypeName() + "\")",

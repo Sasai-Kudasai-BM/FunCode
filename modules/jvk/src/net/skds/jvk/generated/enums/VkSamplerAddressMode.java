@@ -14,4 +14,9 @@ public final class VkSamplerAddressMode {
 
 	public static final int VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER = 3;
 
+	/**
+	* No need to add an extnumber attribute, since this uses a core enum value
+	*/
+	public static final int VK_SAMPLER_ADDRESS_MODE_MIRROR_CLAMP_TO_EDGE = 4;
+
 }

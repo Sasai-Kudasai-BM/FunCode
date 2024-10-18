@@ -10,4 +10,8 @@ public final class VkIndexType {
 
 	public static final int VK_INDEX_TYPE_UINT32 = 1;
 
+	public static final int VK_INDEX_TYPE_NONE_KHR = 0;
+
+	public static final int VK_INDEX_TYPE_UINT8_EXT = 0;
+
 }

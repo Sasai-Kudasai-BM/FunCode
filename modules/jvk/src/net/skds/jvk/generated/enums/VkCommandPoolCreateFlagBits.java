@@ -16,4 +16,9 @@ public final class VkCommandPoolCreateFlagBits {
 	*/
 	public static final int VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT = 2;
 
+	/**
+	* Command buffers allocated from pool are protected command buffers
+	*/
+	public static final int VK_COMMAND_POOL_CREATE_PROTECTED_BIT = 4;
+
 }

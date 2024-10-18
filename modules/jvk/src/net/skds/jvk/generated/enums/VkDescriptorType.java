@@ -28,4 +28,12 @@ public final class VkDescriptorType {
 
 	public static final int VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT = 10;
 
+	public static final int VK_DESCRIPTOR_TYPE_INLINE_UNIFORM_BLOCK = 0;
+
+	public static final int VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_KHR = 0;
+
+	public static final int VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_NV = 0;
+
+	public static final int VK_DESCRIPTOR_TYPE_MUTABLE_VALVE = 0;
+
 }

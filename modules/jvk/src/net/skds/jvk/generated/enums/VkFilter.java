@@ -10,4 +10,6 @@ public final class VkFilter {
 
 	public static final int VK_FILTER_LINEAR = 1;
 
+	public static final int VK_FILTER_CUBIC_IMG = 0;
+
 }

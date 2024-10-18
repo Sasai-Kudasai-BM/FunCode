@@ -91,4 +91,27 @@ public final class VkPipelineStageFlagBits {
 	*/
 	public static final int VK_PIPELINE_STAGE_ALL_COMMANDS_BIT = 65536;
 
+	public static final int VK_PIPELINE_STAGE_NONE = 0;
+
+	public static final int VK_PIPELINE_STAGE_TRANSFORM_FEEDBACK_BIT_EXT = 16777216;
+
+	/**
+	* A pipeline stage for conditional rendering predicate fetch
+	*/
+	public static final int VK_PIPELINE_STAGE_CONDITIONAL_RENDERING_BIT_EXT = 262144;
+
+	public static final int VK_PIPELINE_STAGE_ACCELERATION_STRUCTURE_BUILD_BIT_KHR = 33554432;
+
+	public static final int VK_PIPELINE_STAGE_RAY_TRACING_SHADER_BIT_KHR = 2097152;
+
+	public static final int VK_PIPELINE_STAGE_TASK_SHADER_BIT_NV = 524288;
+
+	public static final int VK_PIPELINE_STAGE_MESH_SHADER_BIT_NV = 1048576;
+
+	public static final int VK_PIPELINE_STAGE_FRAGMENT_DENSITY_PROCESS_BIT_EXT = 8388608;
+
+	public static final int VK_PIPELINE_STAGE_FRAGMENT_SHADING_RATE_ATTACHMENT_BIT_KHR = 4194304;
+
+	public static final int VK_PIPELINE_STAGE_COMMAND_PREPROCESS_BIT_NV = 131072;
+
 }

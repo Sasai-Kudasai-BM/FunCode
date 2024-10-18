@@ -90,4 +90,51 @@ public final class VkAccessFlagBits2 {
 
 	public static final long VK_ACCESS_2_SHADER_STORAGE_WRITE_BIT_KHR = 17179869184L;
 
+	public static final long VK_ACCESS_2_VIDEO_DECODE_READ_BIT_KHR = 34359738368L;
+
+	public static final long VK_ACCESS_2_VIDEO_DECODE_WRITE_BIT_KHR = 68719476736L;
+
+	public static final long VK_ACCESS_2_VIDEO_ENCODE_READ_BIT_KHR = 137438953472L;
+
+	public static final long VK_ACCESS_2_VIDEO_ENCODE_WRITE_BIT_KHR = 274877906944L;
+
+	public static final long VK_ACCESS_2_TRANSFORM_FEEDBACK_WRITE_BIT_EXT = 33554432L;
+
+	public static final long VK_ACCESS_2_TRANSFORM_FEEDBACK_COUNTER_READ_BIT_EXT = 67108864L;
+
+	public static final long VK_ACCESS_2_TRANSFORM_FEEDBACK_COUNTER_WRITE_BIT_EXT = 134217728L;
+
+	/**
+	* read access flag for reading conditional rendering predicate
+	*/
+	public static final long VK_ACCESS_2_CONDITIONAL_RENDERING_READ_BIT_EXT = 1048576L;
+
+	public static final long VK_ACCESS_2_COMMAND_PREPROCESS_READ_BIT_NV = 131072L;
+
+	public static final long VK_ACCESS_2_COMMAND_PREPROCESS_WRITE_BIT_NV = 262144L;
+
+	public static final long VK_ACCESS_2_FRAGMENT_SHADING_RATE_ATTACHMENT_READ_BIT_KHR = 8388608L;
+
+	public static final long VK_ACCESS_2_ACCELERATION_STRUCTURE_READ_BIT_KHR = 2097152L;
+
+	public static final long VK_ACCESS_2_ACCELERATION_STRUCTURE_WRITE_BIT_KHR = 4194304L;
+
+	public static final long VK_ACCESS_2_FRAGMENT_DENSITY_MAP_READ_BIT_EXT = 16777216L;
+
+	public static final long VK_ACCESS_2_COLOR_ATTACHMENT_READ_NONCOHERENT_BIT_EXT = 524288L;
+
+	public static final long VK_ACCESS_2_RESERVED_41_BIT_AMD = 2199023255552L;
+
+	public static final long VK_ACCESS_2_INVOCATION_MASK_READ_BIT_HUAWEI = 549755813888L;
+
+	public static final long VK_ACCESS_2_SHADER_BINDING_TABLE_READ_BIT_KHR = 1099511627776L;
+
+	public static final long VK_ACCESS_2_RESERVED_44_BIT_NV = 17592186044416L;
+
+	public static final long VK_ACCESS_2_RESERVED_45_BIT_NV = 35184372088832L;
+
+	public static final long VK_ACCESS_2_RESERVED_42_BIT_NV = 4398046511104L;
+
+	public static final long VK_ACCESS_2_RESERVED_43_BIT_NV = 8796093022208L;
+
 }

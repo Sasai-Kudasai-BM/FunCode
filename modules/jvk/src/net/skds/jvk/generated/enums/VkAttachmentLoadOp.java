@@ -12,4 +12,6 @@ public final class VkAttachmentLoadOp {
 
 	public static final int VK_ATTACHMENT_LOAD_OP_DONT_CARE = 2;
 
+	public static final int VK_ATTACHMENT_LOAD_OP_NONE_EXT = 0;
+
 }

@@ -31,4 +31,15 @@ public final class VkMemoryPropertyFlagBits {
 	*/
 	public static final int VK_MEMORY_PROPERTY_LAZILY_ALLOCATED_BIT = 16;
 
+	/**
+	* Memory is protected
+	*/
+	public static final int VK_MEMORY_PROPERTY_PROTECTED_BIT = 32;
+
+	public static final int VK_MEMORY_PROPERTY_DEVICE_COHERENT_BIT_AMD = 64;
+
+	public static final int VK_MEMORY_PROPERTY_DEVICE_UNCACHED_BIT_AMD = 128;
+
+	public static final int VK_MEMORY_PROPERTY_RDMA_CAPABLE_BIT_NV = 256;
+
 }

@@ -376,4 +376,188 @@ public final class VkFormat {
 
 	public static final int VK_FORMAT_ASTC_12x12_SRGB_BLOCK = 184;
 
+	public static final int VK_FORMAT_G8B8G8R8_422_UNORM = 0;
+
+	public static final int VK_FORMAT_B8G8R8G8_422_UNORM = 1;
+
+	public static final int VK_FORMAT_G8_B8_R8_3PLANE_420_UNORM = 2;
+
+	public static final int VK_FORMAT_G8_B8R8_2PLANE_420_UNORM = 3;
+
+	public static final int VK_FORMAT_G8_B8_R8_3PLANE_422_UNORM = 4;
+
+	public static final int VK_FORMAT_G8_B8R8_2PLANE_422_UNORM = 5;
+
+	public static final int VK_FORMAT_G8_B8_R8_3PLANE_444_UNORM = 6;
+
+	public static final int VK_FORMAT_R10X6_UNORM_PACK16 = 7;
+
+	public static final int VK_FORMAT_R10X6G10X6_UNORM_2PACK16 = 8;
+
+	public static final int VK_FORMAT_R10X6G10X6B10X6A10X6_UNORM_4PACK16 = 9;
+
+	public static final int VK_FORMAT_G10X6B10X6G10X6R10X6_422_UNORM_4PACK16 = 10;
+
+	public static final int VK_FORMAT_B10X6G10X6R10X6G10X6_422_UNORM_4PACK16 = 11;
+
+	public static final int VK_FORMAT_G10X6_B10X6_R10X6_3PLANE_420_UNORM_3PACK16 = 12;
+
+	public static final int VK_FORMAT_G10X6_B10X6R10X6_2PLANE_420_UNORM_3PACK16 = 13;
+
+	public static final int VK_FORMAT_G10X6_B10X6_R10X6_3PLANE_422_UNORM_3PACK16 = 14;
+
+	public static final int VK_FORMAT_G10X6_B10X6R10X6_2PLANE_422_UNORM_3PACK16 = 15;
+
+	public static final int VK_FORMAT_G10X6_B10X6_R10X6_3PLANE_444_UNORM_3PACK16 = 16;
+
+	public static final int VK_FORMAT_R12X4_UNORM_PACK16 = 17;
+
+	public static final int VK_FORMAT_R12X4G12X4_UNORM_2PACK16 = 18;
+
+	public static final int VK_FORMAT_R12X4G12X4B12X4A12X4_UNORM_4PACK16 = 19;
+
+	public static final int VK_FORMAT_G12X4B12X4G12X4R12X4_422_UNORM_4PACK16 = 20;
+
+	public static final int VK_FORMAT_B12X4G12X4R12X4G12X4_422_UNORM_4PACK16 = 21;
+
+	public static final int VK_FORMAT_G12X4_B12X4_R12X4_3PLANE_420_UNORM_3PACK16 = 22;
+
+	public static final int VK_FORMAT_G12X4_B12X4R12X4_2PLANE_420_UNORM_3PACK16 = 23;
+
+	public static final int VK_FORMAT_G12X4_B12X4_R12X4_3PLANE_422_UNORM_3PACK16 = 24;
+
+	public static final int VK_FORMAT_G12X4_B12X4R12X4_2PLANE_422_UNORM_3PACK16 = 25;
+
+	public static final int VK_FORMAT_G12X4_B12X4_R12X4_3PLANE_444_UNORM_3PACK16 = 26;
+
+	public static final int VK_FORMAT_G16B16G16R16_422_UNORM = 27;
+
+	public static final int VK_FORMAT_B16G16R16G16_422_UNORM = 28;
+
+	public static final int VK_FORMAT_G16_B16_R16_3PLANE_420_UNORM = 29;
+
+	public static final int VK_FORMAT_G16_B16R16_2PLANE_420_UNORM = 30;
+
+	public static final int VK_FORMAT_G16_B16_R16_3PLANE_422_UNORM = 31;
+
+	public static final int VK_FORMAT_G16_B16R16_2PLANE_422_UNORM = 32;
+
+	public static final int VK_FORMAT_G16_B16_R16_3PLANE_444_UNORM = 33;
+
+	public static final int VK_FORMAT_G8_B8R8_2PLANE_444_UNORM = 0;
+
+	public static final int VK_FORMAT_G10X6_B10X6R10X6_2PLANE_444_UNORM_3PACK16 = 1;
+
+	public static final int VK_FORMAT_G12X4_B12X4R12X4_2PLANE_444_UNORM_3PACK16 = 2;
+
+	public static final int VK_FORMAT_G16_B16R16_2PLANE_444_UNORM = 3;
+
+	public static final int VK_FORMAT_A4R4G4B4_UNORM_PACK16 = 0;
+
+	public static final int VK_FORMAT_A4B4G4R4_UNORM_PACK16 = 1;
+
+	public static final int VK_FORMAT_ASTC_4x4_SFLOAT_BLOCK = 0;
+
+	public static final int VK_FORMAT_ASTC_5x4_SFLOAT_BLOCK = 1;
+
+	public static final int VK_FORMAT_ASTC_5x5_SFLOAT_BLOCK = 2;
+
+	public static final int VK_FORMAT_ASTC_6x5_SFLOAT_BLOCK = 3;
+
+	public static final int VK_FORMAT_ASTC_6x6_SFLOAT_BLOCK = 4;
+
+	public static final int VK_FORMAT_ASTC_8x5_SFLOAT_BLOCK = 5;
+
+	public static final int VK_FORMAT_ASTC_8x6_SFLOAT_BLOCK = 6;
+
+	public static final int VK_FORMAT_ASTC_8x8_SFLOAT_BLOCK = 7;
+
+	public static final int VK_FORMAT_ASTC_10x5_SFLOAT_BLOCK = 8;
+
+	public static final int VK_FORMAT_ASTC_10x6_SFLOAT_BLOCK = 9;
+
+	public static final int VK_FORMAT_ASTC_10x8_SFLOAT_BLOCK = 10;
+
+	public static final int VK_FORMAT_ASTC_10x10_SFLOAT_BLOCK = 11;
+
+	public static final int VK_FORMAT_ASTC_12x10_SFLOAT_BLOCK = 12;
+
+	public static final int VK_FORMAT_ASTC_12x12_SFLOAT_BLOCK = 13;
+
+	public static final int VK_FORMAT_PVRTC1_2BPP_UNORM_BLOCK_IMG = 0;
+
+	public static final int VK_FORMAT_PVRTC1_4BPP_UNORM_BLOCK_IMG = 1;
+
+	public static final int VK_FORMAT_PVRTC2_2BPP_UNORM_BLOCK_IMG = 2;
+
+	public static final int VK_FORMAT_PVRTC2_4BPP_UNORM_BLOCK_IMG = 3;
+
+	public static final int VK_FORMAT_PVRTC1_2BPP_SRGB_BLOCK_IMG = 4;
+
+	public static final int VK_FORMAT_PVRTC1_4BPP_SRGB_BLOCK_IMG = 5;
+
+	public static final int VK_FORMAT_PVRTC2_2BPP_SRGB_BLOCK_IMG = 6;
+
+	public static final int VK_FORMAT_PVRTC2_4BPP_SRGB_BLOCK_IMG = 7;
+
+	public static final int VK_FORMAT_ASTC_3x3x3_UNORM_BLOCK_EXT = 0;
+
+	public static final int VK_FORMAT_ASTC_3x3x3_SRGB_BLOCK_EXT = 1;
+
+	public static final int VK_FORMAT_ASTC_3x3x3_SFLOAT_BLOCK_EXT = 2;
+
+	public static final int VK_FORMAT_ASTC_4x3x3_UNORM_BLOCK_EXT = 3;
+
+	public static final int VK_FORMAT_ASTC_4x3x3_SRGB_BLOCK_EXT = 4;
+
+	public static final int VK_FORMAT_ASTC_4x3x3_SFLOAT_BLOCK_EXT = 5;
+
+	public static final int VK_FORMAT_ASTC_4x4x3_UNORM_BLOCK_EXT = 6;
+
+	public static final int VK_FORMAT_ASTC_4x4x3_SRGB_BLOCK_EXT = 7;
+
+	public static final int VK_FORMAT_ASTC_4x4x3_SFLOAT_BLOCK_EXT = 8;
+
+	public static final int VK_FORMAT_ASTC_4x4x4_UNORM_BLOCK_EXT = 9;
+
+	public static final int VK_FORMAT_ASTC_4x4x4_SRGB_BLOCK_EXT = 10;
+
+	public static final int VK_FORMAT_ASTC_4x4x4_SFLOAT_BLOCK_EXT = 11;
+
+	public static final int VK_FORMAT_ASTC_5x4x4_UNORM_BLOCK_EXT = 12;
+
+	public static final int VK_FORMAT_ASTC_5x4x4_SRGB_BLOCK_EXT = 13;
+
+	public static final int VK_FORMAT_ASTC_5x4x4_SFLOAT_BLOCK_EXT = 14;
+
+	public static final int VK_FORMAT_ASTC_5x5x4_UNORM_BLOCK_EXT = 15;
+
+	public static final int VK_FORMAT_ASTC_5x5x4_SRGB_BLOCK_EXT = 16;
+
+	public static final int VK_FORMAT_ASTC_5x5x4_SFLOAT_BLOCK_EXT = 17;
+
+	public static final int VK_FORMAT_ASTC_5x5x5_UNORM_BLOCK_EXT = 18;
+
+	public static final int VK_FORMAT_ASTC_5x5x5_SRGB_BLOCK_EXT = 19;
+
+	public static final int VK_FORMAT_ASTC_5x5x5_SFLOAT_BLOCK_EXT = 20;
+
+	public static final int VK_FORMAT_ASTC_6x5x5_UNORM_BLOCK_EXT = 21;
+
+	public static final int VK_FORMAT_ASTC_6x5x5_SRGB_BLOCK_EXT = 22;
+
+	public static final int VK_FORMAT_ASTC_6x5x5_SFLOAT_BLOCK_EXT = 23;
+
+	public static final int VK_FORMAT_ASTC_6x6x5_UNORM_BLOCK_EXT = 24;
+
+	public static final int VK_FORMAT_ASTC_6x6x5_SRGB_BLOCK_EXT = 25;
+
+	public static final int VK_FORMAT_ASTC_6x6x5_SFLOAT_BLOCK_EXT = 26;
+
+	public static final int VK_FORMAT_ASTC_6x6x6_UNORM_BLOCK_EXT = 27;
+
+	public static final int VK_FORMAT_ASTC_6x6x6_SRGB_BLOCK_EXT = 28;
+
+	public static final int VK_FORMAT_ASTC_6x6x6_SFLOAT_BLOCK_EXT = 29;
+
 }

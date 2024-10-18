@@ -58,4 +58,53 @@ public final class VkObjectType {
 
 	public static final int VK_OBJECT_TYPE_COMMAND_POOL = 25;
 
+	public static final int VK_OBJECT_TYPE_SAMPLER_YCBCR_CONVERSION = 0;
+
+	public static final int VK_OBJECT_TYPE_DESCRIPTOR_UPDATE_TEMPLATE = 0;
+
+	public static final int VK_OBJECT_TYPE_PRIVATE_DATA_SLOT = 0;
+
+	public static final int VK_OBJECT_TYPE_SURFACE_KHR = 0;
+
+	public static final int VK_OBJECT_TYPE_SWAPCHAIN_KHR = 0;
+
+	public static final int VK_OBJECT_TYPE_DISPLAY_KHR = 0;
+
+	public static final int VK_OBJECT_TYPE_DISPLAY_MODE_KHR = 1;
+
+	public static final int VK_OBJECT_TYPE_DEBUG_REPORT_CALLBACK_EXT = 0;
+
+	/**
+	* VkVideoSessionKHR
+	*/
+	public static final int VK_OBJECT_TYPE_VIDEO_SESSION_KHR = 0;
+
+	/**
+	* VkVideoSessionParametersKHR
+	*/
+	public static final int VK_OBJECT_TYPE_VIDEO_SESSION_PARAMETERS_KHR = 1;
+
+	public static final int VK_OBJECT_TYPE_CU_MODULE_NVX = 0;
+
+	public static final int VK_OBJECT_TYPE_CU_FUNCTION_NVX = 1;
+
+	public static final int VK_OBJECT_TYPE_DEBUG_UTILS_MESSENGER_EXT = 0;
+
+	public static final int VK_OBJECT_TYPE_ACCELERATION_STRUCTURE_KHR = 0;
+
+	public static final int VK_OBJECT_TYPE_VALIDATION_CACHE_EXT = 0;
+
+	public static final int VK_OBJECT_TYPE_ACCELERATION_STRUCTURE_NV = 0;
+
+	public static final int VK_OBJECT_TYPE_PERFORMANCE_CONFIGURATION_INTEL = 0;
+
+	public static final int VK_OBJECT_TYPE_DEFERRED_OPERATION_KHR = 0;
+
+	public static final int VK_OBJECT_TYPE_INDIRECT_COMMANDS_LAYOUT_NV = 0;
+
+	/**
+	* VkBufferCollectionFUCHSIA
+	*/
+	public static final int VK_OBJECT_TYPE_BUFFER_COLLECTION_FUCHSIA = 0;
+
 }

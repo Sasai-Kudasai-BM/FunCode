@@ -14,4 +14,6 @@ public final class VkDescriptorBindingFlagBits {
 
 	public static final int VK_DESCRIPTOR_BINDING_VARIABLE_DESCRIPTOR_COUNT_BIT = 8;
 
+	public static final int VK_DESCRIPTOR_BINDING_RESERVED_4_BIT_QCOM = 16;
+
 }

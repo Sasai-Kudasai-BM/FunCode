@@ -1,15 +1,17 @@
 package net.skds.jvk.test;
 
 import net.skds.jvk.VKDefinitions;
+import net.skds.jvk.VkResult;
 import net.skds.jvk.generated.enums.*;
 import net.skds.jvk.generated.extensions.VkKhrSurface;
 import net.skds.jvk.generated.extensions.VkKhrSwapchain;
 import net.skds.jvk.generated.extensions.VkKhrWin32Surface;
 import net.skds.jvk.generated.structs.*;
+import net.skds.lib.unsafe.MemoryStack;
+import net.skds.lib.unsafe.UnsafeAnal;
 import net.skds.lib.utils.SKDSUtils;
-import net.skds.lib.utils.UnsafeAnal;
+import net.skds.lib.utils.ThreadUtil;
 import net.skds.nativelib.Kernel32;
-import net.skds.ninvoker.MemoryStack;
 import net.skds.ninvoker.NInvoker;
 import sun.misc.Unsafe;
 
@@ -49,11 +51,15 @@ public class TestTriangle {
 
 	final long vertexShaderSize;
 	final long pVertexShader;
+	final long fragmentShaderSize;
+	final long pFragmentShader;
+
+	final long pAllocator = 0;
 
 	int surfaceFormat = VkFormat.VK_FORMAT_B8G8R8A8_UNORM;
 
-	int width = 800;
-	int height = 600;
+	int width;
+	int height;
 
 	long instance;
 	long hDevice;
@@ -64,11 +70,17 @@ public class TestTriangle {
 	long queue;
 	long pipeline;
 	long renderPass;
-	long shaderModule;
+	long vShaderModule;
+	long fShaderModule;
 	long pipelineLayout;
 	long framebuffer;
 	long surface;
 	long swapchain;
+
+	FramebufferImage[] framebufferImages;
+	VkPhysicalDeviceMemoryProperties memoryProperties;
+	int deviceFastMemoryType;
+	int hostFastMemoryType;
 
 	VkPhysicalDeviceLimits limits;
 
@@ -76,8 +88,14 @@ public class TestTriangle {
 
 	public TestTriangle() {
 		this.frame = new JFrame() {
+
 			@Override
-			public void paintComponents(Graphics g) {
+			public Graphics getGraphics() {
+				return null;
+			}
+
+			@Override
+			public void paint(Graphics g) {
 			}
 		};
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -99,6 +117,9 @@ public class TestTriangle {
 			byte[] sd = Files.readAllBytes(Path.of("shader/vert.spv"));
 			vertexShaderSize = sd.length;
 			pVertexShader = staticStack.push(sd);
+			sd = Files.readAllBytes(Path.of("shader/frag.spv"));
+			fragmentShaderSize = sd.length;
+			pFragmentShader = staticStack.push(sd);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
@@ -107,13 +128,11 @@ public class TestTriangle {
 		if (DEBUG) {
 			System.out.println("HWND: " + hWnd);
 			System.out.println("HINSTANCE: " + hInstance);
-
 			System.out.println("Vertex shader size: " + vertexShaderSize);
 
 			listLayers();
-			listExtensions();
+			//listExtensions();
 		}
-
 
 		allocExtensions();
 		initInstance();
@@ -129,17 +148,36 @@ public class TestTriangle {
 
 	private void initPipeline() {
 		try (MemoryStack stack = new MemoryStack()) {
+
+			VkAttachmentReference attachmentReference = new VkAttachmentReference();
+			attachmentReference.attachment = 0;
+			attachmentReference.layout = VkImageLayout.VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+			attachmentReference.allocPut(stack);
+
 			VkSubpassDescription subpassDescription = new VkSubpassDescription();
 			subpassDescription.inputAttachmentCount = 0;
-			subpassDescription.colorAttachmentCount = 0;
+			subpassDescription.colorAttachmentCount = 1;
+			subpassDescription.pColorAttachments = attachmentReference.address();
 			subpassDescription.preserveAttachmentCount = 0;
 			subpassDescription.pDepthStencilAttachment = 0;
 			subpassDescription.pipelineBindPoint = VkPipelineBindPoint.VK_PIPELINE_BIND_POINT_GRAPHICS;
 			subpassDescription.alloc(stack);
 			subpassDescription.put();
 
+			VkAttachmentDescription attachmentDescription = new VkAttachmentDescription();
+			attachmentDescription.format = surfaceFormat;
+			attachmentDescription.samples = VkSampleCountFlagBits.VK_SAMPLE_COUNT_1_BIT;
+			attachmentDescription.loadOp = VkAttachmentLoadOp.VK_ATTACHMENT_LOAD_OP_CLEAR;
+			attachmentDescription.storeOp = VkAttachmentStoreOp.VK_ATTACHMENT_STORE_OP_STORE;
+			attachmentDescription.stencilLoadOp = VkAttachmentLoadOp.VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+			attachmentDescription.stencilStoreOp = VkAttachmentStoreOp.VK_ATTACHMENT_STORE_OP_DONT_CARE;
+			attachmentDescription.initialLayout = VkImageLayout.VK_IMAGE_LAYOUT_UNDEFINED;
+			attachmentDescription.finalLayout = VkImageLayout.VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+			attachmentDescription.allocPut(stack);
+
 			VkRenderPassCreateInfo renderPassCI = new VkRenderPassCreateInfo();
-			renderPassCI.attachmentCount = 0;
+			renderPassCI.attachmentCount = 1;
+			renderPassCI.pAttachments = attachmentDescription.address();
 			renderPassCI.subpassCount = 1;
 			renderPassCI.dependencyCount = 0;
 			renderPassCI.pSubpasses = subpassDescription.address();
@@ -152,20 +190,30 @@ public class TestTriangle {
 			VkShaderModuleCreateInfo shaderModuleCi = new VkShaderModuleCreateInfo();
 			shaderModuleCi.codeSize = vertexShaderSize;
 			shaderModuleCi.pCode = pVertexShader;
-			shaderModuleCi.alloc(stack);
-			shaderModuleCi.put();
+			long pVertMod = shaderModuleCi.allocPut(stack);
+			shaderModuleCi.codeSize = fragmentShaderSize;
+			shaderModuleCi.pCode = pFragmentShader;
+			long pFragMod = shaderModuleCi.allocPut(stack);
 
-			check(vkCreateShaderModule(device, shaderModuleCi.address(), 0, lPtr0));
-			shaderModule = unsafe.getLong(lPtr0);
+			check(vkCreateShaderModule(device, pVertMod, 0, lPtr0));
+			vShaderModule = unsafe.getLong(lPtr0);
+			check(vkCreateShaderModule(device, pFragMod, 0, lPtr0));
+			fShaderModule = unsafe.getLong(lPtr0);
 
-			VkPipelineShaderStageCreateInfo shaderStageCi = new VkPipelineShaderStageCreateInfo();
-			shaderStageCi.pName = stack.pushNT("main", StandardCharsets.UTF_8);
-			shaderStageCi.flags = 0;
-			shaderStageCi.pSpecializationInfo = 0;
-			shaderStageCi.module = shaderModule;
-			shaderStageCi.stage = VkShaderStageFlagBits.VK_SHADER_STAGE_VERTEX_BIT;
-			shaderStageCi.alloc(stack);
-			shaderStageCi.put();
+			VkPipelineShaderStageCreateInfo[] shaderStageCi = VkPipelineShaderStageCreateInfo.WRAPPER.allocArray(2);
+			shaderStageCi[0].pName = stack.pushNT("main", StandardCharsets.UTF_8);
+			shaderStageCi[0].flags = 0;
+			shaderStageCi[0].pSpecializationInfo = 0;
+			shaderStageCi[0].module = vShaderModule;
+			shaderStageCi[0].stage = VkShaderStageFlagBits.VK_SHADER_STAGE_VERTEX_BIT;
+			shaderStageCi[0].put();
+
+			shaderStageCi[1].pName = shaderStageCi[0].pName;
+			shaderStageCi[1].flags = shaderStageCi[0].flags;
+			shaderStageCi[1].pSpecializationInfo = shaderStageCi[0].pSpecializationInfo;
+			shaderStageCi[1].module = fShaderModule;
+			shaderStageCi[1].stage = VkShaderStageFlagBits.VK_SHADER_STAGE_FRAGMENT_BIT;
+			shaderStageCi[1].put();
 
 			VkPipelineRasterizationStateCreateInfo rasterizationCi = new VkPipelineRasterizationStateCreateInfo();
 			rasterizationCi.rasterizerDiscardEnable = 1;
@@ -187,6 +235,26 @@ public class TestTriangle {
 			assemblyStateCi.primitiveRestartEnable = 0;
 			assemblyStateCi.allocPut(stack);
 
+			VkPipelineColorBlendAttachmentState blendState = new VkPipelineColorBlendAttachmentState();
+			blendState.blendEnable = 1;
+			blendState.srcColorBlendFactor = 1;
+			blendState.dstColorBlendFactor = 0;
+			blendState.colorBlendOp = VkBlendOp.VK_BLEND_OP_SRC_EXT;
+			blendState.srcAlphaBlendFactor = 1;
+			blendState.dstAlphaBlendFactor = 1;
+			blendState.alphaBlendOp = VkBlendOp.VK_BLEND_OP_SRC_EXT;
+			blendState.colorWriteMask = VkColorComponentFlagBits.VK_COLOR_COMPONENT_R_BIT |
+					VkColorComponentFlagBits.VK_COLOR_COMPONENT_G_BIT |
+					VkColorComponentFlagBits.VK_COLOR_COMPONENT_B_BIT;
+			blendState.allocPut(stack);
+
+			VkPipelineColorBlendStateCreateInfo blendInfo = new VkPipelineColorBlendStateCreateInfo();
+			blendInfo.logicOpEnable = 0;
+			blendInfo.attachmentCount = 1;
+			blendInfo.pAttachments = blendState.address();
+			blendInfo.blendConstants = new float[]{1, 1, 1, 1};
+			blendInfo.allocPut(stack);
+
 			VkPipelineLayoutCreateInfo layoutCi = new VkPipelineLayoutCreateInfo();
 			layoutCi.setLayoutCount = 0;
 			layoutCi.pushConstantRangeCount = 0;
@@ -196,13 +264,14 @@ public class TestTriangle {
 			pipelineLayout = unsafe.getLong(lPtr0);
 
 			VkGraphicsPipelineCreateInfo pipelineCI = new VkGraphicsPipelineCreateInfo();
-			pipelineCI.stageCount = 1;
-			pipelineCI.pStages = shaderStageCi.address();
+			pipelineCI.stageCount = 2;
+			pipelineCI.pStages = shaderStageCi[0].address();
 			pipelineCI.renderPass = renderPass;
 			pipelineCI.subpass = 0;
 			pipelineCI.pRasterizationState = rasterizationCi.address();
 			pipelineCI.pVertexInputState = vertexInputStateCi.address();
 			pipelineCI.pInputAssemblyState = assemblyStateCi.address();
+			pipelineCI.pColorBlendState = blendInfo.address();
 			pipelineCI.layout = pipelineLayout;
 			pipelineCI.allocPut(stack);
 
@@ -214,19 +283,86 @@ public class TestTriangle {
 		}
 	}
 
+	record FramebufferImage(long img, long view, long mem) {
+
+	}
+
+	@SuppressWarnings("SameParameterValue")
+	private FramebufferImage[] createFramebufferImages(MemoryStack stack, int count) {
+
+		////long imgPtr = stack.pushLongs(count);
+		////check(VkKhrSwapchain.vkGetSwapchainImagesKHR(device, swapchain, stack.push(count), imgPtr));
+		//VkImageCreateInfo imageInfo = new VkImageCreateInfo();
+		//imageInfo.imageType = VkImageType.VK_IMAGE_TYPE_2D;
+		//imageInfo.format = surfaceFormat;
+		//imageInfo.sharingMode = VkSharingMode.VK_SHARING_MODE_EXCLUSIVE;
+		//imageInfo.arrayLayers = 1;
+		//imageInfo.mipLevels = 1;
+		//imageInfo.samples = VkSampleCountFlagBits.VK_SAMPLE_COUNT_1_BIT;
+		//imageInfo.tiling = VkImageTiling.VK_IMAGE_TILING_OPTIMAL;
+		//imageInfo.usage = VkImageUsageFlagBits.VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
+		//imageInfo.queueFamilyIndexCount = 0;
+		//imageInfo.initialLayout = VkImageLayout.VK_IMAGE_LAYOUT_UNDEFINED;
+		//imageInfo.extent = new VkExtent3D();
+		//imageInfo.extent.depth = 1;
+		//imageInfo.extent.width = width;
+		//imageInfo.extent.height = height;
+		//imageInfo.allocPut(stack);
+
+		//VkMemoryRequirements requirements = new VkMemoryRequirements();
+		//requirements.alloc(stack);
+
+		VkImageViewCreateInfo viewInfo = new VkImageViewCreateInfo();
+		viewInfo.components = new VkComponentMapping();
+		viewInfo.components.a = VkComponentSwizzle.VK_COMPONENT_SWIZZLE_A;
+		viewInfo.components.r = VkComponentSwizzle.VK_COMPONENT_SWIZZLE_R;
+		viewInfo.components.g = VkComponentSwizzle.VK_COMPONENT_SWIZZLE_G;
+		viewInfo.components.b = VkComponentSwizzle.VK_COMPONENT_SWIZZLE_B;
+		viewInfo.subresourceRange = new VkImageSubresourceRange();
+		viewInfo.subresourceRange.aspectMask = VkImageAspectFlagBits.VK_IMAGE_ASPECT_COLOR_BIT;
+		viewInfo.subresourceRange.baseArrayLayer = 0;
+		viewInfo.subresourceRange.baseMipLevel = 0;
+		viewInfo.subresourceRange.layerCount = 1;
+		viewInfo.subresourceRange.levelCount = 1;
+		viewInfo.flags = 0;
+		viewInfo.viewType = VkImageViewType.VK_IMAGE_VIEW_TYPE_2D;
+		viewInfo.format = surfaceFormat;
+		viewInfo.alloc(stack);
+		FramebufferImage[] images = new FramebufferImage[count];
+		long ptr = stack.pushLongs(count);
+		check(VkKhrSwapchain.vkGetSwapchainImagesKHR(device, swapchain, stack.push(count), ptr));
+
+		for (int i = 0; i < count; i++) {
+			//check(vkCreateImage(device, imageInfo.address(), pAllocator, lPtr0));
+			//long image = unsafe.getLong(lPtr0);
+			long image = unsafe.getLong(ptr + 8L * i);
+
+			//vkGetImageMemoryRequirements(device, image, requirements.address());
+			//requirements.get();
+
+			//VkMemoryAllocateInfo memoryAllocateInfo = new VkMemoryAllocateInfo();
+			//memoryAllocateInfo.allocationSize = requirements.size;
+			//memoryAllocateInfo.memoryTypeIndex = deviceFastMemoryType;
+			//memoryAllocateInfo.allocPut(stack);
+
+			//check(vkAllocateMemory(device, memoryAllocateInfo.address(), pAllocator, lPtr0));
+			//long mem = unsafe.getLong(lPtr0);
+			//check(vkBindImageMemory(device, image, mem, 0));
+
+			viewInfo.image = image;
+			viewInfo.put();
+
+			check(vkCreateImageView(device, viewInfo.address(), pAllocator, lPtr0));
+			long view = unsafe.getLong(lPtr0);
+
+			images[i] = new FramebufferImage(image, view, 0);
+		}
+		return images;
+
+	}
+
 	private void initFramebuffer() {
 		try (MemoryStack stack = new MemoryStack()) {
-
-			VkFramebufferCreateInfo framebufferCi = new VkFramebufferCreateInfo();
-			framebufferCi.renderPass = renderPass;
-			framebufferCi.attachmentCount = 0;
-			framebufferCi.width = width;
-			framebufferCi.height = height;
-			framebufferCi.layers = 1;
-			framebufferCi.allocPut(stack);
-
-			check(vkCreateFramebuffer(device, framebufferCi.address(), 0, lPtr0));
-			framebuffer = unsafe.getLong(lPtr0);
 
 			VkWin32SurfaceCreateInfoKHR surfaceCi = new VkWin32SurfaceCreateInfoKHR();
 			surfaceCi.sType = 1000009000;// VkKhrWin32Surface.VK_STRUCTURE_TYPE_WIN32_SURFACE_CREATE_INFO_KHR; // broken???
@@ -281,6 +417,19 @@ public class TestTriangle {
 			check(VkKhrSwapchain.vkCreateSwapchainKHR(device, swapchainInfo.address(), 0, lPtr0));
 			swapchain = unsafe.getLong(lPtr0);
 
+			framebufferImages = createFramebufferImages(stack, 1);
+
+			VkFramebufferCreateInfo framebufferCi = new VkFramebufferCreateInfo();
+			framebufferCi.renderPass = renderPass;
+			framebufferCi.attachmentCount = framebufferImages.length;
+			framebufferCi.pAttachments = stack.push(framebufferImages[0].view);
+			framebufferCi.width = width;
+			framebufferCi.height = height;
+			framebufferCi.layers = 1;
+			framebufferCi.allocPut(stack);
+			check(vkCreateFramebuffer(device, framebufferCi.address(), pAllocator, lPtr0));
+			framebuffer = unsafe.getLong(lPtr0);
+
 			if (DEBUG) {
 				System.out.println("framebuffer: " + framebuffer);
 				System.out.println("surface: " + surface);
@@ -292,20 +441,7 @@ public class TestTriangle {
 
 	private void prepare() {
 		try (MemoryStack stack = new MemoryStack()) {
-			VkRenderPassBeginInfo beginInfo = new VkRenderPassBeginInfo();
-			VkRect2D renderArea = new VkRect2D();
-			renderArea.offset = new VkOffset2D();
-			renderArea.extent = new VkExtent2D();
-			renderArea.offset.x = 0;
-			renderArea.offset.y = 0;
-			renderArea.extent.width = width;
-			renderArea.extent.height = height;
-			beginInfo.renderArea = renderArea;
-			beginInfo.renderPass = renderPass;
-			beginInfo.framebuffer = framebuffer;
-			beginInfo.clearValueCount = 1;
-			beginInfo.pClearValues = stack.push(.5f, 0f, .5f, 0f);
-			beginInfo.allocPut(stack);
+
 
 			//vkCmdBeginRenderPass(commandBuffer, beginInfo.address(), VkSubpassContents.VK_SUBPASS_CONTENTS_INLINE);
 
@@ -315,12 +451,58 @@ public class TestTriangle {
 
 	private void presentTest() {
 		try (MemoryStack stack = new MemoryStack()) {
+
+			check(vkResetCommandBuffer(commandBuffer, 0));
+
+			VkCommandBufferBeginInfo beginInfo = new VkCommandBufferBeginInfo();
+			beginInfo.flags = VkCommandBufferUsageFlagBits.VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+			beginInfo.allocPut(stack);
+			check(vkBeginCommandBuffer(commandBuffer, beginInfo.address()));
+
+			VkExtent2D extent = new VkExtent2D();
+			extent.width = width;
+			extent.height = height;
+			VkOffset2D offset = new VkOffset2D();
+			offset.x = 0;
+			offset.y = 0;
+			VkRenderPassBeginInfo renderPassInfo = new VkRenderPassBeginInfo();
+			renderPassInfo.renderPass = renderPass;
+			renderPassInfo.framebuffer = framebuffer;
+			renderPassInfo.renderArea = new VkRect2D();
+			renderPassInfo.renderArea.extent = extent;
+			renderPassInfo.renderArea.offset = offset;
+			renderPassInfo.clearValueCount = 1;
+			renderPassInfo.pClearValues = stack.push(.5f, 0f, .5f, 0f);
+			renderPassInfo.allocPut(stack);
+
+			vkCmdBeginRenderPass(commandBuffer, renderPassInfo.address(), VkSubpassContents.VK_SUBPASS_CONTENTS_INLINE);
+			//vkCmdNextSubpass(commandBuffer, VkSubpassContents.VK_SUBPASS_CONTENTS_INLINE);
+			vkCmdBindPipeline(commandBuffer, VkPipelineBindPoint.VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
+			vkCmdDraw(commandBuffer, 3, 1, 0, 0);
+			vkCmdEndRenderPass(commandBuffer);
+
+			check(vkEndCommandBuffer(commandBuffer));
+
+			VkSubmitInfo submitInfo = new VkSubmitInfo();
+			submitInfo.waitSemaphoreCount = 0;
+			submitInfo.signalSemaphoreCount = 0;
+			submitInfo.commandBufferCount = 1;
+			submitInfo.pCommandBuffers = stack.push(commandBuffer);
+			submitInfo.allocPut(stack);
+
+			check(vkQueueSubmit(queue, 1, submitInfo.address(), 0));
+			ThreadUtil.await(100);
+
+			check(VkKhrSwapchain.vkAcquireNextImageKHR(device, swapchain, 10_000, 0, 0, lPtr0));
+
+			ThreadUtil.await(100);
+
 			VkPresentInfoKHR presentInfo = new VkPresentInfoKHR();
 			presentInfo.sType = 1000001001;//VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
 			presentInfo.waitSemaphoreCount = 0;
 			presentInfo.swapchainCount = 1;
 			presentInfo.pSwapchains = stack.push(swapchain);
-			presentInfo.pImageIndices = stack.push(0, 1);
+			presentInfo.pImageIndices = lPtr0;
 			presentInfo.pResults = 0;
 			presentInfo.allocPut(stack);
 
@@ -399,6 +581,23 @@ public class TestTriangle {
 				vkGetPhysicalDeviceProperties(d, properties.address());
 				properties.get();
 				limits = properties.limits;
+
+				memoryProperties = new VkPhysicalDeviceMemoryProperties();
+				memoryProperties.alloc(stack);
+				vkGetPhysicalDeviceMemoryProperties(d, memoryProperties.address());
+				memoryProperties.get();
+
+				deviceFastMemoryType = selectOptimalMemoryType(VkMemoryPropertyFlagBits.VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+				hostFastMemoryType = selectOptimalMemoryType(VkMemoryPropertyFlagBits.VK_MEMORY_PROPERTY_HOST_COHERENT_BIT |
+						VkMemoryPropertyFlagBits.VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
+						VkMemoryPropertyFlagBits.VK_MEMORY_PROPERTY_HOST_CACHED_BIT
+				);
+				if (hostFastMemoryType == -1) {
+					hostFastMemoryType = selectOptimalMemoryType(VkMemoryPropertyFlagBits.VK_MEMORY_PROPERTY_HOST_COHERENT_BIT |
+							VkMemoryPropertyFlagBits.VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+					);
+				}
+
 				if (DEBUG) {
 					System.out.println("=============== Device =============");
 					System.out.println("deviceID: " + properties.deviceID);
@@ -409,7 +608,16 @@ public class TestTriangle {
 					System.out.println("vendorID: " + properties.vendorID);
 					System.out.println("pipelineCacheUUID: " + SKDSUtils.HEX_FORMAT_LC.formatHex(properties.pipelineCacheUUID));
 					System.out.println("deviceName: " + NInvoker.nullTerminatedString(properties.deviceName, StandardCharsets.UTF_8));
-					listDeviceExtensions(d);
+					System.out.println("===========  Memory  ========= x" + memoryProperties.memoryTypeCount);
+					for (int j = 0; j < memoryProperties.memoryTypeCount; j++) {
+						VkMemoryType t = memoryProperties.memoryTypes[j];
+						System.out.println("Flags: " + t.propertyFlags);
+						VkMemoryHeap heap = memoryProperties.memoryHeaps[t.heapIndex];
+						System.out.println("Heap Flags: " + heap.flags);
+						System.out.println("Heap Size: " + SKDSUtils.memoryCompact(heap.size));
+						System.out.println("--------------");
+					}
+					//listDeviceExtensions(d);
 					System.out.println("====================================");
 				} else {
 					break;
@@ -539,6 +747,7 @@ public class TestTriangle {
 	//	}
 	//}
 
+
 	private void listLayers() {
 
 		try (MemoryStack stack = new MemoryStack()) {
@@ -599,12 +808,23 @@ public class TestTriangle {
 		}
 	}
 
+	private int selectOptimalMemoryType(int flags) {
+		for (int i = 0; i < memoryProperties.memoryTypeCount; i++) {
+			VkMemoryType type = memoryProperties.memoryTypes[i];
+			if ((type.propertyFlags & flags) == flags) {
+				return i;
+			}
+		}
+		return -1;
+	}
+
 	private void discard() {
 		vkDestroyRenderPass(device, renderPass, 0);
 		vkDestroyCommandPool(device, commandPool, 0);
 		vkDestroyPipeline(device, pipeline, 0);
 		vkDestroyPipelineLayout(device, pipelineLayout, 0);
-		vkDestroyShaderModule(device, shaderModule, 0);
+		vkDestroyShaderModule(device, vShaderModule, 0);
+		vkDestroyShaderModule(device, fShaderModule, 0);
 		vkDestroyFramebuffer(device, framebuffer, 0);
 		VkKhrSwapchain.vkDestroySwapchainKHR(device, swapchain, 0);
 		VkKhrSurface.vkDestroySurfaceKHR(instance, surface, 0);
@@ -616,7 +836,11 @@ public class TestTriangle {
 	}
 
 	private static void check(int result) {
-		if (result != 0) {
+		if (result != VkResult.VK_SUCCESS) {
+			if (result == VkResult.VK_INCOMPLETE) {
+				System.out.println("[WARN] INCOMPLETE vk result");
+				return;
+			}
 			throw new RuntimeException("VK err " + result + ": " + VKDefinitions.getErr(result));
 		}
 	}

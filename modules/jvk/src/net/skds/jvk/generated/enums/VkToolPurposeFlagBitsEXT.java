@@ -26,4 +26,8 @@ public final class VkToolPurposeFlagBitsEXT {
 
 	public static final int VK_TOOL_PURPOSE_MODIFYING_FEATURES_BIT_EXT = 16;
 
+	public static final int VK_TOOL_PURPOSE_DEBUG_REPORTING_BIT_EXT = 32;
+
+	public static final int VK_TOOL_PURPOSE_DEBUG_MARKERS_BIT_EXT = 64;
+
 }

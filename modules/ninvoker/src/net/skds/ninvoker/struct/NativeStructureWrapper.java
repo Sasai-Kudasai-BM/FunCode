@@ -1,9 +1,8 @@
 package net.skds.ninvoker.struct;
 
+import net.skds.lib.unsafe.MemoryStack;
+import net.skds.lib.unsafe.UnsafeAnal;
 import net.skds.lib.utils.Holders;
-import net.skds.lib.utils.UnsafeAnal;
-import net.skds.ninvoker.MemoryStack;
-import net.skds.ninvoker.NInvoker;
 import sun.misc.Unsafe;
 
 import java.lang.reflect.Array;
@@ -23,6 +22,7 @@ public final class NativeStructureWrapper {
 	private final Class<? extends AbstractNativeStructure> type;
 	private final Adapter[] fields;
 	public final int size;
+	final int arrayPadding;
 	private final Supplier<? extends AbstractNativeStructure> constructor;
 
 	public NativeStructureWrapper(Class<? extends AbstractNativeStructure> type) {
@@ -73,8 +73,10 @@ public final class NativeStructureWrapper {
 									return new ArrayAdapter(f, size, 4);
 								} else if (c == double[].class) {
 									return new ArrayAdapter(f, size, 8);
+								} else if (NativeData.class.isAssignableFrom(c.componentType())) {
+									return new StructArrayAdapter(f, size);
 								}
-							} else if (NativeData.class.isAssignableFrom(c)) {
+							} else if (AbstractNativeStructure.class.isAssignableFrom(c)) {
 								return new StructAdapter(f, size);
 							}
 
@@ -84,6 +86,12 @@ public final class NativeStructureWrapper {
 				.peek(c -> size.increment(c.alignedSize()))
 				.toArray(Adapter[]::new);
 		this.size = size.getValue();
+
+		if (fields.length > 0) {
+			arrayPadding = align(fields[0].alignment(), this.size);
+		} else {
+			arrayPadding = 0;
+		}
 	}
 
 	public void get(AbstractNativeStructure structure) {
@@ -125,9 +133,20 @@ public final class NativeStructureWrapper {
 		for (int i = 0; i < len; i++) {
 			T struct = (T) constructor.get();
 			arr[i] = struct;
-			struct.address = (long) size * i + address;
+			struct.address = (long) (size + arrayPadding) * i + address;
 		}
 		return arr;
+	}
+
+	@SuppressWarnings("unchecked")
+	public <T extends AbstractNativeStructure> long allocArray(T[] array, MemoryStack stack) {
+		long address = stack.pushSize(size * array.length);
+		for (int i = 0; i < array.length; i++) {
+			T struct = (T) constructor.get();
+			array[i] = struct;
+			struct.address = (long) (size + arrayPadding) * i + address;
+		}
+		return address;
 	}
 
 	public long alloc(AbstractNativeStructure structure) {
@@ -154,6 +173,7 @@ public final class NativeStructureWrapper {
 	}
 
 	static int align(int alignment, int pos) {
+		if (alignment == 0) return 0;
 		int mod = pos % alignment;
 		return mod == 0 ? 0 : alignment - mod;
 	}
@@ -161,21 +181,24 @@ public final class NativeStructureWrapper {
 	private abstract static class Adapter {
 
 		protected final Field field;
-		protected final int offset;
-		protected final int alignPadding;
+		protected int offset;
+		protected int alignPadding;
 
 		private Adapter(Field field, Holders.IntHolder offset, int alignment) {
 			this.field = field;
-			this.alignPadding = align(alignment, offset.getValue());
-			this.offset = offset.getValue() + alignPadding;
+			realign(offset, alignment);
 			field.setAccessible(true);
 		}
 
 		private Adapter(Field field, Holders.IntHolder offset) {
 			this.field = field;
-			this.alignPadding = align(alignment(), offset.getValue());
-			this.offset = offset.getValue() + alignPadding;
+			realign(offset, alignment());
 			field.setAccessible(true);
+		}
+
+		protected void realign(Holders.IntHolder offset, int alignment) {
+			this.alignPadding = align(alignment, offset.getValue());
+			this.offset = offset.getValue() + alignPadding;
 		}
 
 		protected long address(AbstractNativeStructure structure) {
@@ -201,6 +224,7 @@ public final class NativeStructureWrapper {
 
 		private final Supplier<NativeData> constructor;
 		private final int size;
+		private final int zeroEAlign;
 
 		@SuppressWarnings("unchecked")
 		private StructAdapter(Field field, Holders.IntHolder offset) {
@@ -216,7 +240,14 @@ public final class NativeStructureWrapper {
 						throw new RuntimeException(e);
 					}
 				};
-				this.size = constructor.get().size();
+				NativeStructureWrapper wrapper = ((AbstractNativeStructure) constructor.get()).getWrapper();
+				this.size = wrapper.size;
+				if (wrapper.fields.length > 0) {
+					zeroEAlign = wrapper.fields[0].alignment();
+					realign(offset, zeroEAlign);
+				} else {
+					zeroEAlign = 1;
+				}
 
 			} catch (Exception e) {
 				throw new RuntimeException(e);
@@ -250,7 +281,103 @@ public final class NativeStructureWrapper {
 
 		@Override
 		int alignment() {
-			return 1;
+			return zeroEAlign;
+		}
+	}
+
+	private static class StructArrayAdapter extends Adapter {
+
+		private final Supplier<AbstractNativeStructure> constructor;
+		private final int elementSize;
+		private final int size;
+		private final int extraSize;
+		private final int length;
+		private final Class<?> type;
+		private final int zeroEAlign;
+
+		@SuppressWarnings("unchecked")
+		private StructArrayAdapter(Field field, Holders.IntHolder offset) {
+			super(field, offset);
+			try {
+				ArrayLength al = field.getAnnotation(ArrayLength.class);
+				if (al == null) {
+					throw new RuntimeException("arrays must have @ArrayLength");
+				}
+				this.length = al.value();
+				DataClass dc = field.getAnnotation(DataClass.class);
+				this.type = (dc == null) ? field.getType().componentType() : dc.value();
+				var cns = (Constructor<AbstractNativeStructure>) type.getConstructor();
+				this.constructor = () -> {
+					try {
+						return cns.newInstance();
+					} catch (Exception e) {
+						throw new RuntimeException(e);
+					}
+				};
+				NativeStructureWrapper wrapper = constructor.get().getWrapper();
+				if (wrapper.fields.length > 0) {
+					this.zeroEAlign = wrapper.fields[0].alignment();
+					realign(offset, zeroEAlign);
+					this.extraSize = align(zeroEAlign, wrapper.size);
+				} else {
+					this.zeroEAlign = 1;
+					this.extraSize = 0;
+				}
+				this.elementSize = wrapper.size;
+				this.size = wrapper.size * length + alignPadding;
+
+
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+		}
+
+		@Override
+		int alignedSize() {
+			return this.size;
+		}
+
+		@Override
+		void get(AbstractNativeStructure structure) throws IllegalAccessException {
+			Object array = field.get(structure);
+			if (array == null) {
+				array = Array.newInstance(type, length);
+				field.set(structure, array);
+			}
+			for (int i = 0; i < length; i++) {
+				NativeData nd = (NativeData) Array.get(array, i);
+				if (nd == null) {
+					nd = constructor.get();
+					Array.set(array, i, nd);
+				}
+				nd.delegate(address(structure) + (long) (elementSize + extraSize) * i);
+				nd.get();
+			}
+		}
+
+		@Override
+		void put(AbstractNativeStructure structure) throws IllegalAccessException {
+			Object array = field.get(structure);
+			if (array == null) {
+				return;
+			}
+			for (int i = 0; i < length; i++) {
+				NativeData nd = (NativeData) Array.get(array, i);
+				if (nd != null) {
+					nd.delegate(address(structure) + (long) (elementSize + extraSize) * i);
+					nd.put();
+				}
+			}
+		}
+
+		@Override
+		int size() {
+			return size;
+		}
+
+		@Override
+		int alignment() {
+			return zeroEAlign;
 		}
 	}
 
@@ -280,7 +407,7 @@ public final class NativeStructureWrapper {
 				arr = Array.newInstance(type, length);
 				field.set(structure, arr);
 			}
-			NInvoker.transferArray(address(structure), arr, length, 0, bytes, arrayBase);
+			UnsafeAnal.transferArray(address(structure), arr, length, 0, bytes, arrayBase);
 		}
 
 		@Override
@@ -289,7 +416,7 @@ public final class NativeStructureWrapper {
 			if (arr == null) {
 				UNSAFE.setMemory(address(structure), (long) bytes * length, (byte) 0);
 			} else {
-				NInvoker.transferArray(arr, address(structure), length, 0, bytes, arrayBase);
+				UnsafeAnal.transferArray(arr, address(structure), length, 0, bytes, arrayBase);
 			}
 		}
 

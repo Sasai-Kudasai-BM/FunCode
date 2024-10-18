@@ -46,4 +46,6 @@ public final class VkSubgroupFeatureFlagBits {
 	*/
 	public static final int VK_SUBGROUP_FEATURE_QUAD_BIT = 128;
 
+	public static final int VK_SUBGROUP_FEATURE_PARTITIONED_BIT_NV = 256;
+
 }

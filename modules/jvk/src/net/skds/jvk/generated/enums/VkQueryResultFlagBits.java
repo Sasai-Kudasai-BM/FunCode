@@ -26,4 +26,6 @@ public final class VkQueryResultFlagBits {
 	*/
 	public static final int VK_QUERY_RESULT_PARTIAL_BIT = 8;
 
+	public static final int VK_QUERY_RESULT_WITH_STATUS_BIT_KHR = 16;
+
 }

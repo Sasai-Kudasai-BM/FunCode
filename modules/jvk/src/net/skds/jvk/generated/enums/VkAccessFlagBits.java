@@ -91,4 +91,31 @@ public final class VkAccessFlagBits {
 	*/
 	public static final int VK_ACCESS_MEMORY_WRITE_BIT = 65536;
 
+	public static final int VK_ACCESS_NONE = 0;
+
+	public static final int VK_ACCESS_TRANSFORM_FEEDBACK_WRITE_BIT_EXT = 33554432;
+
+	public static final int VK_ACCESS_TRANSFORM_FEEDBACK_COUNTER_READ_BIT_EXT = 67108864;
+
+	public static final int VK_ACCESS_TRANSFORM_FEEDBACK_COUNTER_WRITE_BIT_EXT = 134217728;
+
+	/**
+	* read access flag for reading conditional rendering predicate
+	*/
+	public static final int VK_ACCESS_CONDITIONAL_RENDERING_READ_BIT_EXT = 1048576;
+
+	public static final int VK_ACCESS_COLOR_ATTACHMENT_READ_NONCOHERENT_BIT_EXT = 524288;
+
+	public static final int VK_ACCESS_ACCELERATION_STRUCTURE_READ_BIT_KHR = 2097152;
+
+	public static final int VK_ACCESS_ACCELERATION_STRUCTURE_WRITE_BIT_KHR = 4194304;
+
+	public static final int VK_ACCESS_FRAGMENT_DENSITY_MAP_READ_BIT_EXT = 16777216;
+
+	public static final int VK_ACCESS_FRAGMENT_SHADING_RATE_ATTACHMENT_READ_BIT_KHR = 8388608;
+
+	public static final int VK_ACCESS_COMMAND_PREPROCESS_READ_BIT_NV = 131072;
+
+	public static final int VK_ACCESS_COMMAND_PREPROCESS_WRITE_BIT_NV = 262144;
+
 }

@@ -11,4 +11,8 @@ public final class VkDescriptorPoolCreateFlagBits {
 	*/
 	public static final int VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT = 1;
 
+	public static final int VK_DESCRIPTOR_POOL_CREATE_UPDATE_AFTER_BIND_BIT = 2;
+
+	public static final int VK_DESCRIPTOR_POOL_CREATE_HOST_ONLY_BIT_VALVE = 4;
+
 }

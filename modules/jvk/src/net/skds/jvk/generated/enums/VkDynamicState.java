@@ -24,4 +24,66 @@ public final class VkDynamicState {
 
 	public static final int VK_DYNAMIC_STATE_STENCIL_REFERENCE = 8;
 
+	public static final int VK_DYNAMIC_STATE_CULL_MODE = 0;
+
+	public static final int VK_DYNAMIC_STATE_FRONT_FACE = 1;
+
+	public static final int VK_DYNAMIC_STATE_PRIMITIVE_TOPOLOGY = 2;
+
+	public static final int VK_DYNAMIC_STATE_VIEWPORT_WITH_COUNT = 3;
+
+	public static final int VK_DYNAMIC_STATE_SCISSOR_WITH_COUNT = 4;
+
+	public static final int VK_DYNAMIC_STATE_VERTEX_INPUT_BINDING_STRIDE = 5;
+
+	public static final int VK_DYNAMIC_STATE_DEPTH_TEST_ENABLE = 6;
+
+	public static final int VK_DYNAMIC_STATE_DEPTH_WRITE_ENABLE = 7;
+
+	public static final int VK_DYNAMIC_STATE_DEPTH_COMPARE_OP = 8;
+
+	public static final int VK_DYNAMIC_STATE_DEPTH_BOUNDS_TEST_ENABLE = 9;
+
+	public static final int VK_DYNAMIC_STATE_STENCIL_TEST_ENABLE = 10;
+
+	public static final int VK_DYNAMIC_STATE_STENCIL_OP = 11;
+
+	public static final int VK_DYNAMIC_STATE_RASTERIZER_DISCARD_ENABLE = 1;
+
+	public static final int VK_DYNAMIC_STATE_DEPTH_BIAS_ENABLE = 2;
+
+	public static final int VK_DYNAMIC_STATE_PRIMITIVE_RESTART_ENABLE = 4;
+
+	public static final int VK_DYNAMIC_STATE_VIEWPORT_W_SCALING_NV = 0;
+
+	public static final int VK_DYNAMIC_STATE_DISCARD_RECTANGLE_EXT = 0;
+
+	public static final int VK_DYNAMIC_STATE_SAMPLE_LOCATIONS_EXT = 0;
+
+	public static final int VK_DYNAMIC_STATE_RAY_TRACING_PIPELINE_STACK_SIZE_KHR = 0;
+
+	public static final int VK_DYNAMIC_STATE_VIEWPORT_SHADING_RATE_PALETTE_NV = 4;
+
+	public static final int VK_DYNAMIC_STATE_VIEWPORT_COARSE_SAMPLE_ORDER_NV = 6;
+
+	public static final int VK_DYNAMIC_STATE_EXCLUSIVE_SCISSOR_NV = 1;
+
+	public static final int VK_DYNAMIC_STATE_FRAGMENT_SHADING_RATE_KHR = 0;
+
+	public static final int VK_DYNAMIC_STATE_LINE_STIPPLE_EXT = 0;
+
+	public static final int VK_DYNAMIC_STATE_VERTEX_INPUT_EXT = 0;
+
+	/**
+	* Not promoted to 1.3
+	*/
+	public static final int VK_DYNAMIC_STATE_PATCH_CONTROL_POINTS_EXT = 0;
+
+	/**
+	* Not promoted to 1.3
+	*/
+	public static final int VK_DYNAMIC_STATE_LOGIC_OP_EXT = 3;
+
+	public static final int VK_DYNAMIC_STATE_COLOR_WRITE_ENABLE_EXT = 0;
+
 }

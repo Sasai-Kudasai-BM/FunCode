@@ -26,4 +26,17 @@ public final class VkQueueFlagBits {
 	*/
 	public static final int VK_QUEUE_SPARSE_BINDING_BIT = 8;
 
+	/**
+	* Queues may support protected operations
+	*/
+	public static final int VK_QUEUE_PROTECTED_BIT = 16;
+
+	public static final int VK_QUEUE_VIDEO_DECODE_BIT_KHR = 32;
+
+	public static final int VK_QUEUE_VIDEO_ENCODE_BIT_KHR = 64;
+
+	public static final int VK_QUEUE_RESERVED_7_BIT_QCOM = 128;
+
+	public static final int VK_QUEUE_RESERVED_8_BIT_NV = 256;
+
 }

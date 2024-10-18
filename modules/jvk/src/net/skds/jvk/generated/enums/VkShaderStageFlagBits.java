@@ -22,4 +22,22 @@ public final class VkShaderStageFlagBits {
 
 	public static final int VK_SHADER_STAGE_ALL = 2147483647;
 
+	public static final int VK_SHADER_STAGE_RAYGEN_BIT_KHR = 256;
+
+	public static final int VK_SHADER_STAGE_ANY_HIT_BIT_KHR = 512;
+
+	public static final int VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR = 1024;
+
+	public static final int VK_SHADER_STAGE_MISS_BIT_KHR = 2048;
+
+	public static final int VK_SHADER_STAGE_INTERSECTION_BIT_KHR = 4096;
+
+	public static final int VK_SHADER_STAGE_CALLABLE_BIT_KHR = 8192;
+
+	public static final int VK_SHADER_STAGE_TASK_BIT_NV = 64;
+
+	public static final int VK_SHADER_STAGE_MESH_BIT_NV = 128;
+
+	public static final int VK_SHADER_STAGE_SUBPASS_SHADING_BIT_HUAWEI = 16384;
+
 }

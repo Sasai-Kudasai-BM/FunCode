@@ -18,4 +18,8 @@ public final class VkExternalSemaphoreHandleTypeFlagBitsKHR {
 
 	public static final int VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_SYNC_FD_BIT = 16;
 
+	public static final int VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_ZIRCON_EVENT_BIT_FUCHSIA = 128;
+
+	public static final int VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_RESERVED_5_BIT_NV = 32;
+
 }

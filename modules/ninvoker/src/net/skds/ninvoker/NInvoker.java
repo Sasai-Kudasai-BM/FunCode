@@ -1,8 +1,11 @@
 package net.skds.ninvoker;
 
+import net.skds.lib.unsafe.MemoryStack;
+import net.skds.lib.unsafe.UnsafeAnal;
 import net.skds.lib.utils.SKDSUtils;
 import sun.awt.AWTAccessor;
 import sun.awt.windows.WComponentPeer;
+import sun.misc.Unsafe;
 
 import java.awt.*;
 import java.lang.foreign.*;
@@ -14,8 +17,6 @@ import java.nio.charset.Charset;
 
 /*
 --add-exports
-java.base/jdk.internal.misc=ALL-UNNAMED
---add-exports
 java.desktop/sun.awt=ALL-UNNAMED
 --add-exports
 java.desktop/sun.awt.windows=ALL-UNNAMED
@@ -24,13 +25,15 @@ java.desktop/sun.awt.windows=ALL-UNNAMED
 @SuppressWarnings("unused")
 public final class NInvoker {
 
-	private static final jdk.internal.misc.Unsafe UNSAFE = jdk.internal.misc.Unsafe.getUnsafe();
+	//private static final jdk.internal.misc.Unsafe UNSAFE = jdk.internal.misc.Unsafe.getUnsafe();
+	private static final Unsafe UNSAFE = UnsafeAnal.UNSAFE;
 
 	public static final boolean NATIVE_ORDER = ByteOrder.BIG_ENDIAN == ByteOrder.nativeOrder();
 	public static final Linker LINKER = Linker.nativeLinker();
 	public static final SymbolLookup SYMBOL_LOOKUP = SymbolLookup.loaderLookup();
 	public static final MethodHandles.Lookup METHOD_LOOKUP = MethodHandles.lookup();
 
+	public static final MemoryLayout BOOLEAN = ValueLayout.JAVA_BOOLEAN;
 	public static final MemoryLayout BYTE = ValueLayout.JAVA_BYTE;
 	public static final MemoryLayout SHORT = ValueLayout.JAVA_SHORT;
 	public static final MemoryLayout INT = ValueLayout.JAVA_INT;
@@ -39,6 +42,7 @@ public final class NInvoker {
 	public static final MemoryLayout DOUBLE = ValueLayout.JAVA_DOUBLE;
 	public static final MemoryLayout VOID = null;
 
+	public static final TypeGlue G_BOOLEAN = new TypeGlue(ValueLayout.JAVA_BOOLEAN, boolean.class);
 	public static final TypeGlue G_BYTE = new TypeGlue(ValueLayout.JAVA_BYTE, byte.class);
 	public static final TypeGlue G_SHORT = new TypeGlue(ValueLayout.JAVA_SHORT, short.class);
 	public static final TypeGlue G_INT = new TypeGlue(ValueLayout.JAVA_INT, int.class);
@@ -47,85 +51,6 @@ public final class NInvoker {
 	public static final TypeGlue G_DOUBLE = new TypeGlue(ValueLayout.JAVA_DOUBLE, double.class);
 	public static final TypeGlue G_VOID = new TypeGlue(null, void.class);
 
-	public static final int BYTE_ARRAY_BASE = UNSAFE.arrayBaseOffset(byte[].class);
-	public static final int CHAR_ARRAY_BASE = UNSAFE.arrayBaseOffset(char[].class);
-	public static final int SHORT_ARRAY_BASE = UNSAFE.arrayBaseOffset(short[].class);
-	public static final int INT_ARRAY_BASE = UNSAFE.arrayBaseOffset(int[].class);
-	public static final int FLOAT_ARRAY_BASE = UNSAFE.arrayBaseOffset(float[].class);
-	public static final int LONG_ARRAY_BASE = UNSAFE.arrayBaseOffset(long[].class);
-	public static final int DOUBLE_ARRAY_BASE = UNSAFE.arrayBaseOffset(double[].class);
-
-	public static void transferArray(long src, byte[] dst, int size, int offset) {
-		UNSAFE.copyMemory(null, src, dst, offset + BYTE_ARRAY_BASE, size);
-	}
-
-	public static void transferArray(long src, Object dst, long size, long offset, int byteSize, int arrayOffset) {
-		//if (NATIVE_ORDER || byteSize == 1) {
-		UNSAFE.copyMemory(null, src, dst, offset * byteSize + arrayOffset, size * byteSize);
-		//} else {
-		//	UNSAFE.copySwapMemory(src, 0, dst, offset, size * byteSize, byteSize);
-		//}
-	}
-
-	public static void transferArray(long src, short[] dst, int size, int offset) {
-		transferArray(src, dst, size, offset, 2, SHORT_ARRAY_BASE);
-	}
-
-	public static void transferArray(long src, char[] dst, int size, int offset) {
-		transferArray(src, dst, size, offset, 2, CHAR_ARRAY_BASE);
-	}
-
-	public static void transferArray(long src, int[] dst, int size, int offset) {
-		transferArray(src, dst, size, offset, 4, INT_ARRAY_BASE);
-	}
-
-	public static void transferArray(long src, float[] dst, int size, int offset) {
-		transferArray(src, dst, size, offset, 4, FLOAT_ARRAY_BASE);
-	}
-
-	public static void transferArray(long src, long[] dst, int size, int offset) {
-		transferArray(src, dst, size, offset, 8, LONG_ARRAY_BASE);
-	}
-
-	public static void transferArray(long src, double[] dst, int size, int offset) {
-		transferArray(src, dst, size, offset, 8, DOUBLE_ARRAY_BASE);
-	}
-
-	public static void transferArray(byte[] src, long dst, int size, int offset) {
-		UNSAFE.copyMemory(src, offset + BYTE_ARRAY_BASE, null, dst, size);
-	}
-
-	public static void transferArray(Object src, long dst, long size, long offset, int byteSize, int arrayOffset) {
-		//if (NATIVE_ORDER || byteSize == 1) {
-		UNSAFE.copyMemory(src, offset * byteSize + arrayOffset, null, dst, size * byteSize);
-		//} else {
-		//	UNSAFE.copySwapMemory(src, offset * byteSize + arrayOffset, null, dst, size * byteSize, byteSize);
-		//}
-	}
-
-	public static void transferArray(short[] src, long dst, int size, int offset) {
-		transferArray(src, dst, size, offset, 2, SHORT_ARRAY_BASE);
-	}
-
-	public static void transferArray(char[] src, long dst, int size, int offset) {
-		transferArray(src, dst, size, offset, 2, CHAR_ARRAY_BASE);
-	}
-
-	public static void transferArray(int[] src, long dst, int size, int offset) {
-		transferArray(src, dst, size, offset, 4, INT_ARRAY_BASE);
-	}
-
-	public static void transferArray(float[] src, long dst, int size, int offset) {
-		transferArray(src, dst, size, offset, 4, FLOAT_ARRAY_BASE);
-	}
-
-	public static void transferArray(long[] src, long dst, int size, int offset) {
-		transferArray(src, dst, size, offset, 8, LONG_ARRAY_BASE);
-	}
-
-	public static void transferArray(double[] src, long dst, int size, int offset) {
-		transferArray(src, dst, size, offset, 8, DOUBLE_ARRAY_BASE);
-	}
 
 	public static <T> UpcallLink<T> createUpcallLink(Class<T> clazz, String name, TypeGlue returnType, TypeGlue... argTypes) {
 		MethodHandle handle;
@@ -180,7 +105,7 @@ public final class NInvoker {
 	public static long nullTerminatedString(String string, Charset charset) {
 		byte[] data = string.getBytes(charset);
 		long address = UNSAFE.allocateMemory(data.length + 1);
-		transferArray(data, address, data.length, 0);
+		UnsafeAnal.transferArray(data, address, data.length, 0);
 		UNSAFE.putByte(address + data.length, (byte) 0);
 		return address;
 	}
@@ -188,7 +113,7 @@ public final class NInvoker {
 	public static long nullTerminatedString(String string, Charset charset, MemoryStack stack) {
 		byte[] data = string.getBytes(charset);
 		long address = stack.pushSize(data.length + 1);
-		transferArray(data, address, data.length, 0);
+		UnsafeAnal.transferArray(data, address, data.length, 0);
 		UNSAFE.putByte(address + data.length, (byte) 0);
 		return address;
 	}

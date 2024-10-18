@@ -8,4 +8,6 @@ public final class VkAccelerationStructureCreateFlagBitsKHR {
 
 	public static final int VK_ACCELERATION_STRUCTURE_CREATE_DEVICE_ADDRESS_CAPTURE_REPLAY_BIT_KHR = 1;
 
+	public static final int VK_ACCELERATION_STRUCTURE_CREATE_MOTION_BIT_NV = 4;
+
 }

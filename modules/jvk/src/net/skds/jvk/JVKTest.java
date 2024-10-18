@@ -8,10 +8,7 @@ public class JVKTest {
 
 	public static void main(String[] args) throws Exception {
 
-
 		TestTriangle triangle = new TestTriangle();
-
-
 	}
 
 }

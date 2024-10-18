@@ -10,6 +10,7 @@ interface IEnumType extends IDataType {
 
 	@Override
 	default void generate() {
+		if (getName().equals("VkResult")) return;
 		String pack = VKGen.ROOT_PACKAGE + ".enums";
 		ClassBuilder cb = new ClassBuilder(pack, getName().replace(" ", ""), ClassBuilder.Type.CLASS);
 

@@ -114,4 +114,41 @@ public final class VkFormatFeatureFlagBits2 {
 
 	public static final long VK_FORMAT_FEATURE_2_SAMPLED_IMAGE_DEPTH_COMPARISON_BIT_KHR = 8589934592L;
 
+	public static final long VK_FORMAT_FEATURE_2_VIDEO_DECODE_OUTPUT_BIT_KHR = 33554432L;
+
+	public static final long VK_FORMAT_FEATURE_2_VIDEO_DECODE_DPB_BIT_KHR = 67108864L;
+
+	public static final long VK_FORMAT_FEATURE_2_ACCELERATION_STRUCTURE_VERTEX_BUFFER_BIT_KHR = 536870912L;
+
+	public static final long VK_FORMAT_FEATURE_2_FRAGMENT_DENSITY_MAP_BIT_EXT = 16777216L;
+
+	public static final long VK_FORMAT_FEATURE_2_FRAGMENT_SHADING_RATE_ATTACHMENT_BIT_KHR = 1073741824L;
+
+	public static final long VK_FORMAT_FEATURE_2_VIDEO_ENCODE_INPUT_BIT_KHR = 134217728L;
+
+	public static final long VK_FORMAT_FEATURE_2_VIDEO_ENCODE_DPB_BIT_KHR = 268435456L;
+
+	/**
+	* Format support linear image as render target, it cannot be mixed with non linear attachment
+	*/
+	public static final long VK_FORMAT_FEATURE_2_LINEAR_COLOR_ATTACHMENT_BIT_NV = 274877906944L;
+
+	public static final long VK_FORMAT_FEATURE_2_RESERVED_34_BIT_QCOM = 17179869184L;
+
+	public static final long VK_FORMAT_FEATURE_2_RESERVED_35_BIT_QCOM = 34359738368L;
+
+	public static final long VK_FORMAT_FEATURE_2_RESERVED_36_BIT_QCOM = 68719476736L;
+
+	public static final long VK_FORMAT_FEATURE_2_RESERVED_37_BIT_QCOM = 137438953472L;
+
+	public static final long VK_FORMAT_FEATURE_2_RESERVED_39_BIT_EXT = 549755813888L;
+
+	public static final long VK_FORMAT_FEATURE_2_RESERVED_40_BIT_NV = 1099511627776L;
+
+	public static final long VK_FORMAT_FEATURE_2_RESERVED_41_BIT_NV = 2199023255552L;
+
+	public static final long VK_FORMAT_FEATURE_2_RESERVED_42_BIT_NV = 4398046511104L;
+
+	public static final long VK_FORMAT_FEATURE_2_RESERVED_43_BIT_NV = 8796093022208L;
+
 }

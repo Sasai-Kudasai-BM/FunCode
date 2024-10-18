@@ -14,4 +14,8 @@ public final class VkExternalFenceHandleTypeFlagBitsKHR {
 
 	public static final int VK_EXTERNAL_FENCE_HANDLE_TYPE_SYNC_FD_BIT = 8;
 
+	public static final int VK_EXTERNAL_FENCE_HANDLE_TYPE_RESERVED_4_BIT_NV = 16;
+
+	public static final int VK_EXTERNAL_FENCE_HANDLE_TYPE_RESERVED_5_BIT_NV = 32;
+
 }

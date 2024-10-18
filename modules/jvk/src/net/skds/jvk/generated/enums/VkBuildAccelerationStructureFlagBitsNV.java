@@ -16,4 +16,10 @@ public final class VkBuildAccelerationStructureFlagBitsNV {
 
 	public static final int VK_BUILD_ACCELERATION_STRUCTURE_LOW_MEMORY_BIT_KHR = 16;
 
+	public static final int VK_BUILD_ACCELERATION_STRUCTURE_MOTION_BIT_NV = 32;
+
+	public static final int VK_BUILD_ACCELERATION_STRUCTURE_RESERVED_6_BIT_NV = 64;
+
+	public static final int VK_BUILD_ACCELERATION_STRUCTURE_RESERVED_7_BIT_NV = 128;
+
 }

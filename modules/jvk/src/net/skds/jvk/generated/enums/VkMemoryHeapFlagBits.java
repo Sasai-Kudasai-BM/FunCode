@@ -11,4 +11,11 @@ public final class VkMemoryHeapFlagBits {
 	*/
 	public static final int VK_MEMORY_HEAP_DEVICE_LOCAL_BIT = 1;
 
+	/**
+	* If set, heap allocations allocate multiple instances by default
+	*/
+	public static final int VK_MEMORY_HEAP_MULTI_INSTANCE_BIT = 2;
+
+	public static final int VK_MEMORY_HEAP_RESERVED_2_BIT_KHR = 4;
+
 }

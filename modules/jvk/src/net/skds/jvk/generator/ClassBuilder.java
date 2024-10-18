@@ -66,21 +66,21 @@ class ClassBuilder {
 	}
 
 	public void field(String name, Class<?> type, String initializer, String comment) {
-		var fld = new Field(name, new CT(type.getSimpleName(), type.getPackageName()), initializer, comment, "", false, true);
+		var fld = new Field(name, new CT(type.getSimpleName(), type.getPackageName(), false), initializer, comment, "", false, true);
 		fields.add(fld);
 		contents.add(fld);
 		checkImport(type);
 	}
 
 	public void field(String name, Class<?> type, String initializer, String comment, String prefix, boolean p) {
-		var fld = new Field(name, new CT(type.getSimpleName(), type.getPackageName()), initializer, comment, prefix, p, true);
+		var fld = new Field(name, new CT(type.getSimpleName(), type.getPackageName(), false), initializer, comment, prefix, p, true);
 		fields.add(fld);
 		contents.add(fld);
 		checkImport(type);
 	}
 
 	public void fieldD(String name, Class<?> type, String initializer, String comment, String prefix, boolean p) {
-		var fld = new Field(name, new CT(type.getSimpleName(), type.getPackageName()), initializer, comment, prefix, p, false);
+		var fld = new Field(name, new CT(type.getSimpleName(), type.getPackageName(), false), initializer, comment, prefix, p, false);
 		fields.add(fld);
 		contents.add(fld);
 		checkImport(type);
@@ -90,7 +90,7 @@ class ClassBuilder {
 		var fld = new Field(name, type, initializer, comment, prefix, p, false);
 		fields.add(fld);
 		contents.add(fld);
-		checkImport(type.name, type.pack);
+		checkImport(type.name, type.pack, type.array);
 	}
 
 	public void comment(String comment) {
@@ -168,7 +168,7 @@ class ClassBuilder {
 					sb.append(" static final");
 				}
 			}
-			sb.append(" ").append(fld.type.name).append(" ").append(fld.name);
+			sb.append(" ").append(fld.type.name).append(fld.type.arrayAppend()).append(" ").append(fld.name);
 			if (fld.initializer != null && !fld.initializer.isEmpty()) {
 				sb.append(" = ").append(fld.initializer);
 			}
@@ -247,7 +247,10 @@ class ClassBuilder {
 		CLASS, ENUM;
 	}
 
-	public record CT(String name, String pack) {
+	public record CT(String name, String pack, boolean array) {
+		String arrayAppend() {
+			return array ? "[]" : "";
+		}
 	}
 
 	private record Import(CT t, boolean s) {
@@ -261,21 +264,21 @@ class ClassBuilder {
 
 	public void checkImport(Class<?> type) {
 		if (type == null || type.isPrimitive() || (type.isArray() && type.getComponentType().isPrimitive())) return;
-		imports.add(new Import(new CT(type.getSimpleName(), type.getPackageName()), false));
+		imports.add(new Import(new CT(type.getSimpleName(), type.getPackageName(), false), false));
 	}
 
 	public void importStatic(Class<?> type) {
 		if (type == null || type.isPrimitive()) return;
-		imports.add(new Import(new CT(type.getSimpleName(), type.getPackageName()), true));
+		imports.add(new Import(new CT(type.getSimpleName(), type.getPackageName(), false), true));
 	}
 
-	public void checkImport(String name, String pack) {
+	public void checkImport(String name, String pack, boolean isArray) {
 		if (type == null || Character.isLowerCase(name.charAt(0))) return;
-		imports.add(new Import(new CT(name, pack), false));
+		imports.add(new Import(new CT(name, pack, isArray), false));
 	}
 
-	public void importStatic(String name, String pack) {
+	public void importStatic(String name, String pack, boolean isArray) {
 		if (type == null || Character.isLowerCase(name.charAt(0))) return;
-		imports.add(new Import(new CT(name, pack), true));
+		imports.add(new Import(new CT(name, pack, isArray), true));
 	}
 }

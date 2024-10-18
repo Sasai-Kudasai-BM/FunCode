@@ -4,6 +4,7 @@ import org.w3c.dom.Element;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 class EnumType extends DataType implements IEnumType {
 
@@ -149,6 +150,9 @@ class EnumType extends DataType implements IEnumType {
 			Value v2 = new Value(val, name2, comment2, nt);
 			//et.values().add(v2);
 			VKGen.enumValues.put(v2.name, v2);
+			if (!et.values().stream().map(v -> v.name).collect(Collectors.toSet()).contains(v2.name)) {
+				et.values().add(v2);
+			}
 			return v2;
 		}
 

@@ -21,4 +21,13 @@ public final class VkBufferCreateFlagBits {
 	*/
 	public static final int VK_BUFFER_CREATE_SPARSE_ALIASED_BIT = 4;
 
+	/**
+	* Buffer requires protected memory
+	*/
+	public static final int VK_BUFFER_CREATE_PROTECTED_BIT = 8;
+
+	public static final int VK_BUFFER_CREATE_DEVICE_ADDRESS_CAPTURE_REPLAY_BIT = 16;
+
+	public static final int VK_BUFFER_CREATE_RESERVED_5_BIT_AMD = 32;
+
 }

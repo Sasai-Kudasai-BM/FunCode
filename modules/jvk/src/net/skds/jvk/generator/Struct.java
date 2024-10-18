@@ -72,7 +72,7 @@ class Struct extends DataType implements IStruct {
 							//System.out.println("========");
 
 							st = new ArrayType(st, v.name(), (Integer) v.v());
-							System.out.println(st);
+							//System.out.println(st);
 						}
 					}
 
@@ -83,6 +83,7 @@ class Struct extends DataType implements IStruct {
 							String mt2 = SKDSUtils.cutStringAfter(mt, '[');
 							String mt3 = SKDSUtils.cutStringBefore(mt2, ']');
 							int s = Integer.parseInt(mt3);
+							mt2 = SKDSUtils.cutStringAfter(mt2, ']');
 							if (!mt2.isBlank()) {
 								mt2 = SKDSUtils.cutStringAfter(mt2, '[');
 								mt3 = SKDSUtils.cutStringBefore(mt2, ']');

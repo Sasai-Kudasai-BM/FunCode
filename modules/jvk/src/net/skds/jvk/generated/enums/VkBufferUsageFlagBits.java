@@ -51,4 +51,39 @@ public final class VkBufferUsageFlagBits {
 	*/
 	public static final int VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT = 256;
 
+	public static final int VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT = 131072;
+
+	public static final int VK_BUFFER_USAGE_VIDEO_DECODE_SRC_BIT_KHR = 8192;
+
+	public static final int VK_BUFFER_USAGE_VIDEO_DECODE_DST_BIT_KHR = 16384;
+
+	public static final int VK_BUFFER_USAGE_TRANSFORM_FEEDBACK_BUFFER_BIT_EXT = 2048;
+
+	public static final int VK_BUFFER_USAGE_TRANSFORM_FEEDBACK_COUNTER_BUFFER_BIT_EXT = 4096;
+
+	/**
+	* Specifies the buffer can be used as predicate in conditional rendering
+	*/
+	public static final int VK_BUFFER_USAGE_CONDITIONAL_RENDERING_BIT_EXT = 512;
+
+	public static final int VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR = 524288;
+
+	public static final int VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_STORAGE_BIT_KHR = 1048576;
+
+	public static final int VK_BUFFER_USAGE_SHADER_BINDING_TABLE_BIT_KHR = 1024;
+
+	public static final int VK_BUFFER_USAGE_RESERVED_18_BIT_QCOM = 262144;
+
+	public static final int VK_BUFFER_USAGE_VIDEO_ENCODE_DST_BIT_KHR = 32768;
+
+	public static final int VK_BUFFER_USAGE_VIDEO_ENCODE_SRC_BIT_KHR = 65536;
+
+	public static final int VK_BUFFER_USAGE_RESERVED_21_BIT_AMD = 2097152;
+
+	public static final int VK_BUFFER_USAGE_RESERVED_22_BIT_AMD = 4194304;
+
+	public static final int VK_BUFFER_USAGE_RESERVED_23_BIT_NV = 8388608;
+
+	public static final int VK_BUFFER_USAGE_RESERVED_24_BIT_NV = 16777216;
+
 }

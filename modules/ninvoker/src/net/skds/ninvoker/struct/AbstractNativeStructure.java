@@ -1,6 +1,6 @@
 package net.skds.ninvoker.struct;
 
-import net.skds.ninvoker.MemoryStack;
+import net.skds.lib.unsafe.MemoryStack;
 
 public abstract class AbstractNativeStructure implements NativeData {
 

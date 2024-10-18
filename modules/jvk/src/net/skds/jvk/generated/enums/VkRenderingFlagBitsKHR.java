@@ -18,4 +18,6 @@ public final class VkRenderingFlagBitsKHR {
 
 	public static final int VK_RENDERING_RESUMING_BIT_KHR = 4;
 
+	public static final int VK_RENDERING_RESERVED_3_BIT_EXT = 8;
+
 }

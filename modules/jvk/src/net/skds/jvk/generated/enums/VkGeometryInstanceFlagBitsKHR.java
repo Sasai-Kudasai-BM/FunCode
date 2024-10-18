@@ -16,4 +16,8 @@ public final class VkGeometryInstanceFlagBitsKHR {
 
 	public static final int VK_GEOMETRY_INSTANCE_TRIANGLE_FRONT_COUNTERCLOCKWISE_BIT_KHR = 2;
 
+	public static final int VK_GEOMETRY_INSTANCE_RESERVED_4_BIT_NV = 16;
+
+	public static final int VK_GEOMETRY_INSTANCE_RESERVED_5_BIT_NV = 32;
+
 }

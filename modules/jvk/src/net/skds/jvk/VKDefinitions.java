@@ -1,9 +1,8 @@
 package net.skds.jvk;
 
-import net.skds.jvk.generated.enums.VkResult;
-
 import static net.skds.ninvoker.NInvoker.winInit;
 
+@SuppressWarnings("unused")
 public class VKDefinitions {
 
 	public static final boolean INITIALIZED = winInit("vulkan-1");

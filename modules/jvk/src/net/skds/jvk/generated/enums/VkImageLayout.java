@@ -51,4 +51,40 @@ public final class VkImageLayout {
 	*/
 	public static final int VK_IMAGE_LAYOUT_PREINITIALIZED = 8;
 
+	public static final int VK_IMAGE_LAYOUT_DEPTH_READ_ONLY_STENCIL_ATTACHMENT_OPTIMAL = 0;
+
+	public static final int VK_IMAGE_LAYOUT_DEPTH_ATTACHMENT_STENCIL_READ_ONLY_OPTIMAL = 1;
+
+	public static final int VK_IMAGE_LAYOUT_DEPTH_ATTACHMENT_OPTIMAL = 0;
+
+	public static final int VK_IMAGE_LAYOUT_DEPTH_READ_ONLY_OPTIMAL = 1;
+
+	public static final int VK_IMAGE_LAYOUT_STENCIL_ATTACHMENT_OPTIMAL = 2;
+
+	public static final int VK_IMAGE_LAYOUT_STENCIL_READ_ONLY_OPTIMAL = 3;
+
+	public static final int VK_IMAGE_LAYOUT_READ_ONLY_OPTIMAL = 0;
+
+	public static final int VK_IMAGE_LAYOUT_ATTACHMENT_OPTIMAL = 1;
+
+	public static final int VK_IMAGE_LAYOUT_PRESENT_SRC_KHR = 2;
+
+	public static final int VK_IMAGE_LAYOUT_VIDEO_DECODE_DST_KHR = 0;
+
+	public static final int VK_IMAGE_LAYOUT_VIDEO_DECODE_SRC_KHR = 1;
+
+	public static final int VK_IMAGE_LAYOUT_VIDEO_DECODE_DPB_KHR = 2;
+
+	public static final int VK_IMAGE_LAYOUT_SHARED_PRESENT_KHR = 0;
+
+	public static final int VK_IMAGE_LAYOUT_FRAGMENT_DENSITY_MAP_OPTIMAL_EXT = 0;
+
+	public static final int VK_IMAGE_LAYOUT_FRAGMENT_SHADING_RATE_ATTACHMENT_OPTIMAL_KHR = 3;
+
+	public static final int VK_IMAGE_LAYOUT_VIDEO_ENCODE_DST_KHR = 0;
+
+	public static final int VK_IMAGE_LAYOUT_VIDEO_ENCODE_SRC_KHR = 1;
+
+	public static final int VK_IMAGE_LAYOUT_VIDEO_ENCODE_DPB_KHR = 2;
+
 }
