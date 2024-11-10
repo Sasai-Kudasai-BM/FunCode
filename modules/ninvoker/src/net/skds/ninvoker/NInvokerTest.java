@@ -1,6 +1,6 @@
 package net.skds.ninvoker;
 
-import net.skds.lib.unsafe.UnsafeAnal;
+import net.skds.lib2.unsafe.UnsafeAnal;
 import net.skds.ninvoker.struct.AbstractNativeStructure;
 import net.skds.ninvoker.struct.ArrayLength;
 import net.skds.ninvoker.struct.NativeStructureWrapper;

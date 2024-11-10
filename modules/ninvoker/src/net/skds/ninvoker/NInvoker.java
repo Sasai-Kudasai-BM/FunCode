@@ -1,8 +1,8 @@
 package net.skds.ninvoker;
 
-import net.skds.lib.unsafe.MemoryStack;
-import net.skds.lib.unsafe.UnsafeAnal;
-import net.skds.lib.utils.SKDSUtils;
+import net.skds.lib2.unsafe.MemoryStack;
+import net.skds.lib2.unsafe.UnsafeAnal;
+import net.skds.lib2.utils.SKDSUtils;
 import sun.awt.AWTAccessor;
 import sun.awt.windows.WComponentPeer;
 import sun.misc.Unsafe;

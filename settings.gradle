@@ -6,7 +6,9 @@ include(
         ':funcode',
         ':sosison',
         ':ninvoker',
-        ':jvk',
+        ':jvk_base',
+        ':jvk_generator',
+        ':jvk_generated',
         ':nativelib',
         ':engine'
 )

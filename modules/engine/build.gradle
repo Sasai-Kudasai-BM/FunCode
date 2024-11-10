@@ -5,7 +5,8 @@ dependencies {
     implementation project(":skdslib")
     implementation project(":ninvoker")
     implementation project(":nativelib")
-    implementation project(":jvk")
+    implementation project(":jvk_base")
+    implementation project(":jvk_generated")
 }
 
 

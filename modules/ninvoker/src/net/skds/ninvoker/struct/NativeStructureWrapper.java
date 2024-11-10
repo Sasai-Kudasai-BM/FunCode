@@ -1,8 +1,8 @@
 package net.skds.ninvoker.struct;
 
-import net.skds.lib.unsafe.MemoryStack;
-import net.skds.lib.unsafe.UnsafeAnal;
-import net.skds.lib.utils.Holders;
+import net.skds.lib2.unsafe.MemoryStack;
+import net.skds.lib2.unsafe.UnsafeAnal;
+import net.skds.lib2.utils.Holders;
 import sun.misc.Unsafe;
 
 import java.lang.reflect.Array;

@@ -1,6 +1,6 @@
 package net.skds.ninvoker.struct;
 
-import net.skds.lib.unsafe.MemoryStack;
+import net.skds.lib2.unsafe.MemoryStack;
 
 public interface NativeData {
 

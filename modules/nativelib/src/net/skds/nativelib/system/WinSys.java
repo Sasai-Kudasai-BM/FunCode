@@ -1,6 +1,6 @@
 package net.skds.nativelib.system;
 
-import net.skds.lib.unsafe.UnsafeAnal;
+import net.skds.lib2.unsafe.UnsafeAnal;
 import sun.misc.Unsafe;
 
 import java.lang.invoke.MethodHandle;

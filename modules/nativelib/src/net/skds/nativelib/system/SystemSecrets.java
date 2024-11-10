@@ -1,6 +1,6 @@
 package net.skds.nativelib.system;
 
-import net.skds.lib.utils.SKDSUtils;
+import net.skds.lib2.utils.SKDSUtils;
 
 import java.util.function.Supplier;
 
