@@ -2,8 +2,8 @@ package net.skds.funcode;
 
 import lombok.Getter;
 import lombok.Setter;
-import net.skds.lib.mat.FastMath;
-import net.skds.lib.utils.ThreadUtil;
+import net.skds.lib2.mat.FastMath;
+import net.skds.lib2.utils.ThreadUtil;
 
 import javax.swing.*;
 import java.awt.*;

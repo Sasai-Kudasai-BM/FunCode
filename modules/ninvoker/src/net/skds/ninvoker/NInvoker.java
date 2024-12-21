@@ -77,6 +77,13 @@ public final class NInvoker {
 		);
 	}
 
+	public static MethodHandle createHandle(long address, MemoryLayout returnType, MemoryLayout... arguments) {
+		return LINKER.downcallHandle(
+				MemorySegment.ofAddress(address),
+				fd(returnType, arguments)
+		);
+	}
+
 
 	public static MethodHandle createWinHandle(String name, MemoryLayout returnType, MemoryLayout... arguments) {
 		if (SKDSUtils.OS_TYPE != SKDSUtils.OSType.WINDOWS) {
@@ -139,14 +146,7 @@ public final class NInvoker {
 		return arr;
 	}
 
-	public static final class TypeGlue {
-		private final ValueLayout nType;
-		private final Class<?> jType;
-
-		private TypeGlue(ValueLayout nType, Class<?> jType) {
-			this.nType = nType;
-			this.jType = jType;
-		}
+	public record TypeGlue(ValueLayout nType, Class<?> jType) {
 	}
 
 	private NInvoker() {

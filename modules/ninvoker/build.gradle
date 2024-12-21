@@ -3,7 +3,7 @@ group = "net.skds"
 
 dependencies {
 
-    implementation project(':skdslib')
+    compileOnly project(':skdslib')
 }
 
 compileJava {

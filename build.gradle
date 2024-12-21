@@ -1,14 +1,20 @@
+//plugins {
+//    id 'org.jetbrains.intellij.platform' version '2.1.0'
+//}
 version = project.version
 
 allprojects {
     apply plugin: 'java'
     apply plugin: 'idea'
+    //apply plugin: 'org.jetbrains.intellij.platform'
     java {
         toolchain {
             languageVersion = JavaLanguageVersion.of(22)
         }
     }
-
+    repositories {
+        mavenCentral()
+    }
 }
 
 subprojects {
@@ -19,9 +25,6 @@ subprojects {
             java.srcDir 'src'
             resources.srcDir 'resources'
         }
-    }
-    repositories {
-        mavenCentral()
     }
     dependencies {
         implementation("com.google.code.gson:gson:2.10.1")

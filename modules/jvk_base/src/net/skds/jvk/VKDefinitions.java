@@ -69,4 +69,9 @@ public class VKDefinitions {
 		};
 	}
 
+
+	public static VkDeviceTypeE getDeviceType(int type) {
+		return VkDeviceTypeE.values()[type];
+	}
+
 }

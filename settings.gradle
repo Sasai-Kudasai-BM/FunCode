@@ -4,7 +4,6 @@ rootProject.name = 'FunCode'
 include(
         ':skdslib',
         ':funcode',
-        ':sosison',
         ':ninvoker',
         ':jvk_base',
         ':jvk_generator',

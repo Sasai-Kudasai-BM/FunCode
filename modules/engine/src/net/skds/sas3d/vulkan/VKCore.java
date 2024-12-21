@@ -1,4 +1,4 @@
-package net.skds.jvk.test;
+package net.skds.sas3d.vulkan;
 
 import net.skds.jvk.VKDefinitions;
 import net.skds.jvk.VkResult;
@@ -13,12 +13,7 @@ import net.skds.ninvoker.NInvoker;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.List;
 
 import static net.skds.jvk.generated.VK10.*;
@@ -33,14 +28,16 @@ import static net.skds.jvk.generated.enums.VkPipelineStageFlagBits.*;
 import static net.skds.jvk.generated.enums.VkSampleCountFlagBits.VK_SAMPLE_COUNT_1_BIT;
 import static net.skds.lib2.unsafe.UnsafeAnal.*;
 
-public class TestTriangle {
+public class VKCore {
 
-	public static final boolean DEBUG = true;
 	public static final List<String> LAYERS = List.of("VK_LAYER_KHRONOS_validation");
 	public static final List<String> EXTENSIONS = List.of("VK_KHR_surface", "VK_KHR_win32_surface");
 	public static final List<String> DEVICE_EXTENSIONS = List.of("VK_KHR_swapchain");
 
 	final MemoryStack staticStack = new MemoryStack();
+	private final boolean debug;
+	private final String appName;
+	private final String engineName;
 
 	private int layersCount;
 	private final MemoryStack layersPtr = new MemoryStack();
@@ -50,13 +47,13 @@ public class TestTriangle {
 	private final MemoryStack deviceExtensionsPtr = new MemoryStack();
 
 	final JFrame frame;
-	final long hWnd;
-	final long hInstance;
+	long hWnd;
+	long hInstance;
 
-	final long vertexShaderSize;
-	final long pVertexShader;
-	final long fragmentShaderSize;
-	final long pFragmentShader;
+	long vertexShaderSize;
+	long pVertexShader;
+	long fragmentShaderSize;
+	long pFragmentShader;
 
 	final long pAllocator = 0;
 
@@ -70,13 +67,18 @@ public class TestTriangle {
 	long device;
 	int mainQueueFamilyIndex;
 	long commandPool;
+
 	long commandBuffer;
 	long queue;
+
 	long pipeline;
 	long renderPass;
+
 	long vShaderModule;
 	long fShaderModule;
+
 	long pipelineLayout;
+
 	long framebuffer;
 	long surface;
 	long swapchain;
@@ -90,67 +92,54 @@ public class TestTriangle {
 
 	final long lPtr0 = staticStack.push8();
 
-	public TestTriangle() {
-		this.frame = new JFrame() {
-
-			@Override
-			public Graphics getGraphics() {
-				return null;
+	public VKCore(boolean debug, JFrame frame, String appName, String engineName) {
+		this.debug = debug;
+		this.frame = frame;
+		this.appName = appName;
+		this.engineName = engineName;
+		if (debug) {
+			this.layersCount = LAYERS.size();
+			for (String layer : LAYERS) {
+				this.layersPtr.pushNT(layer);
 			}
-
-			@Override
-			public void paint(Graphics g) {
-			}
-		};
-		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		frame.setPreferredSize(new Dimension(800, 600));
-		//frame.setBackground(null);
-		//frame.setUndecorated(true);
-		//frame.setOpacity(.5f);
-		frame.addWindowListener(new WindowAdapter() {
-			@Override
-			public void windowClosing(WindowEvent e) {
-				discard();
-			}
-		});
-		frame.pack();
-		frame.setVisible(true);
-		this.hWnd = NInvoker.getHWnd(frame);
-		this.hInstance = 0;//Kernel32.getModuleHandle(0);
-		this.width = frame.getContentPane().getWidth();
-		this.height = frame.getContentPane().getHeight();
-
-		try {
-			byte[] sd = Files.readAllBytes(Path.of("shader/vert.spv"));
-			vertexShaderSize = sd.length;
-			pVertexShader = staticStack.push(sd);
-			sd = Files.readAllBytes(Path.of("shader/frag.spv"));
-			fragmentShaderSize = sd.length;
-			pFragmentShader = staticStack.push(sd);
-		} catch (IOException e) {
-			throw new RuntimeException(e);
+			this.layersPtr.makePPtr();
+		} else {
+			this.layersCount = 0;
 		}
+		this.extensionsCount = EXTENSIONS.size();
+		for (String extension : EXTENSIONS) {
+			this.extensionsPtr.pushNT(extension);
+		}
+		this.extensionsPtr.makePPtr();
+		this.deviceExtensionsCount = DEVICE_EXTENSIONS.size();
+		for (String extension : DEVICE_EXTENSIONS) {
+			this.deviceExtensionsPtr.pushNT(extension);
+		}
+		this.deviceExtensionsPtr.makePPtr();
 
-
-		if (DEBUG) {
-			System.out.println("HWND: " + hWnd);
-			System.out.println("HINSTANCE: " + hInstance);
-			System.out.println("Vertex shader size: " + vertexShaderSize);
-
+		if (debug) {
 			listLayers();
-			//listExtensions();
 		}
+	}
 
-		allocExtensions();
+	public void initWindow() {
+		this.hWnd = NInvoker.getHWnd(frame);
+		//this.hInstance = Kernel32.getModuleHandle(0);
+		final Component wnd = frame.getContentPane();
+		this.width = wnd.getWidth();
+		this.height = wnd.getHeight();
+	}
+
+	public void init() {
+		initWindow();
+
 		initInstance();
 		initDevice();
 		initCommandBuffer();
-		initPipeline();
-		initFramebuffer();
+		//initPipeline();
+		//initFramebuffer();
 
-		prepare();
-
-		presentTest();
+		//prepare();
 	}
 
 	private void initPipeline() {
@@ -189,7 +178,7 @@ public class TestTriangle {
 			renderPassCI.dependencyCount = 0;
 			renderPassCI.allocPut(stack);
 
-			check(vkCreateRenderPass(device, renderPassCI.address(), 0, lPtr0));
+			vkCheck(vkCreateRenderPass(device, renderPassCI.address(), 0, lPtr0));
 			renderPass = getLong(lPtr0);
 
 			VkShaderModuleCreateInfo shaderModuleCi = new VkShaderModuleCreateInfo();
@@ -200,9 +189,9 @@ public class TestTriangle {
 			shaderModuleCi.pCode = pFragmentShader;
 			long pFragMod = shaderModuleCi.allocPut(stack);
 
-			check(vkCreateShaderModule(device, pVertMod, 0, lPtr0));
+			vkCheck(vkCreateShaderModule(device, pVertMod, 0, lPtr0));
 			vShaderModule = getLong(lPtr0);
-			check(vkCreateShaderModule(device, pFragMod, 0, lPtr0));
+			vkCheck(vkCreateShaderModule(device, pFragMod, 0, lPtr0));
 			fShaderModule = getLong(lPtr0);
 
 			VkPipelineShaderStageCreateInfo[] shaderStageCi = VkPipelineShaderStageCreateInfo.WRAPPER.allocArray(2);
@@ -259,7 +248,7 @@ public class TestTriangle {
 			layoutCi.pushConstantRangeCount = 0;
 			layoutCi.allocPut(stack);
 
-			check(vkCreatePipelineLayout(device, layoutCi.address(), 0, lPtr0));
+			vkCheck(vkCreatePipelineLayout(device, layoutCi.address(), 0, lPtr0));
 			pipelineLayout = getLong(lPtr0);
 
 			VkPipelineDynamicStateCreateInfo dynamicStateInfo = new VkPipelineDynamicStateCreateInfo();
@@ -322,9 +311,9 @@ public class TestTriangle {
 			pipelineCI.basePipelineIndex = -1;
 			pipelineCI.allocPut(stack);
 
-			check(vkCreateGraphicsPipelines(device, 0, 1, pipelineCI.address(), 0, lPtr0));
+			vkCheck(vkCreateGraphicsPipelines(device, 0, 1, pipelineCI.address(), 0, lPtr0));
 			pipeline = getLong(lPtr0);
-			if (DEBUG) {
+			if (debug) {
 				System.out.println("pipeline: " + pipeline);
 			}
 		}
@@ -377,7 +366,7 @@ public class TestTriangle {
 		viewInfo.alloc(stack);
 		FramebufferImage[] images = new FramebufferImage[count];
 		long ptr = stack.pushLongs(count);
-		check(VkKhrSwapchain.vkGetSwapchainImagesKHR(device, swapchain, stack.push(count), ptr));
+		vkCheck(VkKhrSwapchain.vkGetSwapchainImagesKHR(device, swapchain, stack.push(count), ptr));
 
 		for (int i = 0; i < count; i++) {
 			//check(vkCreateImage(device, imageInfo.address(), pAllocator, lPtr0));
@@ -399,7 +388,7 @@ public class TestTriangle {
 			viewInfo.image = image;
 			viewInfo.put();
 
-			check(vkCreateImageView(device, viewInfo.address(), pAllocator, lPtr0));
+			vkCheck(vkCreateImageView(device, viewInfo.address(), pAllocator, lPtr0));
 			long view = getLong(lPtr0);
 
 			images[i] = new FramebufferImage(image, view, 0);
@@ -417,13 +406,13 @@ public class TestTriangle {
 			surfaceCi.hwnd = hWnd;
 			surfaceCi.allocPut(stack);
 
-			check(VkKhrWin32Surface.vkCreateWin32SurfaceKHR(instance, surfaceCi.address(), 0, lPtr0));
+			vkCheck(VkKhrWin32Surface.vkCreateWin32SurfaceKHR(instance, surfaceCi.address(), 0, lPtr0));
 			surface = getLong(lPtr0);
 
-			check(VkKhrSurface.vkGetPhysicalDeviceSurfaceFormatsKHR(hDevice, surface, lPtr0, 0));
+			vkCheck(VkKhrSurface.vkGetPhysicalDeviceSurfaceFormatsKHR(hDevice, surface, lPtr0, 0));
 			int count = getInt(lPtr0);
 			VkSurfaceFormatKHR[] formats = VkSurfaceFormatKHR.WRAPPER.allocArray(count, stack);
-			check(VkKhrSurface.vkGetPhysicalDeviceSurfaceFormatsKHR(hDevice, surface, lPtr0, formats[0].address()));
+			vkCheck(VkKhrSurface.vkGetPhysicalDeviceSurfaceFormatsKHR(hDevice, surface, lPtr0, formats[0].address()));
 			boolean formatOk = false;
 			for (int i = 0; i < count; i++) {
 				VkSurfaceFormatKHR format = formats[i];
@@ -432,7 +421,7 @@ public class TestTriangle {
 					formatOk = true;
 					break;
 				}
-				if (DEBUG) {
+				if (debug) {
 					System.out.println("Surface format: " + format.format);
 				}
 			}
@@ -461,7 +450,7 @@ public class TestTriangle {
 			swapchainInfo.oldSwapchain = 0;
 			swapchainInfo.allocPut(stack);
 
-			check(VkKhrSwapchain.vkCreateSwapchainKHR(device, swapchainInfo.address(), 0, lPtr0));
+			vkCheck(VkKhrSwapchain.vkCreateSwapchainKHR(device, swapchainInfo.address(), 0, lPtr0));
 			swapchain = getLong(lPtr0);
 
 			framebufferImages = createFramebufferImages(stack, 1);
@@ -474,10 +463,10 @@ public class TestTriangle {
 			framebufferCi.height = height;
 			framebufferCi.layers = 1;
 			framebufferCi.allocPut(stack);
-			check(vkCreateFramebuffer(device, framebufferCi.address(), pAllocator, lPtr0));
+			vkCheck(vkCreateFramebuffer(device, framebufferCi.address(), pAllocator, lPtr0));
 			framebuffer = getLong(lPtr0);
 
-			if (DEBUG) {
+			if (debug) {
 				System.out.println("framebuffer: " + framebuffer);
 				System.out.println("surface: " + surface);
 				System.out.println("swapchain: " + swapchain);
@@ -503,21 +492,21 @@ public class TestTriangle {
 			VkSemaphoreCreateInfo semaphoreInfo = new VkSemaphoreCreateInfo();
 			semaphoreInfo.allocPut(stack);
 			long pSemaphore = stack.pushLongs(1);
-			check(vkCreateSemaphore(device, semaphoreInfo.address(), pAllocator, pSemaphore));
+			vkCheck(vkCreateSemaphore(device, semaphoreInfo.address(), pAllocator, pSemaphore));
 			long pSemaphore2 = stack.pushLongs(1);
-			check(vkCreateSemaphore(device, semaphoreInfo.address(), pAllocator, pSemaphore2));
+			vkCheck(vkCreateSemaphore(device, semaphoreInfo.address(), pAllocator, pSemaphore2));
 
 			long pIndex = stack.push4();
-			check(VkKhrSwapchain.vkAcquireNextImageKHR(device, swapchain, 0, getLong(pSemaphore), 0, pIndex));
+			vkCheck(VkKhrSwapchain.vkAcquireNextImageKHR(device, swapchain, 0, getLong(pSemaphore), 0, pIndex));
 			int index = getInt(pIndex);
 
 
-			check(vkResetCommandBuffer(commandBuffer, 0));
+			vkCheck(vkResetCommandBuffer(commandBuffer, 0));
 
 			VkCommandBufferBeginInfo beginInfo = new VkCommandBufferBeginInfo();
 			//beginInfo.flags = VkCommandBufferUsageFlagBits.VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
 			beginInfo.allocPut(stack);
-			check(vkBeginCommandBuffer(commandBuffer, beginInfo.address()));
+			vkCheck(vkBeginCommandBuffer(commandBuffer, beginInfo.address()));
 
 			VkExtent2D extent = new VkExtent2D();
 			extent.width = width;
@@ -608,7 +597,7 @@ public class TestTriangle {
 			//
 			// SHITTY ==============
 
-			check(vkEndCommandBuffer(commandBuffer));
+			vkCheck(vkEndCommandBuffer(commandBuffer));
 
 
 			VkSubmitInfo submitInfo = new VkSubmitInfo();
@@ -621,7 +610,7 @@ public class TestTriangle {
 			submitInfo.pWaitDstStageMask = stack.push(VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT);
 			submitInfo.allocPut(stack);
 
-			check(vkQueueSubmit(queue, 1, submitInfo.address(), 0));
+			vkCheck(vkQueueSubmit(queue, 1, submitInfo.address(), 0));
 
 
 			VkPresentInfoKHR presentInfo = new VkPresentInfoKHR();
@@ -636,14 +625,14 @@ public class TestTriangle {
 			presentInfo.allocPut(stack);
 
 
-			check(VkKhrSwapchain.vkQueuePresentKHR(queue, presentInfo.address()));
+			vkCheck(VkKhrSwapchain.vkQueuePresentKHR(queue, presentInfo.address()));
 
-			check(vkQueueWaitIdle(queue));
+			vkCheck(vkQueueWaitIdle(queue));
 		}
 	}
 
 	private void allocExtensions() {
-		if (DEBUG) {
+		if (debug) {
 			layersCount = LAYERS.size();
 			for (String layer : LAYERS) {
 				layersPtr.pushNT(layer, StandardCharsets.UTF_8);
@@ -669,12 +658,11 @@ public class TestTriangle {
 			VkApplicationInfo appInfo = new VkApplicationInfo();
 			appInfo.applicationVersion = VKDefinitions.vkMakeApiVersion(0, 1, 0, 0);
 			appInfo.engineVersion = VKDefinitions.vkMakeApiVersion(0, 1, 0, 0);
-			appInfo.pApplicationName = NInvoker.nullTerminatedString("test", StandardCharsets.UTF_8, stack);
-			appInfo.pEngineName = NInvoker.nullTerminatedString("test_engine", StandardCharsets.UTF_8, stack);
+			appInfo.pApplicationName = NInvoker.nullTerminatedString(appName, StandardCharsets.UTF_8, stack);
+			appInfo.pEngineName = NInvoker.nullTerminatedString(engineName, StandardCharsets.UTF_8, stack);
 			appInfo.applicationVersion = VKDefinitions.VK_API_VERSION_1_0;
 
-			appInfo.alloc(stack);
-			appInfo.put();
+			appInfo.allocPut(stack);
 
 			VkInstanceCreateInfo icInfo = new VkInstanceCreateInfo();
 			icInfo.pApplicationInfo = appInfo.address();
@@ -683,13 +671,12 @@ public class TestTriangle {
 			icInfo.enabledExtensionCount = extensionsCount;
 			icInfo.ppEnabledExtensionNames = extensionsPtr.getPPtr();
 
-			icInfo.alloc(stack);
-			icInfo.put();
+			icInfo.allocPut(stack);
 
-			check(vkCreateInstance(icInfo.address(), 0, lPtr0));
+			vkCheck(vkCreateInstance(icInfo.address(), 0, lPtr0));
 			instance = getLong(lPtr0);
 
-			if (DEBUG) {
+			if (debug) {
 				System.out.println("instance: " + instance);
 			}
 		}
@@ -698,10 +685,10 @@ public class TestTriangle {
 	private void initDevice() {
 		try (MemoryStack stack = new MemoryStack()) {
 
-			check(vkEnumeratePhysicalDevices(instance, lPtr0, 0));
+			vkCheck(vkEnumeratePhysicalDevices(instance, lPtr0, 0));
 			int count = getInt(lPtr0);
 			long pDevArr = stack.pushLongs(count);
-			check(vkEnumeratePhysicalDevices(instance, lPtr0, pDevArr));
+			vkCheck(vkEnumeratePhysicalDevices(instance, lPtr0, pDevArr));
 
 			VkPhysicalDeviceProperties properties = new VkPhysicalDeviceProperties();
 			properties.alloc(stack);
@@ -730,10 +717,10 @@ public class TestTriangle {
 					);
 				}
 
-				if (DEBUG) {
+				if (debug) {
 					System.out.println("=============== Device =============");
 					System.out.println("deviceID: " + properties.deviceID);
-					System.out.println("deviceType: " + properties.deviceType);
+					System.out.println("deviceType: " + VKDefinitions.getDeviceType(properties.deviceType));
 					System.out.println("apiVersion: " + VKDefinitions.getVersion(properties.apiVersion)
 					);
 					System.out.println("driverVersion: " + Integer.toUnsignedString(properties.driverVersion, 16));
@@ -743,11 +730,11 @@ public class TestTriangle {
 					System.out.println("===========  Memory  ========= x" + memoryProperties.memoryTypeCount);
 					for (int j = 0; j < memoryProperties.memoryTypeCount; j++) {
 						VkMemoryType t = memoryProperties.memoryTypes[j];
-						System.out.println("Flags: " + t.propertyFlags);
+						if (t.propertyFlags == 0) continue;
+						System.out.print("propertyFlags: " + t.propertyFlags);
 						VkMemoryHeap heap = memoryProperties.memoryHeaps[t.heapIndex];
-						System.out.println("Heap Flags: " + heap.flags);
-						System.out.println("Heap Size: " + SKDSUtils.memoryCompact(heap.size));
-						System.out.println("--------------");
+						System.out.print(" heap flags: " + heap.flags);
+						System.out.println(" Size: " + SKDSUtils.memoryCompact(heap.size));
 					}
 					//listDeviceExtensions(d);
 					System.out.println("====================================");
@@ -770,7 +757,7 @@ public class TestTriangle {
 				VkQueueFamilyProperties fp = familyProperties[i];
 				fp.get();
 
-				if (DEBUG) {
+				if (debug) {
 					System.out.println("===== Family properties ====");
 					System.out.println("queueCount: " + fp.queueCount);
 					System.out.println("queueFlags: " + fp.queueFlags);
@@ -787,34 +774,34 @@ public class TestTriangle {
 				}
 			}
 
-			long pPrio = stack.push4();
-			setFloat(pPrio, 1f);
-			VkDeviceQueueCreateInfo dqci = new VkDeviceQueueCreateInfo();
-			dqci.queueFamilyIndex = mainQueueFamilyIndex;
-			dqci.queueCount = 1;
-			dqci.pQueuePriorities = pPrio;
+			long pPriority = stack.push4();
+			setFloat(pPriority, 1f);
+			VkDeviceQueueCreateInfo deviceQueueInfo = new VkDeviceQueueCreateInfo();
+			deviceQueueInfo.queueFamilyIndex = mainQueueFamilyIndex;
+			deviceQueueInfo.queueCount = 1;
+			deviceQueueInfo.pQueuePriorities = pPriority;
 
-			dqci.allocPut(stack);
+			deviceQueueInfo.allocPut(stack);
 
-			VkDeviceCreateInfo dci = new VkDeviceCreateInfo();
-			if (DEBUG) {
-				dci.enabledLayerCount = layersCount;
-				dci.ppEnabledLayerNames = layersPtr.getPPtr();
+			VkDeviceCreateInfo deviceInfo = new VkDeviceCreateInfo();
+			if (debug) {
+				deviceInfo.enabledLayerCount = layersCount;
+				deviceInfo.ppEnabledLayerNames = layersPtr.getPPtr();
 			}
-			dci.enabledExtensionCount = deviceExtensionsCount;
-			dci.ppEnabledExtensionNames = deviceExtensionsPtr.getPPtr();
-			dci.queueCreateInfoCount = 1;
-			dci.pQueueCreateInfos = dqci.address();
+			deviceInfo.enabledExtensionCount = deviceExtensionsCount;
+			deviceInfo.ppEnabledExtensionNames = deviceExtensionsPtr.getPPtr();
+			deviceInfo.queueCreateInfoCount = 1;
+			deviceInfo.pQueueCreateInfos = deviceQueueInfo.address();
 
-			dci.allocPut(stack);
+			deviceInfo.allocPut(stack);
 
-			check(vkCreateDevice(hDevice, dci.address(), 0, lPtr0));
+			vkCheck(vkCreateDevice(hDevice, deviceInfo.address(), 0, lPtr0));
 			device = getLong(lPtr0);
 
 			vkGetDeviceQueue(device, mainQueueFamilyIndex, 0, lPtr0);
 			queue = getLong(lPtr0);
 
-			if (DEBUG) {
+			if (debug) {
 				System.out.println("device: " + device);
 				System.out.println("queue: " + queue);
 			}
@@ -828,7 +815,7 @@ public class TestTriangle {
 			commandPoolInfo.flags = VkCommandPoolCreateFlagBits.VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
 			commandPoolInfo.alloc(stack);
 			commandPoolInfo.put();
-			check(vkCreateCommandPool(device, commandPoolInfo.address(), 0, lPtr0));
+			vkCheck(vkCreateCommandPool(device, commandPoolInfo.address(), 0, lPtr0));
 			commandPool = getLong(lPtr0);
 
 			VkCommandBufferAllocateInfo cbaInfo = new VkCommandBufferAllocateInfo();
@@ -838,9 +825,9 @@ public class TestTriangle {
 			cbaInfo.alloc(stack);
 			cbaInfo.put();
 
-			check(vkAllocateCommandBuffers(device, cbaInfo.address(), lPtr0));
+			vkCheck(vkAllocateCommandBuffers(device, cbaInfo.address(), lPtr0));
 			commandBuffer = getLong(lPtr0);
-			if (DEBUG) {
+			if (debug) {
 				System.out.println("commandPool: " + commandPool);
 				System.out.println("commandBuffer: " + commandBuffer);
 			}
@@ -881,12 +868,12 @@ public class TestTriangle {
 	private void listLayers() {
 
 		try (MemoryStack stack = new MemoryStack()) {
-			check(vkEnumerateInstanceLayerProperties(lPtr0, 0));
+			vkCheck(vkEnumerateInstanceLayerProperties(lPtr0, 0));
 			int size = getInt(lPtr0);
 
 			VkLayerProperties[] properties = VkLayerProperties.WRAPPER.allocArray(size, stack);
 
-			check(vkEnumerateInstanceLayerProperties(lPtr0, properties[0].address()));
+			vkCheck(vkEnumerateInstanceLayerProperties(lPtr0, properties[0].address()));
 			//properties[0].get();
 
 			for (VkLayerProperties p : properties) {
@@ -904,10 +891,10 @@ public class TestTriangle {
 	private void listExtensions() {
 
 		try (MemoryStack stack = new MemoryStack()) {
-			check(vkEnumerateInstanceExtensionProperties(0, lPtr0, 0));
+			vkCheck(vkEnumerateInstanceExtensionProperties(0, lPtr0, 0));
 			int size = getInt(lPtr0);
 			VkExtensionProperties[] properties = VkExtensionProperties.WRAPPER.allocArray(size, stack);
-			check(vkEnumerateInstanceExtensionProperties(0, lPtr0, properties[0].address()));
+			vkCheck(vkEnumerateInstanceExtensionProperties(0, lPtr0, properties[0].address()));
 			//properties[0].get();
 
 			for (VkExtensionProperties p : properties) {
@@ -923,10 +910,10 @@ public class TestTriangle {
 	private void listDeviceExtensions(long d) {
 
 		try (MemoryStack stack = new MemoryStack()) {
-			check(vkEnumerateDeviceExtensionProperties(d, 0, lPtr0, 0));
+			vkCheck(vkEnumerateDeviceExtensionProperties(d, 0, lPtr0, 0));
 			int size = getInt(lPtr0);
 			VkExtensionProperties[] properties = VkExtensionProperties.WRAPPER.allocArray(size, stack);
-			check(vkEnumerateDeviceExtensionProperties(d, 0, lPtr0, properties[0].address()));
+			vkCheck(vkEnumerateDeviceExtensionProperties(d, 0, lPtr0, properties[0].address()));
 			//properties[0].get();
 
 			for (VkExtensionProperties p : properties) {
@@ -948,7 +935,7 @@ public class TestTriangle {
 		return -1;
 	}
 
-	private void discard() {
+	public void dispose() {
 		vkDestroyRenderPass(device, renderPass, 0);
 		vkDestroyCommandPool(device, commandPool, 0);
 		vkDestroyPipeline(device, pipeline, 0);
@@ -960,27 +947,18 @@ public class TestTriangle {
 		VkKhrSurface.vkDestroySurfaceKHR(instance, surface, 0);
 		vkDestroyDevice(device, 0);
 		vkDestroyInstance(instance, 0);
-		if (DEBUG) {
+		if (debug) {
 			System.out.println("VK Discarded");
 		}
 	}
 
-	private static void check(int result) {
+	private static void vkCheck(int result) {
 		if (result != VkResult.VK_SUCCESS) {
 			if (result == VkResult.VK_INCOMPLETE) {
 				System.out.println("[WARN] INCOMPLETE vk result");
 				return;
 			}
 			throw new RuntimeException("VK err " + result + ": " + VKDefinitions.getErr(result));
-		}
-	}
-
-	public static void main(String[] args) {
-		try {
-
-			new TestTriangle();
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
 	}
 }
