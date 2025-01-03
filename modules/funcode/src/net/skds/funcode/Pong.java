@@ -3,7 +3,7 @@ package net.skds.funcode;
 import lombok.Getter;
 import lombok.Setter;
 import net.skds.lib2.mat.FastMath;
-import net.skds.lib2.utils.ThreadUtil;
+import net.skds.lib2.utils.ThreadUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -140,7 +140,7 @@ public class Pong {
 		frame.pack();
 		frame.setVisible(true);
 		pong.start();
-		ThreadUtil.runTickableDaemon(() -> {
+		ThreadUtils.runTickableDaemon(() -> {
 			pong.tick();
 			panel.repaint();
 			return true;

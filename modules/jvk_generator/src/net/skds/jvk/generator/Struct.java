@@ -1,6 +1,6 @@
 package net.skds.jvk.generator;
 
-import net.skds.lib2.utils.SKDSUtils;
+import net.skds.lib2.utils.StringUtils;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
@@ -80,13 +80,13 @@ class Struct extends DataType implements IStruct {
 						mt = sib1.getTextContent().replace("\n", "").replace(" ", "");
 						if (!mt.isBlank()) {
 
-							String mt2 = SKDSUtils.cutStringAfter(mt, '[');
-							String mt3 = SKDSUtils.cutStringBefore(mt2, ']');
+							String mt2 = StringUtils.cutStringAfter(mt, '[');
+							String mt3 = StringUtils.cutStringBefore(mt2, ']');
 							int s = Integer.parseInt(mt3);
-							mt2 = SKDSUtils.cutStringAfter(mt2, ']');
+							mt2 = StringUtils.cutStringAfter(mt2, ']');
 							if (!mt2.isBlank()) {
-								mt2 = SKDSUtils.cutStringAfter(mt2, '[');
-								mt3 = SKDSUtils.cutStringBefore(mt2, ']');
+								mt2 = StringUtils.cutStringAfter(mt2, '[');
+								mt3 = StringUtils.cutStringBefore(mt2, ']');
 								s *= Integer.parseInt(mt3);
 							}
 

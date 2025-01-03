@@ -36,6 +36,7 @@ import static net.skds.lib2.unsafe.UnsafeAnal.*;
 public class TestTriangle {
 
 	public static final boolean DEBUG = true;
+	public static final boolean NO_LAYERS = true;
 	public static final List<String> LAYERS = List.of("VK_LAYER_KHRONOS_validation");
 	public static final List<String> EXTENSIONS = List.of("VK_KHR_surface", "VK_KHR_win32_surface");
 	public static final List<String> DEVICE_EXTENSIONS = List.of("VK_KHR_swapchain");
@@ -678,8 +679,13 @@ public class TestTriangle {
 
 			VkInstanceCreateInfo icInfo = new VkInstanceCreateInfo();
 			icInfo.pApplicationInfo = appInfo.address();
-			icInfo.enabledLayerCount = layersCount;
-			icInfo.ppEnabledLayerNames = layersPtr.getPPtr();
+			if (NO_LAYERS) {
+				icInfo.enabledLayerCount = 0;
+				icInfo.ppEnabledLayerNames = 0;
+			} else {
+				icInfo.enabledLayerCount = layersCount;
+				icInfo.ppEnabledLayerNames = layersPtr.getPPtr();
+			}
 			icInfo.enabledExtensionCount = extensionsCount;
 			icInfo.ppEnabledExtensionNames = extensionsPtr.getPPtr();
 
