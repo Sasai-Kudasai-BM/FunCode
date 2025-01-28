@@ -1,23 +1,22 @@
-rootProject.name = 'FunCode'
+rootProject.name = "FunCode"
 
 
 include(
-        ':skdslib',
-        ':funcode',
-        ':ninvoker',
-        ':jvk_base',
-        ':jvk_generator',
-        ':jvk_generated',
-        ':nativelib',
-        ':engine'
+        ":skdslib",
+        ":funcode",
+        ":ninvoker",
+        ":jvk_base",
+        ":jvk_generator",
+        ":jvk_generated",
+        ":nativelib",
+        ":engine",
+
+        ":sosaldb-base",
+        ":sosaldb-server",
+        ":sosaldb-api",
+        ":sosaldb-gui"
 )
 
-//includeBuild("modules/skdslib")
-//includeBuild("modules/funcode")
-//includeBuild("modules/sosison")
-//includeBuild("modules/ninvoker")
-//includeBuild("modules/jvk")
-//includeBuild("modules/nativelib")
 
 rootProject.children.each { project ->
     String projectDirName = "modules/$project.name"

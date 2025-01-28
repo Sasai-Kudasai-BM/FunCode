@@ -17,3 +17,5 @@ run-web/updates/launcher/java
 run-launcher
 out
 /modules/skdslib
+/run-db-client/
+/run-db-server/
