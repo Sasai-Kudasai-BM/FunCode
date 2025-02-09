@@ -29,6 +29,7 @@ public class ClickerWindow extends JFrame {
 
 	public ClickerWindow() {
 		super("Cum clicker");
+		clicker.start();
 		//KeyboardFocusManager.setCurrentKeyboardFocusManager(null);
 		if (SKDSUtils.OS_TYPE == SKDSUtils.OSType.WINDOWS) {
 			try {
@@ -49,11 +50,10 @@ public class ClickerWindow extends JFrame {
 		this.newPreset.setPreferredSize(new Dimension(LW, 20));
 		this.newPreset.setFocusPainted(false);
 		this.newPreset.addActionListener(e -> {
-			Script preset = clicker.options.newPreset();
+			Script preset = clicker.options.newScript();
 			PresetPanel p = new PresetPanel(preset);
 			this.presetsList.add(p, 1);
 			scrollPane.revalidate();
-
 		});
 		this.presetsList.add(this.newPreset);
 		updatePresets();
@@ -80,7 +80,7 @@ public class ClickerWindow extends JFrame {
 	void updatePresets() {
 		this.presetsList.removeAll();
 		this.presetsList.add(newPreset);
-		for (Script preset : clicker.options.getPresets()) {
+		for (Script preset : clicker.options.getScripts()) {
 			PresetPanel p = new PresetPanel(preset);
 			this.presetsList.add(p);
 			preset.setPresetActivationListener(p);

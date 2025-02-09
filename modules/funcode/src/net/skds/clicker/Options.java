@@ -15,14 +15,14 @@ public class Options implements JsonPostDeserializeCall, Cloneable {
 
 	private transient boolean dirty = false;
 
-	private LinkedList<Script> presets = new LinkedList<>();
+	private LinkedList<Script> scripts = new LinkedList<>();
 
-	public Iterable<Script> getPresets() {
-		return presets;
+	public Iterable<Script> getScripts() {
+		return scripts;
 	}
 
 	public void removeScript(Script p) {
-		if (presets.remove(p)) {
+		if (scripts.remove(p)) {
 			markDirty();
 		}
 	}
@@ -31,9 +31,9 @@ public class Options implements JsonPostDeserializeCall, Cloneable {
 		dirty = true;
 	}
 
-	public Script newPreset() {
+	public Script newScript() {
 		Script preset = new Script(this);
-		this.presets.addFirst(preset);
+		this.scripts.addFirst(preset);
 		markDirty();
 		return preset;
 	}
@@ -56,7 +56,7 @@ public class Options implements JsonPostDeserializeCall, Cloneable {
 
 	@Override
 	public void postDeserializedJson() {
-		for (Script preset : presets) {
+		for (Script preset : scripts) {
 			preset.options = this;
 		}
 	}
@@ -65,9 +65,9 @@ public class Options implements JsonPostDeserializeCall, Cloneable {
 	@Override
 	protected Options clone() {
 		Options cl = new Options();
-		for (Script p : presets) {
+		for (Script p : scripts) {
 			Script p2 = new Script(cl);
-			cl.presets.addLast(p2);
+			cl.scripts.addLast(p2);
 			p2.active = p.active;
 			p2.trigger = p.trigger;
 			p2.action = p.action;

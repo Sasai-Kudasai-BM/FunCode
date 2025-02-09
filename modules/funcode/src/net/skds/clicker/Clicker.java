@@ -4,6 +4,7 @@ import net.skds.clicker.gui.ClickerWindow;
 import net.skds.lib2.utils.ArrayUtils;
 import net.skds.lib2.utils.linkiges.Obj2BooleanPair;
 import net.skds.lib2.utils.linkiges.Obj2BooleanPairRecord;
+import net.skds.lib2.utils.logger.SKDSLogger;
 import net.skds.lib2.utils.platforms.PlatformFeatures;
 
 import java.awt.event.KeyEvent;
@@ -20,7 +21,7 @@ public class Clicker implements KeyListener, MouseListener, Runnable {
 
 	public static final int STANDARD_MOD_MASK = SHIFT_DOWN_MASK | CTRL_DOWN_MASK | ALT_DOWN_MASK | META_DOWN_MASK;
 
-	public final Options options = Options.getInstance();
+	public final Options options;
 	private final PlatformFeatures platform = PlatformFeatures.getInstance();
 	private final Thread thread;
 	private final LinkedBlockingQueue<Obj2BooleanPair<Key>> inputQueue = new LinkedBlockingQueue<>();
@@ -28,12 +29,32 @@ public class Clicker implements KeyListener, MouseListener, Runnable {
 	private final Map<Script, EnabledScript> enabledScripts = new HashMap<>();
 	private final Set<Key> activeKeys = new HashSet<>();
 	private int activeMods = 0;
+	private boolean running = true;
 
 	public Clicker() {
-		platform.addKeyListener(this);
+		this.options = Options.getInstance();
 		this.thread = new Thread(this, "Clicker");
 		this.thread.setDaemon(true);
+	}
+
+	public void start() {
+		if (!running) {
+			throw new RuntimeException("Clicker was already stopped");
+		}
+		this.platform.addKeyListener(this);
+		this.platform.addMouseListener(this);
 		this.thread.start();
+		for (Script script : options.getScripts()) {
+			if (script.isActive()) {
+				enable(script);
+			}
+		}
+	}
+
+	public void stop() {
+		running = false;
+		this.platform.removeKeyListener(this);
+		this.platform.removeMouseListener(this);
 	}
 
 	private long getTimeOut() {
@@ -49,6 +70,7 @@ public class Clicker implements KeyListener, MouseListener, Runnable {
 				}
 			}
 		}
+		wt -= 2;
 		if (wt < 0) {
 			wt = 0;
 		}
@@ -57,7 +79,7 @@ public class Clicker implements KeyListener, MouseListener, Runnable {
 
 	@Override
 	public void run() {
-		while (true) {
+		while (running) {
 			try {
 				long t;
 				synchronized (enabledScripts) {
@@ -134,9 +156,11 @@ public class Clicker implements KeyListener, MouseListener, Runnable {
 			if (active) {
 				long t = System.currentTimeMillis();
 				if (script.period + lastClick <= t) {
+					lastClick = t;
 					System.out.println("Sex " + script);
+				} else {
+					Thread.yield();
 				}
-
 			}
 		}
 	}
@@ -339,6 +363,7 @@ public class Clicker implements KeyListener, MouseListener, Runnable {
 	}
 
 	public static void main(String[] args) {
+		SKDSLogger.replaceOuts();
 		new ClickerWindow();
 	}
 }

@@ -56,7 +56,7 @@ public class VerticalLayout implements LayoutManager {
 		}
 		Dimension size = preferredLayoutSize(parent);
 		parent.setPreferredSize(size);
-		parent.setSize(size);
+		parent.repaint();
 	}
 
 	@Override
