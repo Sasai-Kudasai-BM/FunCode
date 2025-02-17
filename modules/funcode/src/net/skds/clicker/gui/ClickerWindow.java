@@ -2,9 +2,9 @@ package net.skds.clicker.gui;
 
 import net.skds.clicker.Clicker;
 import net.skds.clicker.Script;
-import net.skds.clicker.gui.layouts.HorizontalLayout;
-import net.skds.clicker.gui.layouts.VerticalLayout;
 import net.skds.lib2.awtutils.SwingDocListener;
+import net.skds.lib2.awtutils.layouts.HorizontalLayout;
+import net.skds.lib2.awtutils.layouts.VerticalLayout;
 import net.skds.lib2.utils.ImageUtils;
 import net.skds.lib2.utils.SKDSUtils;
 

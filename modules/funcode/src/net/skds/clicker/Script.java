@@ -12,8 +12,10 @@ public class Script {
 	boolean active = false;
 	@Getter
 	Clicker.KeyTrigger trigger = Clicker.KeyTrigger.BLANK;
+	//@Getter
+	//Clicker.Action action = Clicker.Action.BLANK;
 	@Getter
-	Clicker.Action action = Clicker.Action.BLANK;
+	Action action = Action.Loop.ROOT;
 	@Getter
 	String name = "new";
 	@Getter
@@ -49,12 +51,12 @@ public class Script {
 		}
 	}
 
-	public void setAction(Clicker.Action action) {
-		if (this.action != action) {
-			options.markDirty();
-			this.action = action;
-		}
-	}
+	//public void setAction(Clicker.Action action) {
+	//	if (this.action != action) {
+	//		options.markDirty();
+	//		this.action = action;
+	//	}
+	//}
 
 	public void setName(String name) {
 		if (!Objects.equals(this.name, name)) {

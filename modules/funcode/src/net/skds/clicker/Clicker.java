@@ -109,7 +109,7 @@ public class Clicker implements KeyListener, MouseListener, Runnable {
 	public void enable(Script script) {
 		script.setActive(true);
 		synchronized (enabledScripts) {
-			enabledScripts.put(script, new EnabledScript(script));
+			enabledScripts.put(script, new EnabledScript(this, script));
 		}
 	}
 
@@ -125,44 +125,6 @@ public class Clicker implements KeyListener, MouseListener, Runnable {
 		int rm = trigger.modMask;
 		if ((rm & activeMods) != rm) return false;
 		return ArrayUtils.containsAll(activeKeys, trigger.keys);
-	}
-
-	private class EnabledScript {
-
-		final Script script;
-
-		boolean active = false;
-		boolean lastMatches = false;
-		long lastClick = 0;
-
-		private EnabledScript(Script script) {
-			this.script = script;
-		}
-
-		void tick() {
-			boolean km = keysMatches(script.trigger);
-			if (km != lastMatches) {
-				lastMatches = km;
-				if (script.getTrigger().toggle) {
-					if (!km) {
-						active = !active;
-						script.presetActivationListener.acceptActiveState(script, active);
-					}
-				} else {
-					active = km;
-					script.presetActivationListener.acceptActiveState(script, km);
-				}
-			}
-			if (active) {
-				long t = System.currentTimeMillis();
-				if (script.period + lastClick <= t) {
-					lastClick = t;
-					System.out.println("Sex " + script);
-				} else {
-					Thread.yield();
-				}
-			}
-		}
 	}
 
 	public void removeScript(Script p) {
