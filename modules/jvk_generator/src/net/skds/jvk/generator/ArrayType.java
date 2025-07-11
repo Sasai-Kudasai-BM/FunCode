@@ -3,6 +3,9 @@ package net.skds.jvk.generator;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import java.lang.foreign.MemoryLayout;
+import java.lang.foreign.SequenceLayout;
+
 @RequiredArgsConstructor
 class ArrayType implements IDataType {
 
@@ -10,6 +13,8 @@ class ArrayType implements IDataType {
 	private final IDataType ref;
 
 	private final String comment;
+
+	private SequenceLayout layout;
 
 	@Getter
 	private final int length;
@@ -34,9 +39,15 @@ class ArrayType implements IDataType {
 		return ref.nativeType();
 	}
 
+
 	@Override
-	public int size() {
-		return ref.size() * length;
+	public MemoryLayout memoryLayout() {
+		SequenceLayout l = this.layout;
+		if (l == null) {
+			l = MemoryLayout.sequenceLayout(length, ref.memoryLayout());
+			this.layout = l;
+		}
+		return l;
 	}
 
 

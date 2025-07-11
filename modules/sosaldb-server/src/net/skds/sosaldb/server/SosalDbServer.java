@@ -46,7 +46,7 @@ public class SosalDbServer {
 
 		List<UserInfo> urs = JsonUtils.readJson(cfg.getUsersFile(), Types.parameterizedType(List.class, UserInfo.class));
 		if (urs == null) {
-			urs = List.of(new UserInfo("admin", SKDSUtils.hashString("admin")));
+			urs = List.of(new UserInfo("admin", "admin"));
 			JsonUtils.saveJson(cfg.getUsersFile(), urs);
 		}
 		List<DatabaseInfo> dbs = JsonUtils.readJson(cfg.getDatabasesFile(), Types.parameterizedType(List.class, DatabaseInfo.class));

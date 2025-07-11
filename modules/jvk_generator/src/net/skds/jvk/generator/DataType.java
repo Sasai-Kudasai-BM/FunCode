@@ -2,11 +2,18 @@ package net.skds.jvk.generator;
 
 import lombok.RequiredArgsConstructor;
 
+import java.lang.foreign.MemoryLayout;
+
 class DataType implements IDataType {
 
 	protected String name;
 	protected String comment = "";
 	protected NativeTypeEnum nativeType;
+
+	@Override
+	public MemoryLayout memoryLayout() {
+		return nativeType.javaType.layout;
+	}
 
 	@Override
 	public String getName() {
@@ -23,10 +30,6 @@ class DataType implements IDataType {
 		return nativeType;
 	}
 
-	@Override
-	public int size() {
-		return nativeType.size();
-	}
 
 	@Override
 	public String toString() {
@@ -63,9 +66,10 @@ class DataType implements IDataType {
 			return getParent().nativeType();
 		}
 
+
 		@Override
-		public int size() {
-			return getParent().size();
+		public MemoryLayout memoryLayout() {
+			return getParent().memoryLayout();
 		}
 
 		@Override

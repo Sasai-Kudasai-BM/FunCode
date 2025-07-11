@@ -3,17 +3,9 @@ group = "net.skds"
 
 
 dependencies {
-    //implementation project(":skdslib")
-    //implementation project(":ninvoker")
-    //implementation project(":nativelib")
-    //implementation project(":jvk_base")
-    //implementation project(":jvk_generated")
-
-    compileOnly project(":jvk_base")
-    compileOnly project(":jvk_generated")
-    compileOnly project(":skdslib")
-    compileOnly project(":ninvoker")
-
+    implementation project(":jvk_base")
+    implementation project(":jvk_generated")
+    implementation project(":skdslib")
 }
 
 

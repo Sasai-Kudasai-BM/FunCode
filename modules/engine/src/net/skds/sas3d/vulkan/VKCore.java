@@ -7,12 +7,12 @@ import net.skds.jvk.generated.extensions.VkKhrSurface;
 import net.skds.jvk.generated.extensions.VkKhrSwapchain;
 import net.skds.jvk.generated.extensions.VkKhrWin32Surface;
 import net.skds.jvk.generated.structs.*;
-import net.skds.lib2.unsafe.MemoryStack;
 import net.skds.lib2.utils.SKDSUtils;
-import net.skds.ninvoker.NInvoker;
 
 import javax.swing.*;
 import java.awt.*;
+import java.lang.foreign.Arena;
+import java.lang.foreign.ValueLayout;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
@@ -26,7 +26,7 @@ import static net.skds.jvk.generated.enums.VkAttachmentStoreOp.VK_ATTACHMENT_STO
 import static net.skds.jvk.generated.enums.VkImageLayout.*;
 import static net.skds.jvk.generated.enums.VkPipelineStageFlagBits.*;
 import static net.skds.jvk.generated.enums.VkSampleCountFlagBits.VK_SAMPLE_COUNT_1_BIT;
-import static net.skds.lib2.unsafe.UnsafeAnal.*;
+import static net.skds.lib2.natives.SafeAnal.*;
 
 public class VKCore {
 
@@ -34,21 +34,19 @@ public class VKCore {
 	public static final List<String> EXTENSIONS = List.of("VK_KHR_surface", "VK_KHR_win32_surface");
 	public static final List<String> DEVICE_EXTENSIONS = List.of("VK_KHR_swapchain");
 
-	final MemoryStack staticStack = new MemoryStack();
+	final Arena arena = Arena.ofAuto();
 	private final boolean debug;
 	private final String appName;
 	private final String engineName;
 
-	private int layersCount;
-	private final MemoryStack layersPtr = new MemoryStack();
-	private int extensionsCount;
-	private final MemoryStack extensionsPtr = new MemoryStack();
-	private int deviceExtensionsCount;
-	private final MemoryStack deviceExtensionsPtr = new MemoryStack();
+	private final int layersCount;
+	private final long layersPPtr;
+	private final int extensionsCount;
+	private final long extensionsPPtr;
+	private final int deviceExtensionsCount;
+	private final long deviceExtensionsPPtr;
 
 	final JFrame frame;
-	long hWnd;
-	long hInstance;
 
 	long vertexShaderSize;
 	long pVertexShader;
@@ -90,7 +88,8 @@ public class VKCore {
 
 	VkPhysicalDeviceLimits limits;
 
-	final long lPtr0 = staticStack.push8();
+	final long[] pointers = allocPointers(arena, 4);
+	final long lPtr0 = pointers[0];
 
 	public VKCore(boolean debug, JFrame frame, String appName, String engineName) {
 		this.debug = debug;
@@ -99,32 +98,32 @@ public class VKCore {
 		this.engineName = engineName;
 		if (debug) {
 			this.layersCount = LAYERS.size();
-			for (String layer : LAYERS) {
-				this.layersPtr.pushNT(layer);
-			}
-			this.layersPtr.makePPtr();
+			this.layersPPtr = loadCStrings(LAYERS);
 		} else {
 			this.layersCount = 0;
+			this.layersPPtr = 0;
 		}
 		this.extensionsCount = EXTENSIONS.size();
-		for (String extension : EXTENSIONS) {
-			this.extensionsPtr.pushNT(extension);
-		}
-		this.extensionsPtr.makePPtr();
+		this.extensionsPPtr = loadCStrings(EXTENSIONS);
+
 		this.deviceExtensionsCount = DEVICE_EXTENSIONS.size();
-		for (String extension : DEVICE_EXTENSIONS) {
-			this.deviceExtensionsPtr.pushNT(extension);
-		}
-		this.deviceExtensionsPtr.makePPtr();
+		this.deviceExtensionsPPtr = loadCStrings(DEVICE_EXTENSIONS);
 
 		if (debug) {
 			listLayers();
 		}
 	}
 
+	private long loadCStrings(List<String> strings) {
+		int count = strings.size();
+		long[] ptrs = new long[count];
+		for (int i = 0; i < count; i++) {
+			ptrs[i] = arena.allocateFrom(strings.get(i)).address();
+		}
+		return arena.allocateFrom(ValueLayout.JAVA_LONG, ptrs).address();
+	}
+
 	public void initWindow() {
-		this.hWnd = NInvoker.getHWnd(frame);
-		//this.hInstance = Kernel32.getModuleHandle(0);
 		final Component wnd = frame.getContentPane();
 		this.width = wnd.getWidth();
 		this.height = wnd.getHeight();
@@ -143,180 +142,180 @@ public class VKCore {
 	}
 
 	private void initPipeline() {
-		try (MemoryStack stack = new MemoryStack()) {
+		Arena arena = Arena.ofAuto();
 
-			VkAttachmentReference attachmentReference = new VkAttachmentReference();
-			attachmentReference.attachment = 0;
-			attachmentReference.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-			attachmentReference.allocPut(stack);
+		VkAttachmentReference attachmentReference = new VkAttachmentReference();
+		attachmentReference.attachment = 0;
+		attachmentReference.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+		attachmentReference.allocPut(arena);
 
-			VkSubpassDescription subpassDescription = new VkSubpassDescription();
-			subpassDescription.inputAttachmentCount = 0;
-			subpassDescription.colorAttachmentCount = 1;
-			subpassDescription.pColorAttachments = attachmentReference.address();
-			subpassDescription.preserveAttachmentCount = 0;
-			subpassDescription.pDepthStencilAttachment = 0;
-			subpassDescription.pipelineBindPoint = VkPipelineBindPoint.VK_PIPELINE_BIND_POINT_GRAPHICS;
-			subpassDescription.allocPut(stack);
+		VkSubpassDescription subpassDescription = new VkSubpassDescription();
+		subpassDescription.inputAttachmentCount = 0;
+		subpassDescription.colorAttachmentCount = 1;
+		subpassDescription.pColorAttachments = attachmentReference.getAddress();
+		subpassDescription.preserveAttachmentCount = 0;
+		subpassDescription.pDepthStencilAttachment = 0;
+		subpassDescription.pipelineBindPoint = VkPipelineBindPoint.VK_PIPELINE_BIND_POINT_GRAPHICS;
+		subpassDescription.allocPut(arena);
 
-			VkAttachmentDescription attachmentDescription = new VkAttachmentDescription();
-			attachmentDescription.format = surfaceFormat;
-			attachmentDescription.samples = VK_SAMPLE_COUNT_1_BIT;
-			attachmentDescription.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-			attachmentDescription.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-			attachmentDescription.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-			attachmentDescription.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-			attachmentDescription.initialLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-			attachmentDescription.finalLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-			attachmentDescription.allocPut(stack);
+		VkAttachmentDescription attachmentDescription = new VkAttachmentDescription();
+		attachmentDescription.format = surfaceFormat;
+		attachmentDescription.samples = VK_SAMPLE_COUNT_1_BIT;
+		attachmentDescription.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+		attachmentDescription.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+		attachmentDescription.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+		attachmentDescription.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+		attachmentDescription.initialLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+		attachmentDescription.finalLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+		attachmentDescription.allocPut(arena);
 
-			VkRenderPassCreateInfo renderPassCI = new VkRenderPassCreateInfo();
-			renderPassCI.attachmentCount = 1;
-			renderPassCI.pAttachments = attachmentDescription.address();
-			renderPassCI.subpassCount = 1;
-			renderPassCI.pSubpasses = subpassDescription.address();
-			renderPassCI.dependencyCount = 0;
-			renderPassCI.allocPut(stack);
+		VkRenderPassCreateInfo renderPassCI = new VkRenderPassCreateInfo();
+		renderPassCI.attachmentCount = 1;
+		renderPassCI.pAttachments = attachmentDescription.getAddress();
+		renderPassCI.subpassCount = 1;
+		renderPassCI.pSubpasses = subpassDescription.getAddress();
+		renderPassCI.dependencyCount = 0;
+		renderPassCI.allocPut(arena);
 
-			vkCheck(vkCreateRenderPass(device, renderPassCI.address(), 0, lPtr0));
-			renderPass = getLong(lPtr0);
+		vkCheck(vkCreateRenderPass(device, renderPassCI.getAddress(), 0, lPtr0));
+		renderPass = getLong(lPtr0);
 
-			VkShaderModuleCreateInfo shaderModuleCi = new VkShaderModuleCreateInfo();
-			shaderModuleCi.codeSize = vertexShaderSize;
-			shaderModuleCi.pCode = pVertexShader;
-			long pVertMod = shaderModuleCi.allocPut(stack);
-			shaderModuleCi.codeSize = fragmentShaderSize;
-			shaderModuleCi.pCode = pFragmentShader;
-			long pFragMod = shaderModuleCi.allocPut(stack);
+		VkShaderModuleCreateInfo shaderModuleCi = new VkShaderModuleCreateInfo();
+		shaderModuleCi.codeSize = vertexShaderSize;
+		shaderModuleCi.pCode = pVertexShader;
+		shaderModuleCi.allocPut();
+		shaderModuleCi.codeSize = fragmentShaderSize;
+		shaderModuleCi.pCode = pFragmentShader;
+		shaderModuleCi.allocPut();
 
-			vkCheck(vkCreateShaderModule(device, pVertMod, 0, lPtr0));
-			vShaderModule = getLong(lPtr0);
-			vkCheck(vkCreateShaderModule(device, pFragMod, 0, lPtr0));
-			fShaderModule = getLong(lPtr0);
+		vkCheck(vkCreateShaderModule(device, shaderModuleCi.getAddress(), 0, lPtr0));
+		vShaderModule = getLong(lPtr0);
+		vkCheck(vkCreateShaderModule(device, shaderModuleCi.getAddress(), 0, lPtr0));
+		fShaderModule = getLong(lPtr0);
 
-			VkPipelineShaderStageCreateInfo[] shaderStageCi = VkPipelineShaderStageCreateInfo.WRAPPER.allocArray(2);
-			shaderStageCi[0].pName = stack.pushNT("main", StandardCharsets.UTF_8);
-			shaderStageCi[0].flags = 0;
-			shaderStageCi[0].pSpecializationInfo = 0;
-			shaderStageCi[0].module = vShaderModule;
-			shaderStageCi[0].stage = VkShaderStageFlagBits.VK_SHADER_STAGE_VERTEX_BIT;
-			shaderStageCi[0].put();
+		VkPipelineShaderStageCreateInfo[] shaderStageCi = VkPipelineShaderStageCreateInfo.WRAPPER.allocArray(2);
+		shaderStageCi[0].pName = arena.allocateFrom("main").address();
+		shaderStageCi[0].flags = 0;
+		shaderStageCi[0].pSpecializationInfo = 0;
+		shaderStageCi[0].module = vShaderModule;
+		shaderStageCi[0].stage = VkShaderStageFlagBits.VK_SHADER_STAGE_VERTEX_BIT;
+		shaderStageCi[0].put();
 
-			shaderStageCi[1].pName = shaderStageCi[0].pName;
-			shaderStageCi[1].flags = shaderStageCi[0].flags;
-			shaderStageCi[1].pSpecializationInfo = shaderStageCi[0].pSpecializationInfo;
-			shaderStageCi[1].module = fShaderModule;
-			shaderStageCi[1].stage = VkShaderStageFlagBits.VK_SHADER_STAGE_FRAGMENT_BIT;
-			shaderStageCi[1].put();
+		shaderStageCi[1].pName = shaderStageCi[0].pName;
+		shaderStageCi[1].flags = shaderStageCi[0].flags;
+		shaderStageCi[1].pSpecializationInfo = shaderStageCi[0].pSpecializationInfo;
+		shaderStageCi[1].module = fShaderModule;
+		shaderStageCi[1].stage = VkShaderStageFlagBits.VK_SHADER_STAGE_FRAGMENT_BIT;
+		shaderStageCi[1].put();
 
-			VkPipelineRasterizationStateCreateInfo rasterizationCi = new VkPipelineRasterizationStateCreateInfo();
-			rasterizationCi.rasterizerDiscardEnable = 0;
-			rasterizationCi.cullMode = VkCullModeFlagBits.VK_CULL_MODE_NONE;
-			rasterizationCi.polygonMode = VkPolygonMode.VK_POLYGON_MODE_FILL;
-			rasterizationCi.depthClampEnable = 0;
-			rasterizationCi.frontFace = VkFrontFace.VK_FRONT_FACE_COUNTER_CLOCKWISE;
-			rasterizationCi.depthBiasEnable = 0;
-			rasterizationCi.lineWidth = 1;
-			rasterizationCi.allocPut(stack);
+		VkPipelineRasterizationStateCreateInfo rasterizationCi = new VkPipelineRasterizationStateCreateInfo();
+		rasterizationCi.rasterizerDiscardEnable = 0;
+		rasterizationCi.cullMode = VkCullModeFlagBits.VK_CULL_MODE_NONE;
+		rasterizationCi.polygonMode = VkPolygonMode.VK_POLYGON_MODE_FILL;
+		rasterizationCi.depthClampEnable = 0;
+		rasterizationCi.frontFace = VkFrontFace.VK_FRONT_FACE_COUNTER_CLOCKWISE;
+		rasterizationCi.depthBiasEnable = 0;
+		rasterizationCi.lineWidth = 1;
+		rasterizationCi.allocPut(arena);
 
-			VkPipelineVertexInputStateCreateInfo vertexInputStateCi = new VkPipelineVertexInputStateCreateInfo();
-			vertexInputStateCi.vertexBindingDescriptionCount = 0;
-			vertexInputStateCi.vertexAttributeDescriptionCount = 0;
-			vertexInputStateCi.allocPut(stack);
+		VkPipelineVertexInputStateCreateInfo vertexInputStateCi = new VkPipelineVertexInputStateCreateInfo();
+		vertexInputStateCi.vertexBindingDescriptionCount = 0;
+		vertexInputStateCi.vertexAttributeDescriptionCount = 0;
+		vertexInputStateCi.allocPut(arena);
 
-			VkPipelineInputAssemblyStateCreateInfo assemblyStateCi = new VkPipelineInputAssemblyStateCreateInfo();
-			assemblyStateCi.topology = VkPrimitiveTopology.VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
-			assemblyStateCi.primitiveRestartEnable = 0;
-			assemblyStateCi.allocPut(stack);
+		VkPipelineInputAssemblyStateCreateInfo assemblyStateCi = new VkPipelineInputAssemblyStateCreateInfo();
+		assemblyStateCi.topology = VkPrimitiveTopology.VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
+		assemblyStateCi.primitiveRestartEnable = 0;
+		assemblyStateCi.allocPut(arena);
 
-			VkPipelineColorBlendAttachmentState blendState = new VkPipelineColorBlendAttachmentState();
-			blendState.blendEnable = 0; // 1
-			blendState.colorWriteMask = VkColorComponentFlagBits.VK_COLOR_COMPONENT_R_BIT |
-					VkColorComponentFlagBits.VK_COLOR_COMPONENT_G_BIT |
-					VkColorComponentFlagBits.VK_COLOR_COMPONENT_B_BIT |
-					VkColorComponentFlagBits.VK_COLOR_COMPONENT_A_BIT;
-			blendState.allocPut(stack);
+		VkPipelineColorBlendAttachmentState blendState = new VkPipelineColorBlendAttachmentState();
+		blendState.blendEnable = 0; // 1
+		blendState.colorWriteMask = VkColorComponentFlagBits.VK_COLOR_COMPONENT_R_BIT |
+				VkColorComponentFlagBits.VK_COLOR_COMPONENT_G_BIT |
+				VkColorComponentFlagBits.VK_COLOR_COMPONENT_B_BIT |
+				VkColorComponentFlagBits.VK_COLOR_COMPONENT_A_BIT;
+		blendState.allocPut(arena);
 
-			VkPipelineColorBlendStateCreateInfo blendInfo = new VkPipelineColorBlendStateCreateInfo();
-			blendInfo.logicOpEnable = 0;
-			blendInfo.attachmentCount = 1;
-			blendInfo.pAttachments = blendState.address();
-			blendInfo.allocPut(stack);
+		VkPipelineColorBlendStateCreateInfo blendInfo = new VkPipelineColorBlendStateCreateInfo();
+		blendInfo.logicOpEnable = 0;
+		blendInfo.attachmentCount = 1;
+		blendInfo.pAttachments = blendState.address();
+		blendInfo.allocPut(arena);
 
-			VkPipelineLayoutCreateInfo layoutCi = new VkPipelineLayoutCreateInfo();
-			layoutCi.setLayoutCount = 0;
-			layoutCi.pushConstantRangeCount = 0;
-			layoutCi.allocPut(stack);
+		VkPipelineLayoutCreateInfo layoutCi = new VkPipelineLayoutCreateInfo();
+		layoutCi.setLayoutCount = 0;
+		layoutCi.pushConstantRangeCount = 0;
+		layoutCi.allocPut(arena);
 
-			vkCheck(vkCreatePipelineLayout(device, layoutCi.address(), 0, lPtr0));
-			pipelineLayout = getLong(lPtr0);
+		vkCheck(vkCreatePipelineLayout(device, layoutCi.address(), 0, lPtr0));
+		pipelineLayout = getLong(lPtr0);
 
-			VkPipelineDynamicStateCreateInfo dynamicStateInfo = new VkPipelineDynamicStateCreateInfo();
-			dynamicStateInfo.dynamicStateCount = 2;
-			dynamicStateInfo.pDynamicStates = stack.push(VkDynamicState.VK_DYNAMIC_STATE_SCISSOR, VkDynamicState.VK_DYNAMIC_STATE_VIEWPORT);
-			dynamicStateInfo.allocPut(stack);
+		VkPipelineDynamicStateCreateInfo dynamicStateInfo = new VkPipelineDynamicStateCreateInfo();
+		dynamicStateInfo.dynamicStateCount = 2;
+		dynamicStateInfo.pDynamicStates = arena.push(VkDynamicState.VK_DYNAMIC_STATE_SCISSOR, VkDynamicState.VK_DYNAMIC_STATE_VIEWPORT);
+		dynamicStateInfo.allocPut(arena);
 
-			//VkPipelineDepthStencilStateCreateInfo depthStencilInfo = new VkPipelineDepthStencilStateCreateInfo();
-			//depthStencilInfo.depthTestEnable = 0;
-			//depthStencilInfo.depthWriteEnable = 0;
-			//depthStencilInfo.depthBoundsTestEnable = 0;
-			//depthStencilInfo.stencilTestEnable = 0;
-			//depthStencilInfo.allocPut(stack);
+		//VkPipelineDepthStencilStateCreateInfo depthStencilInfo = new VkPipelineDepthStencilStateCreateInfo();
+		//depthStencilInfo.depthTestEnable = 0;
+		//depthStencilInfo.depthWriteEnable = 0;
+		//depthStencilInfo.depthBoundsTestEnable = 0;
+		//depthStencilInfo.stencilTestEnable = 0;
+		//depthStencilInfo.allocPut(arena);
 
 
-			VkViewport viewport = new VkViewport();
-			viewport.height = height;
-			viewport.width = width;
-			viewport.minDepth = 0.0f;
-			viewport.maxDepth = 1.0f;
-			viewport.allocPut(stack);
-			VkExtent2D extent = new VkExtent2D();
-			extent.width = width;
-			extent.height = height;
-			VkOffset2D offset = new VkOffset2D();
-			offset.x = 0;
-			offset.y = 0;
-			VkRect2D scissor = new VkRect2D();
-			scissor.extent = extent;
-			scissor.offset = offset;
-			scissor.allocPut(stack);
+		VkViewport viewport = new VkViewport();
+		viewport.height = height;
+		viewport.width = width;
+		viewport.minDepth = 0.0f;
+		viewport.maxDepth = 1.0f;
+		viewport.allocPut(arena);
+		VkExtent2D extent = new VkExtent2D();
+		extent.width = width;
+		extent.height = height;
+		VkOffset2D offset = new VkOffset2D();
+		offset.x = 0;
+		offset.y = 0;
+		VkRect2D scissor = new VkRect2D();
+		scissor.extent = extent;
+		scissor.offset = offset;
+		scissor.allocPut(arena);
 
-			VkPipelineViewportStateCreateInfo viewportInfo = new VkPipelineViewportStateCreateInfo();
-			viewportInfo.scissorCount = 1;
-			viewportInfo.pScissors = scissor.address();
-			viewportInfo.viewportCount = 1;
-			viewportInfo.pViewports = viewport.address();
-			viewportInfo.allocPut(stack);
+		VkPipelineViewportStateCreateInfo viewportInfo = new VkPipelineViewportStateCreateInfo();
+		viewportInfo.scissorCount = 1;
+		viewportInfo.pScissors = scissor.address();
+		viewportInfo.viewportCount = 1;
+		viewportInfo.pViewports = viewport.address();
+		viewportInfo.allocPut(arena);
 
-			VkPipelineMultisampleStateCreateInfo multisampleInfo = new VkPipelineMultisampleStateCreateInfo();
-			multisampleInfo.pSampleMask = 0;
-			multisampleInfo.rasterizationSamples = VK_SAMPLE_COUNT_1_BIT;
-			multisampleInfo.allocPut(stack);
+		VkPipelineMultisampleStateCreateInfo multisampleInfo = new VkPipelineMultisampleStateCreateInfo();
+		multisampleInfo.pSampleMask = 0;
+		multisampleInfo.rasterizationSamples = VK_SAMPLE_COUNT_1_BIT;
+		multisampleInfo.allocPut(arena);
 
-			VkGraphicsPipelineCreateInfo pipelineCI = new VkGraphicsPipelineCreateInfo();
-			pipelineCI.stageCount = 2;
-			pipelineCI.pStages = shaderStageCi[0].address();
-			pipelineCI.renderPass = renderPass;
-			pipelineCI.subpass = 0;
-			pipelineCI.pRasterizationState = rasterizationCi.address();
-			pipelineCI.pVertexInputState = vertexInputStateCi.address();
-			pipelineCI.pInputAssemblyState = assemblyStateCi.address();
-			pipelineCI.pColorBlendState = blendInfo.address();
-			pipelineCI.pDynamicState = dynamicStateInfo.address();
-			//pipelineCI.pDepthStencilState = depthStencilInfo.address();
-			pipelineCI.pViewportState = viewportInfo.address();
-			pipelineCI.pMultisampleState = multisampleInfo.address();
-			pipelineCI.layout = pipelineLayout;
-			pipelineCI.basePipelineHandle = 0;
-			pipelineCI.basePipelineIndex = -1;
-			pipelineCI.allocPut(stack);
+		VkGraphicsPipelineCreateInfo pipelineCI = new VkGraphicsPipelineCreateInfo();
+		pipelineCI.stageCount = 2;
+		pipelineCI.pStages = shaderStageCi[0].address();
+		pipelineCI.renderPass = renderPass;
+		pipelineCI.subpass = 0;
+		pipelineCI.pRasterizationState = rasterizationCi.address();
+		pipelineCI.pVertexInputState = vertexInputStateCi.address();
+		pipelineCI.pInputAssemblyState = assemblyStateCi.address();
+		pipelineCI.pColorBlendState = blendInfo.address();
+		pipelineCI.pDynamicState = dynamicStateInfo.address();
+		//pipelineCI.pDepthStencilState = depthStencilInfo.address();
+		pipelineCI.pViewportState = viewportInfo.address();
+		pipelineCI.pMultisampleState = multisampleInfo.address();
+		pipelineCI.layout = pipelineLayout;
+		pipelineCI.basePipelineHandle = 0;
+		pipelineCI.basePipelineIndex = -1;
+		pipelineCI.allocPut(arena);
 
-			vkCheck(vkCreateGraphicsPipelines(device, 0, 1, pipelineCI.address(), 0, lPtr0));
-			pipeline = getLong(lPtr0);
-			if (debug) {
-				System.out.println("pipeline: " + pipeline);
-			}
+		vkCheck(vkCreateGraphicsPipelines(device, 0, 1, pipelineCI.address(), 0, lPtr0));
+		pipeline = getLong(lPtr0);
+		if (debug) {
+			System.out.println("pipeline: " + pipeline);
 		}
+
 	}
 
 	record FramebufferImage(long img, long view, long mem) {

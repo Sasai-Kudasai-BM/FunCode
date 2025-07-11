@@ -19,11 +19,7 @@ public class SJNIClassLoader extends ClassLoader {
 			return defineClass(name, bytes, 0, bytes.length);
 		}
 	}
-
-	@Override
-	protected Class<?> loadClass(String name, boolean resolve) {
-		throw new UnsupportedOperationException();
-	}
+	
 
 	@Override
 	public URL getResource(String name) {

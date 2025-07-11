@@ -2,6 +2,8 @@ package net.skds.jvk.generator;
 
 import lombok.RequiredArgsConstructor;
 
+import java.lang.foreign.MemoryLayout;
+
 @RequiredArgsConstructor
 enum NativeTypeEnum implements IDataType {
 	INT8_T(JavaTypeEnum.BYTE),
@@ -49,7 +51,7 @@ enum NativeTypeEnum implements IDataType {
 	}
 
 	@Override
-	public int size() {
-		return javaType.byteSize;
+	public MemoryLayout memoryLayout() {
+		return javaType.layout;
 	}
 }

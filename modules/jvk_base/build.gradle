@@ -3,7 +3,6 @@ group = "net.skds"
 
 dependencies {
     implementation project(":skdslib")
-    implementation project(":ninvoker")
 }
 
 

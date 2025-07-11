@@ -3,6 +3,8 @@ package net.skds.jvk.generator;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import java.lang.foreign.MemoryLayout;
+
 @RequiredArgsConstructor
 class RefType implements IDataType {
 
@@ -27,8 +29,8 @@ class RefType implements IDataType {
 	}
 
 	@Override
-	public int size() {
-		return ref.size();
+	public MemoryLayout memoryLayout() {
+		return ref.memoryLayout();
 	}
 
 

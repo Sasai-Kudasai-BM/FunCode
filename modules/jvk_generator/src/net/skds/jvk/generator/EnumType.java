@@ -2,6 +2,7 @@ package net.skds.jvk.generator;
 
 import org.w3c.dom.Element;
 
+import java.lang.foreign.MemoryLayout;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -208,6 +209,11 @@ class EnumType extends DataType implements IEnumType {
 		@Override
 		public String toString() {
 			return name + "[enum " + values().size() + "; " + nativeType() + (isBitmask() ? "; bitmask" : "") + "]";
+		}
+
+		@Override
+		public MemoryLayout memoryLayout() {
+			return getParent().memoryLayout();
 		}
 	}
 }

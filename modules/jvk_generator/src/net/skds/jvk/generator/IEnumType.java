@@ -1,5 +1,8 @@
 package net.skds.jvk.generator;
 
+import net.skds.lib2.misc.clazz.classbuilder.*;
+
+import java.lang.reflect.Modifier;
 import java.util.List;
 
 interface IEnumType extends IDataType {
@@ -12,7 +15,7 @@ interface IEnumType extends IDataType {
 	default void generate() {
 		if (getName().equals("VkResult")) return;
 		String pack = VKGen.ROOT_PACKAGE + ".enums";
-		ClassBuilder cb = new ClassBuilder(pack, getName().replace(" ", ""), ClassBuilder.Type.CLASS);
+		TextClassBuilder cb = new TextClassBuilder(pack, getName().replace(" ", ""), ClassType.CLASS).setFinal(true);
 
 		for (EnumType.Value value : values()) {
 			if (value.v() == null) {
@@ -28,10 +31,18 @@ interface IEnumType extends IDataType {
 			} else if (nt.javaType == JavaTypeEnum.LONG) {
 				init += "L";
 			}
-			cb.field(value.name(), nt.javaType.clazz, init, value.comment());
+			CBField field = new CBField(
+					value.name(),
+					Modifier.PUBLIC | Modifier.STATIC | Modifier.FINAL,
+					CBType.of(nt.javaType.clazz),
+					null,
+					new CBJavadoc(value.comment()),
+					new CodeBody(init + ";")
+			);
+			cb.addElement(field);
 		}
 
-		cb.export();
+		VKGen.export(cb);
 	}
 
 	//@Override

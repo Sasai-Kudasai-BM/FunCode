@@ -1,5 +1,8 @@
 package net.skds.jvk.generator;
 
+import java.lang.foreign.MemoryLayout;
+import java.lang.foreign.ValueLayout;
+
 record PointerType(IDataType pnt) implements IDataType {
 
 	@Override
@@ -22,9 +25,10 @@ record PointerType(IDataType pnt) implements IDataType {
 		return NativeTypeEnum.POINTER;
 	}
 
+
 	@Override
-	public int size() {
-		return NativeTypeEnum.POINTER.size();
+	public MemoryLayout memoryLayout() {
+		return ValueLayout.JAVA_LONG;
 	}
 
 	@Override

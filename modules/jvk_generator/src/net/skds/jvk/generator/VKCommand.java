@@ -1,6 +1,10 @@
 package net.skds.jvk.generator;
 
 import lombok.RequiredArgsConstructor;
+import net.skds.jvk.annotation.NativeType;
+import net.skds.lib2.misc.clazz.classbuilder.CBAnnotation;
+import net.skds.lib2.misc.clazz.classbuilder.CBMethod;
+import net.skds.lib2.utils.StringUtils;
 import org.w3c.dom.Element;
 
 import java.util.ArrayList;
@@ -9,7 +13,7 @@ import java.util.List;
 class VKCommand implements ICommand {
 
 	private String name;
-	private String comment = "";
+	private String comment;
 	private IDataType returnType;
 	//private final List<String> successCodes = new ArrayList<>();
 	//private final List<String> errorCodes = new ArrayList<>();
@@ -75,19 +79,18 @@ class VKCommand implements ICommand {
 	}
 
 	@Override
-	public ClassBuilder.Arg[] arguments() {
-		ClassBuilder.Arg[] args = new ClassBuilder.Arg[arguments.size()];
+	public List<CBMethod.Arg> arguments() {
+		List<CBMethod.Arg> args = new ArrayList<>();
 
-		for (int i = 0; i < args.length; i++) {
+		for (int i = 0; i < arguments.size(); i++) {
 			CommandArgument a = arguments.get(i);
-
-			String insert = "@NativeType(\"" + a.type().nativeTypeName() + "\")";
-			if (!a.comment().isEmpty()) {
-				insert += " /*" + a.comment() + "*/";
-			}
 			Class<?> t = a.type().nativeType().javaType.clazz;
-
-			args[i] = new ClassBuilder.Arg(t, a.name(), insert);
+			args.add(new CBMethod.Arg(
+					t,
+					a.name(),
+					List.of(new CBAnnotation(NativeType.class, StringUtils.quote(a.type().nativeTypeName()))),
+					a.comment()
+			));
 		}
 
 		return args;
@@ -154,7 +157,7 @@ class VKCommand implements ICommand {
 		}
 
 		@Override
-		public ClassBuilder.Arg[] arguments() {
+		public List<CBMethod.Arg> arguments() {
 			return getParent().arguments();
 		}
 

@@ -2,19 +2,21 @@ package net.skds.jvk.generator;
 
 import lombok.AllArgsConstructor;
 
+import java.lang.foreign.ValueLayout;
 import java.util.function.Function;
 
 @AllArgsConstructor
 enum JavaTypeEnum {
-	BYTE(byte.class, 1, Byte::valueOf),
-	SHORT(short.class, 2, Short::valueOf),
-	INT(int.class, 4, Integer::valueOf),
-	LONG(long.class, 8, Long::valueOf),
-	FLOAT(float.class, 4, Float::valueOf),
-	DOUBLE(double.class, 8, Double::valueOf),
-	VOID(void.class, 0, s -> null);
+	BYTE(byte.class, ValueLayout.JAVA_BYTE, 1, Byte::valueOf),
+	SHORT(short.class, ValueLayout.JAVA_SHORT, 2, Short::valueOf),
+	INT(int.class, ValueLayout.JAVA_INT, 4, Integer::valueOf),
+	LONG(long.class, ValueLayout.JAVA_LONG, 8, Long::valueOf),
+	FLOAT(float.class, ValueLayout.JAVA_FLOAT, 4, Float::valueOf),
+	DOUBLE(double.class, ValueLayout.JAVA_DOUBLE, 8, Double::valueOf),
+	VOID(void.class, null, 0, s -> null);
 
 	public final Class<?> clazz;
+	public final ValueLayout layout;
 	public final int byteSize;
 	private final Function<String, Object> parser;
 

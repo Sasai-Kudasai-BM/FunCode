@@ -4,6 +4,7 @@ import net.skds.clicker.Clicker;
 import net.skds.clicker.Script;
 import net.skds.lib2.awtutils.SwingDocListener;
 import net.skds.lib2.awtutils.layouts.HorizontalLayout;
+import net.skds.lib2.awtutils.layouts.LayoutMode;
 import net.skds.lib2.awtutils.layouts.VerticalLayout;
 import net.skds.lib2.utils.ImageUtils;
 import net.skds.lib2.utils.SKDSUtils;
@@ -90,7 +91,7 @@ public class ClickerWindow extends JFrame {
 
 	private static class PresetsList extends JPanel {
 		public PresetsList() {
-			setLayout(new VerticalLayout(0));
+			setLayout(new VerticalLayout());
 
 			//setPreferredSize(new Dimension(200, 0));
 		}
@@ -159,7 +160,7 @@ public class ClickerWindow extends JFrame {
 			this.lastTrigger = script.getTrigger();
 			setPreferredSize(new Dimension(LW, HH));
 			setBorder(BorderFactory.createEtchedBorder());
-			setLayout(new HorizontalLayout(0, true));
+			setLayout(new HorizontalLayout(0, LayoutMode.CENTER));
 
 			this.name = new JTextField(script.getName());
 			this.name.setPreferredSize(new Dimension(80, H));

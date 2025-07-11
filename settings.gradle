@@ -4,11 +4,10 @@ rootProject.name = "FunCode"
 include(
         ":skdslib",
         ":funcode",
-        ":ninvoker",
         ":jvk_base",
         ":jvk_generator",
         ":jvk_generated",
-        ":nativelib",
+        //":nativelib",
         ":engine",
 
         ":sosaldb-base",

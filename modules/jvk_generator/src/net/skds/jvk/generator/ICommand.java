@@ -1,5 +1,9 @@
 package net.skds.jvk.generator;
 
+import net.skds.lib2.misc.clazz.classbuilder.CBMethod;
+
+import java.util.List;
+
 interface ICommand {
 	String name();
 
@@ -8,5 +12,5 @@ interface ICommand {
 	IDataType returnType();
 
 
-	ClassBuilder.Arg[] arguments();
+	List<CBMethod.Arg> arguments();
 }

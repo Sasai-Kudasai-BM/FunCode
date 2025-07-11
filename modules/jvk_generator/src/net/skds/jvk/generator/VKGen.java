@@ -1,5 +1,8 @@
 package net.skds.jvk.generator;
 
+import net.skds.lib2.misc.clazz.classbuilder.TextClassBuilder;
+import net.skds.lib2.utils.StringUtils;
+import net.skds.lib2.utils.logger.SKDSLogger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -7,11 +10,17 @@ import org.w3c.dom.NodeList;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
+import java.lang.foreign.*;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 import java.util.*;
 
 class VKGen {
 
+	private static final Map<ValueLayout, String> valueLayouts = new TreeMap<>(VKGen::layoutCompare);
+
 	private static final Queue<Runnable> tasks = new LinkedList<>();
+	private static final Queue<Runnable> tasksEnd = new LinkedList<>();
 
 	public static final List<VKVersion> versions = new ArrayList<>();
 	public static final Map<String, IDataType> types = new HashMap<>();
@@ -22,6 +31,76 @@ class VKGen {
 
 	public static final File EXPORT_DIR = new File("generated/jvk");
 	public static final String ROOT_PACKAGE = "net.skds.jvk.generated";
+
+	// import static ValueLayout, MemoryLayout
+	public static int layoutCompare(ValueLayout layout1, ValueLayout layout2) {
+		if (layout1 == layout2) return 0;
+		return layout1.carrier().getSimpleName().compareTo(layout2.carrier().getSimpleName());
+	}
+
+	public static String referMemLayout(MemoryLayout layout) {
+		if (layout instanceof PaddingLayout || layout instanceof ValueLayout) {
+			return createMemLayout(layout);
+		}
+		String name = StringUtils.cutStringBefore(layout.name().orElseThrow(), ' ');
+		return name + ".MEMORY_LAYOUT";
+	}
+
+	public static String createMemLayout(MemoryLayout layout) {
+		StringBuilder sb = new StringBuilder();
+
+		switch (layout) {
+			case ValueLayout l -> sb.append(Objects.requireNonNull(valueLayouts.get(l), layout.toString()));
+			case SequenceLayout l -> sb.append("sequenceLayout(")
+					.append(l.elementCount())
+					.append(", ")
+					.append(referMemLayout(l.elementLayout()))
+					.append(")");
+			case PaddingLayout l -> sb.append("paddingLayout(")
+					.append(l.byteSize())
+					.append(")");
+			case GroupLayout l -> {
+				switch (l) {
+					case StructLayout l2 -> sb.append("structLayout(");
+					case UnionLayout l2 -> sb.append("unionLayout(");
+				}
+				List<MemoryLayout> members = l.memberLayouts();
+				if (members.size() == 1) {
+					sb.append(referMemLayout(members.getFirst()));
+				} else {
+					for (MemoryLayout member : members) {
+						sb.append("\n\t\t").append(referMemLayout(member)).append(",");
+					}
+					sb.setLength(sb.length() - 1);
+					sb.append("\n");
+				}
+				sb.append(")");
+			}
+		}
+
+		return sb.toString();
+	}
+
+	public static List<String> createCLayoutJavadoc(GroupLayout layout) {
+		List<String> doc = new ArrayList<>();
+		doc.add("C definition:");
+		String type = switch (layout) {
+			case StructLayout l2 -> "struct";
+			case UnionLayout l2 -> "union";
+		};
+		doc.add(type + " " + layout.name().orElseThrow() + " {");
+		List<MemoryLayout> members = layout.memberLayouts();
+		for (int i = 0; i < members.size(); i++) {
+			MemoryLayout member = members.get(i);
+			if (member instanceof PaddingLayout p) {
+				doc.add("\t// pad (" + p.byteSize() + ")");
+				continue;
+			}
+			doc.add("\t" + member.name().orElseThrow() + ";");
+		}
+		doc.add("};");
+		return doc;
+	}
 
 	private static void defaultType(String name, NativeTypeEnum nativeType) {
 		DataType tp = new DataType();
@@ -108,6 +187,10 @@ class VKGen {
 		tasks.add(task);
 	}
 
+	public static void addEndTask(Runnable task) {
+		tasksEnd.add(task);
+	}
+
 	public static String filterName(String nane) {
 		return nane.replace("\t", "").replace(" ", "").replace("\n", "");
 	}
@@ -161,6 +244,12 @@ class VKGen {
 		}
 	}
 
+	private static void flushTasksEnd() {
+		for (Runnable r; (r = tasksEnd.poll()) != null; ) {
+			r.run();
+		}
+	}
+
 
 	private static void bitmaskType(Element e) {
 
@@ -179,6 +268,7 @@ class VKGen {
 	}
 
 	public static void main(String[] args) throws Exception {
+		SKDSLogger.replaceOuts();
 		/*
 		var res = HttpUtils.downloadFromNet("https://registry.khronos.org/vulkan/specs/1.3-extensions/man/html/VkInstanceCreateInfo.html");
 		res.readAll();
@@ -271,6 +361,7 @@ class VKGen {
 			}
 		}
 		flushTasks();
+		flushTasksEnd();
 
 		for (VKVersion version : versions) {
 			version.export();
@@ -302,5 +393,27 @@ class VKGen {
 		//	//	System.out.println("\t" + v);
 		//	//}
 		//}
+	}
+
+	public static void export(TextClassBuilder classBuilder) {
+		try {
+			File dir = new File(VKGen.EXPORT_DIR, classBuilder.pack.replace(".", "/"));
+			dir.mkdirs();
+			File fl = new File(dir, classBuilder.name + ".java");
+			Files.writeString(fl.toPath(), classBuilder.toString(), StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.CREATE);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	static {
+		valueLayouts.put(ValueLayout.JAVA_BOOLEAN, "JAVA_BOOLEAN");
+		valueLayouts.put(ValueLayout.JAVA_BYTE, "JAVA_BYTE");
+		valueLayouts.put(ValueLayout.JAVA_SHORT, "JAVA_SHORT");
+		valueLayouts.put(ValueLayout.JAVA_CHAR, "JAVA_CHAR");
+		valueLayouts.put(ValueLayout.JAVA_INT, "JAVA_INT");
+		valueLayouts.put(ValueLayout.JAVA_FLOAT, "JAVA_FLOAT");
+		valueLayouts.put(ValueLayout.JAVA_LONG, "JAVA_LONG");
+		valueLayouts.put(ValueLayout.JAVA_DOUBLE, "JAVA_DOUBLE");
 	}
 }

@@ -1,5 +1,7 @@
 package net.skds.jvk.generator;
 
+import java.lang.foreign.MemoryLayout;
+
 interface IDataType {
 
 	String getName();
@@ -8,7 +10,7 @@ interface IDataType {
 
 	NativeTypeEnum nativeType();
 
-	int size();
+	MemoryLayout memoryLayout();
 
 	default String nativeTypeName() {
 		if (nativeType() == NativeTypeEnum.POINTER) {

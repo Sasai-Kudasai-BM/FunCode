@@ -1,11 +1,15 @@
 package net.skds.jvk;
 
-import static net.skds.ninvoker.NInvoker.winInit;
+
+import net.skds.jvk.platform.VKPlatformFeatures;
+
+import java.lang.foreign.SymbolLookup;
 
 @SuppressWarnings("unused")
-public class VKDefinitions {
+public class VkDefinitions {
 
-	public static final boolean INITIALIZED = winInit("vulkan-1");
+	public static final SymbolLookup LIBRARY_LOOKUP = VKPlatformFeatures.getInstance().getLibrary();
+	public static final boolean INITIALIZED = LIBRARY_LOOKUP != null;
 
 	public static final int VK_HEADER_VERSION = 216;
 
