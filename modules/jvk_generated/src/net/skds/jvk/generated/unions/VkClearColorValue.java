@@ -45,23 +45,23 @@ public final class VkClearColorValue extends CStruct {
 	
 	@NativeType("float[4]")
 	public float asFloat(int i) {
-		return (float) FLOAT_HANDLE.get(this.segment, this.offset + ValueLayout.JAVA_FLOAT.byteSize() * i);
+		return (float) FLOAT_HANDLE.get(this.segment, this.offset + JAVA_FLOAT.byteSize() * i);
 	}
 	
 	@NativeType("float[4]")
 	public VkClearColorValue asFloat(int i, float value) {
-		FLOAT_HANDLE.set(this.segment, this.offset + ValueLayout.JAVA_FLOAT.byteSize() * i, value);
+		FLOAT_HANDLE.set(this.segment, this.offset + JAVA_FLOAT.byteSize() * i, value);
 		return this;
 	}
 	
 	@NativeType("int32_t[4]")
 	public int asInt(int i) {
-		return (int) INT_HANDLE.get(this.segment, this.offset + ValueLayout.JAVA_INT.byteSize() * i);
+		return (int) INT_HANDLE.get(this.segment, this.offset + JAVA_INT.byteSize() * i);
 	}
 	
 	@NativeType("int32_t[4]")
 	public VkClearColorValue asInt(int i, int value) {
-		INT_HANDLE.set(this.segment, this.offset + ValueLayout.JAVA_INT.byteSize() * i, value);
+		INT_HANDLE.set(this.segment, this.offset + JAVA_INT.byteSize() * i, value);
 		return this;
 	}
 	

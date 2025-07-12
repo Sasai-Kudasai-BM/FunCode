@@ -86,7 +86,7 @@ class VKCommand implements ICommand {
 		for (CommandArgument arg : arguments) {
 			sb.append(arg.type()).append(" ").append(arg.name());
 			if (!arg.comment().isEmpty()) {
-				sb.append("/* ").append(arg.comment()).append(" */");
+				sb.append("/** ").append(arg.comment()).append(" **/");
 			}
 			sb.append(", ");
 		}

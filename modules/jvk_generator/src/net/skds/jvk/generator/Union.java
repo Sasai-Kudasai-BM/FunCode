@@ -225,7 +225,10 @@ class Union extends DataType {
 				List.of(new CBAnnotation(NativeType.class, StringUtils.quote(member.nativeTypeName()))),
 				null,
 				null,
-				new CodeBody("return new Array(this.segment, this.offset);")
+				new CodeBody("return new Array(this.segment, this.offset, "
+						+ ((ArrayType) member).getLength()
+						+ ");"
+				)
 		));
 	}
 
@@ -263,7 +266,7 @@ class Union extends DataType {
 						+ rt.getSimpleName()
 						+ ") "
 						+ rt.getSimpleName().toUpperCase()
-						+ "_HANDLE.get(this.segment, this.offset + ValueLayout."
+						+ "_HANDLE.get(this.segment, this.offset + "
 						+ VKGen.referMemLayout(subLayout, cb)
 						+ ".byteSize() * i);"
 				)
@@ -286,7 +289,7 @@ class Union extends DataType {
 				null,
 				List.of(new CBMethod.Arg(int.class, "i"), new CBMethod.Arg(in, "value")),
 				new CodeBody(in.getSimpleName().toUpperCase()
-						+ "_HANDLE.set(this.segment, this.offset + ValueLayout."
+						+ "_HANDLE.set(this.segment, this.offset + "
 						+ VKGen.referMemLayout(subLayout, cb)
 						+ ".byteSize() * i, value);",
 						"\treturn this;"

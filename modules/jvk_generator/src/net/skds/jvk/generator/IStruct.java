@@ -1,5 +1,6 @@
 package net.skds.jvk.generator;
 
+import net.skds.jvk.StructConstructor;
 import net.skds.jvk.VkStructArray;
 import net.skds.jvk.annotation.NativeType;
 import net.skds.lib2.misc.clazz.classbuilder.*;
@@ -44,7 +45,7 @@ interface IStruct extends IDataType {
 		for (VkgStructMember member : members()) {
 			expMemberFields(cb, member);
 		}
-		
+
 		// constructors
 		cb.addElement(new CBConstructor(
 				Modifier.PUBLIC,
@@ -87,6 +88,16 @@ interface IStruct extends IDataType {
 				.extend(CBType.of(VkStructArray.class, cb.name))
 				.setFinal(true)
 				.setStatic(true);
+
+		cba.addElement(new CBField(
+				"CONSTRUCTOR",
+				Modifier.PRIVATE | Modifier.STATIC | Modifier.FINAL,
+				CBType.of(StructConstructor.class, cb.name),
+				null,
+				null,
+				new CodeBody(cb.name + "::new;")
+
+		));
 
 		cba.addElement(new CBConstructor(
 				Modifier.PUBLIC,
@@ -150,9 +161,6 @@ interface IStruct extends IDataType {
 
 	private static void expMemberFields(TextClassBuilder cb, VkgStructMember member) {
 		IDataType t = member.type;
-		if (t.nativeType() == null) {
-			return;
-		}
 		CBField field = new CBField(
 				StringUtils.uppercaseUnderlined(member.name) + "_OFFSET",
 				Modifier.PRIVATE | Modifier.STATIC | Modifier.FINAL,
@@ -213,10 +221,6 @@ interface IStruct extends IDataType {
 	}
 
 	private static void expArrayComplex(VkgStructMember member, TextClassBuilder cb, IDataType sub) {
-		//if (member.type.nativeType() == null || member.type.nativeType() == NativeTypeEnum.VOID) {
-		//	System.err.println(member.type);
-		//	return;
-		//}
 		CBType rt = VKGen.cbType(sub);
 		cb.addElement(new CBMethod(
 				member.name,
@@ -242,7 +246,9 @@ interface IStruct extends IDataType {
 				new CBJavadoc(member.comment),
 				null,
 				new CodeBody("return new Array(this.segment, this.offset + "
-						+ StringUtils.uppercaseUnderlined(member.name) + "_OFFSET);"
+						+ StringUtils.uppercaseUnderlined(member.name) + "_OFFSET, "
+						+ ((ArrayType) member.type).getLength()
+						+ ");"
 				)
 		));
 	}
@@ -284,7 +290,7 @@ interface IStruct extends IDataType {
 						+ ") "
 						+ rt.getSimpleName().toUpperCase()
 						+ "_HANDLE.get(this.segment, this.offset + "
-						+ StringUtils.uppercaseUnderlined(member.name) + "_OFFSET + ValueLayout."
+						+ StringUtils.uppercaseUnderlined(member.name) + "_OFFSET + "
 						+ VKGen.referMemLayout(subLayout, cb)
 						+ ".byteSize() * i);"
 				)
@@ -309,7 +315,7 @@ interface IStruct extends IDataType {
 				List.of(new CBMethod.Arg(int.class, "i"), new CBMethod.Arg(in, "value")),
 				new CodeBody(in.getSimpleName().toUpperCase()
 						+ "_HANDLE.set(this.segment, this.offset + "
-						+ StringUtils.uppercaseUnderlined(member.name) + "_OFFSET + ValueLayout."
+						+ StringUtils.uppercaseUnderlined(member.name) + "_OFFSET + "
 						+ VKGen.referMemLayout(subLayout, cb)
 						+ ".byteSize() * i, value);",
 						"\treturn this;"

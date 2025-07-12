@@ -53,10 +53,6 @@ public abstract class VkStructArray<T extends CStruct> extends CStruct implement
 		return array.length;
 	}
 
-	@FunctionalInterface
-	public interface StructConstructor<T extends CStruct> {
-		T create(MemorySegment segment, long offset);
-	}
 
 	@Override
 	public Iterator<T> iterator() {
