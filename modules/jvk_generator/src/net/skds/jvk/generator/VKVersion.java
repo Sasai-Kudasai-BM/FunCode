@@ -92,11 +92,16 @@ class VKVersion {
 			String pack = VKGen.ROOT_PACKAGE;
 			cb = new TextClassBuilder(pack, name, ClassType.CLASS);
 
+			CBType vk10 = new CBType("VK10", pack);
+			CBType vk11 = new CBType("VK11", pack);
+			CBType vk12 = new CBType("VK12", pack);
+			CBType vk13 = new CBType("VK13", pack);
+
 			switch (name) {
-				case "VK10" -> cb.permit(new CBType("VK11", pack));
-				case "VK11" -> cb.permit(new CBType("VK12", pack));
-				case "VK12" -> cb.permit(new CBType("VK13", pack));
-				case "VK13" -> cb.setFinal(true);
+				case "VK10" -> cb.permit(vk11);
+				case "VK11" -> cb.permit(vk12).extend(vk10);
+				case "VK12" -> cb.permit(vk13).extend(vk11);
+				case "VK13" -> cb.setFinal(true).extend(vk12);
 			}
 		} else {
 			String pack = VKGen.ROOT_PACKAGE + ".extensions";
@@ -134,7 +139,7 @@ class VKVersion {
 					Modifier.PUBLIC | Modifier.STATIC | Modifier.FINAL,
 					CBType.of(value.type().javaType.clazz),
 					null,
-					value.comment(),
+					new CBJavadoc(value.comment()),
 					new CodeBody(init + ";")
 			);
 			cb.addElement(field);
@@ -143,7 +148,7 @@ class VKVersion {
 			var t = command.returnType().nativeType().javaType.clazz;
 
 			StringBuilder mh = new StringBuilder("createHandle(")
-					.append("VKDefinitions.LIBRARY_LOOKUP, \"")
+					.append("VkDefinitions.LIBRARY_LOOKUP, \"")
 					.append(command.name())
 					.append("\", ")
 					.append(command.returnType().nativeType().javaType.clazz.getSimpleName().toUpperCase());
@@ -167,7 +172,7 @@ class VKVersion {
 
 			List<String> body = List.of(
 					"try {",
-					"\t" + body0.toString(),
+					"\t" + body0,
 					"\t} catch (Throwable e) {",
 					"\t\tthrow new Error(e);",
 					"\t}"

@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 import java.lang.foreign.MemoryLayout;
 import java.lang.foreign.SequenceLayout;
+import java.util.StringJoiner;
 
 @RequiredArgsConstructor
 class ArrayType implements IDataType {
@@ -12,12 +13,19 @@ class ArrayType implements IDataType {
 	@Getter
 	private final IDataType ref;
 
-	private final String comment;
-
 	private SequenceLayout layout;
 
 	@Getter
 	private final int length;
+
+	@Getter
+	private final int[] trueLength;
+
+	public ArrayType(IDataType ref, int length) {
+		this.ref = ref;
+		this.length = length;
+		this.trueLength = new int[]{length};
+	}
 
 	@Override
 	public String getName() {
@@ -26,6 +34,13 @@ class ArrayType implements IDataType {
 
 	@Override
 	public String nativeTypeName() {
+		if (trueLength.length > 1) {
+			StringJoiner sj = new StringJoiner("][", "[", "]");
+			for (int i = 0; i < trueLength.length; i++) {
+				sj.add(String.valueOf(trueLength[i]));
+			}
+			return ref.nativeTypeName() + sj;
+		}
 		return ref.nativeTypeName() + "[" + length + "]";
 	}
 
@@ -41,7 +56,7 @@ class ArrayType implements IDataType {
 
 
 	@Override
-	public MemoryLayout memoryLayout() {
+	public SequenceLayout memoryLayout() {
 		SequenceLayout l = this.layout;
 		if (l == null) {
 			l = MemoryLayout.sequenceLayout(length, ref.memoryLayout());

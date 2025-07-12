@@ -1,5 +1,6 @@
 package net.skds.jvk.generator;
 
+import net.skds.lib2.misc.clazz.classbuilder.CBType;
 import net.skds.lib2.misc.clazz.classbuilder.TextClassBuilder;
 import net.skds.lib2.utils.StringUtils;
 import net.skds.lib2.utils.logger.SKDSLogger;
@@ -38,15 +39,30 @@ class VKGen {
 		return layout1.carrier().getSimpleName().compareTo(layout2.carrier().getSimpleName());
 	}
 
-	public static String referMemLayout(MemoryLayout layout) {
-		if (layout instanceof PaddingLayout || layout instanceof ValueLayout) {
-			return createMemLayout(layout);
+	public static CBType cbType(IDataType type) {
+		return switch (type) {
+			case IStruct s -> new CBType(type.getName(), IStruct.PACKAGE);
+			case Union s -> new CBType(type.getName(), Union.PACKAGE);
+			// TODO fpn
+
+			default -> CBType.of(type.nativeType().javaType.clazz);
+		};
+	}
+
+	public static String referMemLayout(MemoryLayout layout, TextClassBuilder cb) {
+		if (layout instanceof PaddingLayout || layout instanceof ValueLayout || layout instanceof SequenceLayout) {
+			return createMemLayout(layout, cb);
 		}
+
 		String name = StringUtils.cutStringBefore(layout.name().orElseThrow(), ' ');
+		name = StringUtils.cutStringBefore(name, '[');
+		name = StringUtils.cutStringBefore(name, '*');
+		IDataType type = getDataType(name);
+		cb.checkImport(cbType(type));
 		return name + ".MEMORY_LAYOUT";
 	}
 
-	public static String createMemLayout(MemoryLayout layout) {
+	public static String createMemLayout(MemoryLayout layout, TextClassBuilder cb) {
 		StringBuilder sb = new StringBuilder();
 
 		switch (layout) {
@@ -54,7 +70,7 @@ class VKGen {
 			case SequenceLayout l -> sb.append("sequenceLayout(")
 					.append(l.elementCount())
 					.append(", ")
-					.append(referMemLayout(l.elementLayout()))
+					.append(referMemLayout(l.elementLayout(), cb))
 					.append(")");
 			case PaddingLayout l -> sb.append("paddingLayout(")
 					.append(l.byteSize())
@@ -66,10 +82,10 @@ class VKGen {
 				}
 				List<MemoryLayout> members = l.memberLayouts();
 				if (members.size() == 1) {
-					sb.append(referMemLayout(members.getFirst()));
+					sb.append(referMemLayout(members.getFirst(), cb));
 				} else {
 					for (MemoryLayout member : members) {
-						sb.append("\n\t\t").append(referMemLayout(member)).append(",");
+						sb.append("\n\t\t").append(referMemLayout(member, cb)).append(",");
 					}
 					sb.setLength(sb.length() - 1);
 					sb.append("\n");
@@ -134,6 +150,14 @@ class VKGen {
 		defaultType("_screen_context", NativeTypeEnum.POINTER);
 		defaultType("_screen_window", NativeTypeEnum.POINTER);
 
+		// FPN
+		defaultType("PFN_vkAllocationFunction", NativeTypeEnum.POINTER);
+		defaultType("PFN_vkFreeFunction", NativeTypeEnum.POINTER);
+		defaultType("PFN_vkInternalAllocationNotification", NativeTypeEnum.POINTER);
+		defaultType("PFN_vkInternalFreeNotification", NativeTypeEnum.POINTER);
+		defaultType("PFN_vkReallocationFunction", NativeTypeEnum.POINTER);
+		defaultType("PFN_vkVoidFunction", NativeTypeEnum.POINTER);
+
 		// std video
 		defaultType("StdVideoH264ProfileIdc", NativeTypeEnum.VOID);
 		defaultType("StdVideoH264Level", NativeTypeEnum.VOID);
@@ -191,8 +215,8 @@ class VKGen {
 		tasksEnd.add(task);
 	}
 
-	public static String filterName(String nane) {
-		return nane.replace("\t", "").replace(" ", "").replace("\n", "");
+	public static String filterName(String name) {
+		return name.replace("\t", "").replace(" ", "").replace("\n", "");
 	}
 
 	public static IDataType getDataType(String nane) {
@@ -214,9 +238,7 @@ class VKGen {
 	}
 
 	private static void fpnType(Element e) {
-		DataType dt = new DataType();
-		dt.name = filterName(e.getElementsByTagName("name").item(0).getTextContent());
-		dt.nativeType = NativeTypeEnum.POINTER;
+		DataType dt = new FpnType(e);
 		types.put(dt.name, dt);
 	}
 

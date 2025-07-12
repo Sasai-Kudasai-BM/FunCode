@@ -1,10 +1,7 @@
 package net.skds.jvk.generator;
 
 import lombok.RequiredArgsConstructor;
-import net.skds.jvk.annotation.NativeType;
-import net.skds.lib2.misc.clazz.classbuilder.CBAnnotation;
 import net.skds.lib2.misc.clazz.classbuilder.CBMethod;
-import net.skds.lib2.utils.StringUtils;
 import org.w3c.dom.Element;
 
 import java.util.ArrayList;
@@ -80,20 +77,7 @@ class VKCommand implements ICommand {
 
 	@Override
 	public List<CBMethod.Arg> arguments() {
-		List<CBMethod.Arg> args = new ArrayList<>();
-
-		for (int i = 0; i < arguments.size(); i++) {
-			CommandArgument a = arguments.get(i);
-			Class<?> t = a.type().nativeType().javaType.clazz;
-			args.add(new CBMethod.Arg(
-					t,
-					a.name(),
-					List.of(new CBAnnotation(NativeType.class, StringUtils.quote(a.type().nativeTypeName()))),
-					a.comment()
-			));
-		}
-
-		return args;
+		return CommandArgument.arguments(arguments);
 	}
 
 	@Override

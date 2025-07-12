@@ -37,14 +37,14 @@ class DataType implements IDataType {
 	}
 
 	@RequiredArgsConstructor
-	protected static class Aliased implements IDataType {
+	static class Aliased implements IDataType {
 
 		final String alias;
 		final String name;
 		IDataType parent;
 
 
-		protected IDataType getParent() {
+		IDataType getParent() {
 			if (parent == null) {
 				parent = VKGen.getDataType(alias);
 			}

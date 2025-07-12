@@ -81,9 +81,10 @@ class Struct extends DataType implements IStruct {
 
 					mc.append("values = ").append(values);
 				}
-				IDataType st = VKGen.getDataType(member.getElementsByTagName("type").item(0).getTextContent());
+				String stn = member.getElementsByTagName("type").item(0).getTextContent();
+				IDataType st = VKGen.getDataType(stn);
 				if (st == null) {
-					System.out.println(member.getElementsByTagName("type").item(0).getTextContent());
+					System.out.println(stn);
 				}
 				Node nn = member.getElementsByTagName("name").item(0);
 				String sn = nn.getTextContent();
@@ -105,7 +106,7 @@ class Struct extends DataType implements IStruct {
 							//System.out.println(mt);
 							//System.out.println("========");
 
-							st = new ArrayType(st, v.name(), (Integer) v.v());
+							st = new ArrayType(st, (Integer) v.v());
 							//System.out.println(st);
 						}
 					}
@@ -116,15 +117,18 @@ class Struct extends DataType implements IStruct {
 
 							String mt2 = StringUtils.cutStringAfter(mt, '[');
 							String mt3 = StringUtils.cutStringBefore(mt2, ']');
-							int s = Integer.parseInt(mt3);
+							int s0 = Integer.parseInt(mt3);
+							int s = s0;
+							int s1 = 0;
 							mt2 = StringUtils.cutStringAfter(mt2, ']');
 							if (!mt2.isBlank()) {
 								mt2 = StringUtils.cutStringAfter(mt2, '[');
 								mt3 = StringUtils.cutStringBefore(mt2, ']');
-								s *= Integer.parseInt(mt3);
+								s1 = Integer.parseInt(mt3);
+								s *= s1;
 							}
 
-							st = new ArrayType(st, "", s);
+							st = s1 == 0 ? new ArrayType(st, s) : new ArrayType(st, s, new int[]{s0, s1});
 							//System.out.println(st);
 							//System.out.println(s);
 							//System.out.println(mt);
