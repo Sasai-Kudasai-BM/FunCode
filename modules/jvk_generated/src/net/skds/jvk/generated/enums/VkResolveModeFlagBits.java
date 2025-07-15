@@ -10,4 +10,6 @@ public final class VkResolveModeFlagBits {
 	public static final int VK_RESOLVE_MODE_AVERAGE_BIT = 2;
 	public static final int VK_RESOLVE_MODE_MIN_BIT = 4;
 	public static final int VK_RESOLVE_MODE_MAX_BIT = 8;
+	public static final int VK_RESOLVE_MODE_EXTERNAL_FORMAT_DOWNSAMPLE_BIT_ANDROID = 16;
+	public static final int VK_RESOLVE_MODE_RESERVED_5_BIT_EXT = 32;
 }

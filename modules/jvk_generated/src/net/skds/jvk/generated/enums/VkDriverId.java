@@ -49,4 +49,14 @@ public final class VkDriverId {
 	public static final int VK_DRIVER_ID_SAMSUNG_PROPRIETARY = 21;
 	/** Mesa open source project **/
 	public static final int VK_DRIVER_ID_MESA_VENUS = 22;
+	/** Mesa open source project **/
+	public static final int VK_DRIVER_ID_MESA_DOZEN = 23;
+	/** Mesa open source project **/
+	public static final int VK_DRIVER_ID_MESA_NVK = 24;
+	/** Imagination Technologies **/
+	public static final int VK_DRIVER_ID_IMAGINATION_OPEN_SOURCE_MESA = 25;
+	/** Mesa open source project **/
+	public static final int VK_DRIVER_ID_MESA_HONEYKRISP = 26;
+	/** Vulkan SC Emulation on Vulkan **/
+	public static final int VK_DRIVER_ID_VULKAN_SC_EMULATION_ON_VULKAN = 27;
 }

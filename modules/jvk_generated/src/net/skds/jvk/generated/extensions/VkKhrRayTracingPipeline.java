@@ -11,11 +11,11 @@ import static net.skds.lib2.natives.SafeLinker.*;
 public final class VkKhrRayTracingPipeline {
 	
 	public static final int VK_SHADER_UNUSED_KHR = 0;
-	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_TRACING_PIPELINE_FEATURES_KHR = 0;
-	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_TRACING_PIPELINE_PROPERTIES_KHR = 1;
-	public static final int VK_STRUCTURE_TYPE_RAY_TRACING_PIPELINE_CREATE_INFO_KHR = 15;
-	public static final int VK_STRUCTURE_TYPE_RAY_TRACING_SHADER_GROUP_CREATE_INFO_KHR = 16;
-	public static final int VK_STRUCTURE_TYPE_RAY_TRACING_PIPELINE_INTERFACE_CREATE_INFO_KHR = 18;
+	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_TRACING_PIPELINE_FEATURES_KHR = 1000347000;
+	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_TRACING_PIPELINE_PROPERTIES_KHR = 1000347001;
+	public static final int VK_STRUCTURE_TYPE_RAY_TRACING_PIPELINE_CREATE_INFO_KHR = 1000150015;
+	public static final int VK_STRUCTURE_TYPE_RAY_TRACING_SHADER_GROUP_CREATE_INFO_KHR = 1000150016;
+	public static final int VK_STRUCTURE_TYPE_RAY_TRACING_PIPELINE_INTERFACE_CREATE_INFO_KHR = 1000150018;
 	public static final int VK_SHADER_STAGE_RAYGEN_BIT_KHR = 256;
 	public static final int VK_SHADER_STAGE_ANY_HIT_BIT_KHR = 512;
 	public static final int VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR = 1024;
@@ -24,7 +24,7 @@ public final class VkKhrRayTracingPipeline {
 	public static final int VK_SHADER_STAGE_CALLABLE_BIT_KHR = 8192;
 	public static final int VK_PIPELINE_STAGE_RAY_TRACING_SHADER_BIT_KHR = 2097152;
 	public static final int VK_BUFFER_USAGE_SHADER_BINDING_TABLE_BIT_KHR = 1024;
-	public static final int VK_PIPELINE_BIND_POINT_RAY_TRACING_KHR = 0;
+	public static final int VK_PIPELINE_BIND_POINT_RAY_TRACING_KHR = 1000165000;
 	public static final int VK_PIPELINE_CREATE_RAY_TRACING_NO_NULL_ANY_HIT_SHADERS_BIT_KHR = 16384;
 	public static final int VK_PIPELINE_CREATE_RAY_TRACING_NO_NULL_CLOSEST_HIT_SHADERS_BIT_KHR = 32768;
 	public static final int VK_PIPELINE_CREATE_RAY_TRACING_NO_NULL_MISS_SHADERS_BIT_KHR = 65536;
@@ -32,7 +32,8 @@ public final class VkKhrRayTracingPipeline {
 	public static final int VK_PIPELINE_CREATE_RAY_TRACING_SKIP_TRIANGLES_BIT_KHR = 4096;
 	public static final int VK_PIPELINE_CREATE_RAY_TRACING_SKIP_AABBS_BIT_KHR = 8192;
 	public static final int VK_PIPELINE_CREATE_RAY_TRACING_SHADER_GROUP_HANDLE_CAPTURE_REPLAY_BIT_KHR = 524288;
-	public static final int VK_DYNAMIC_STATE_RAY_TRACING_PIPELINE_STACK_SIZE_KHR = 0;
+	public static final int VK_DYNAMIC_STATE_RAY_TRACING_PIPELINE_STACK_SIZE_KHR = 1000347000;
+	public static final long VK_PIPELINE_CREATE_2_RAY_TRACING_SKIP_BUILT_IN_PRIMITIVES_BIT_KHR = 4096L;
 	private static final MethodHandle vkCmdTraceRaysKHR = createHandle(VkDefinitions.LIBRARY_LOOKUP, "vkCmdTraceRaysKHR", VOID, LONG, LONG, LONG, LONG, LONG, INT, INT, INT);
 	
 	@NativeType("void")
@@ -54,7 +55,7 @@ public final class VkKhrRayTracingPipeline {
 	*</pre>
 	**/
 	@NativeType("VkResult")
-	public static int vkCreateRayTracingPipelinesKHR(@NativeType("VkDevice*") long device, /* optional */ @NativeType("VkDeferredOperationKHR*") long deferredOperation, /* optional */ @NativeType("VkPipelineCache*") long pipelineCache, @NativeType("uint32_t") int createInfoCount, @NativeType("VkRayTracingPipelineCreateInfoKHR*") long pCreateInfos, /* optional */ @NativeType("VkAllocationCallbacks*") long pAllocator, @NativeType("VkPipeline**") long pPipelines) {
+	public static int vkCreateRayTracingPipelinesKHR(@NativeType("VkDevice*") long device, /* optional */ @NativeType("VkDeferredOperationKHR*") long deferredOperation, /* optional, external sync */ @NativeType("VkPipelineCache*") long pipelineCache, @NativeType("uint32_t") int createInfoCount, @NativeType("VkRayTracingPipelineCreateInfoKHR*") long pCreateInfos, /* optional */ @NativeType("VkAllocationCallbacks*") long pAllocator, @NativeType("VkPipeline**") long pPipelines) {
 		try {
 			return (int) vkCreateRayTracingPipelinesKHR.invokeExact(device, deferredOperation, pipelineCache, createInfoCount, pCreateInfos, pAllocator, pPipelines);
 		} catch (Throwable e) {

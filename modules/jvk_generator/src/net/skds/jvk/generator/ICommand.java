@@ -13,4 +13,6 @@ interface ICommand {
 
 
 	List<CBMethod.Arg> arguments();
+
+	List<CommandArgument> rawArguments();
 }

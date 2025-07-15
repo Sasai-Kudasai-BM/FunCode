@@ -28,9 +28,10 @@ public final class VkImageCreateFlagBits {
 	public static final int VK_IMAGE_CREATE_CORNER_SAMPLED_BIT_NV = 8192;
 	public static final int VK_IMAGE_CREATE_SAMPLE_LOCATIONS_COMPATIBLE_DEPTH_BIT_EXT = 4096;
 	public static final int VK_IMAGE_CREATE_SUBSAMPLED_BIT_EXT = 16384;
-	public static final int VK_IMAGE_CREATE_RESERVED_16_BIT_AMD = 65536;
-	public static final int VK_IMAGE_CREATE_RESERVED_18_BIT_EXT = 262144;
+	public static final int VK_IMAGE_CREATE_DESCRIPTOR_BUFFER_CAPTURE_REPLAY_BIT_EXT = 65536;
+	public static final int VK_IMAGE_CREATE_MULTISAMPLED_RENDER_TO_SINGLE_SAMPLED_BIT_EXT = 262144;
 	/** Image is created with a layout where individual slices are capable of being used as 2D images **/
 	public static final int VK_IMAGE_CREATE_2D_VIEW_COMPATIBLE_BIT_EXT = 131072;
-	public static final int VK_IMAGE_CREATE_FRAGMENT_DENSITY_MAP_OFFSET_BIT_QCOM = 32768;
+	public static final int VK_IMAGE_CREATE_VIDEO_PROFILE_INDEPENDENT_BIT_KHR = 1048576;
+	public static final int VK_IMAGE_CREATE_FRAGMENT_DENSITY_MAP_OFFSET_BIT_EXT = 32768;
 }

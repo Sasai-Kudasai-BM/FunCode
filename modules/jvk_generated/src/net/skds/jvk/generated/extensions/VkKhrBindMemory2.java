@@ -46,7 +46,7 @@ public final class VkKhrBindMemory2 {
 	}
 	
 	
-	public static final int VK_STRUCTURE_TYPE_BIND_BUFFER_MEMORY_INFO_KHR = 0;
-	public static final int VK_STRUCTURE_TYPE_BIND_IMAGE_MEMORY_INFO_KHR = 1;
+	public static final int VK_STRUCTURE_TYPE_BIND_BUFFER_MEMORY_INFO_KHR = 1000157000;
+	public static final int VK_STRUCTURE_TYPE_BIND_IMAGE_MEMORY_INFO_KHR = 1000157001;
 	public static final int VK_IMAGE_CREATE_ALIAS_BIT_KHR = 1024;
 }

@@ -9,5 +9,5 @@ import static net.skds.lib2.natives.SafeLinker.*;
 public final class VkNvCornerSampledImage {
 	
 	public static final int VK_IMAGE_CREATE_CORNER_SAMPLED_BIT_NV = 8192;
-	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_CORNER_SAMPLED_IMAGE_FEATURES_NV = 0;
+	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_CORNER_SAMPLED_IMAGE_FEATURES_NV = 1000050000;
 }

@@ -160,7 +160,6 @@ interface IStruct extends IDataType {
 	StructLayout memoryLayout();
 
 	private static void expMemberFields(TextClassBuilder cb, VkgStructMember member) {
-		IDataType t = member.type;
 		CBField field = new CBField(
 				StringUtils.uppercaseUnderlined(member.name) + "_OFFSET",
 				Modifier.PRIVATE | Modifier.STATIC | Modifier.FINAL,
@@ -256,10 +255,11 @@ interface IStruct extends IDataType {
 	private static void expGetter(VkgStructMember member, TextClassBuilder cb) {
 		cb.importStatic(SafeLinker.class, "*");
 		Class<?> rt = member.type.nativeType().javaType.clazz;
+		Class<?> jrt = member.type.javaType().clazz;
 		cb.addElement(new CBMethod(
 				member.name,
 				Modifier.PUBLIC,
-				CBType.of(rt),
+				CBType.of(jrt),
 				List.of(new CBAnnotation(NativeType.class, StringUtils.quote(member.type.nativeTypeName()))),
 				new CBJavadoc(member.comment),
 				null,
@@ -269,7 +269,7 @@ interface IStruct extends IDataType {
 						+ rt.getSimpleName().toUpperCase()
 						+ "_HANDLE.get(this.segment, this.offset + "
 						+ StringUtils.uppercaseUnderlined(member.name) + "_OFFSET"
-						+ ");"
+						+ ")" + member.type.booleanCastAppender() + ";"
 				)
 		));
 	}
@@ -278,10 +278,11 @@ interface IStruct extends IDataType {
 		cb.importStatic(SafeLinker.class, "*");
 		cb.importStatic(ValueLayout.class, "*");
 		Class<?> rt = member.type.nativeType().javaType.clazz;
+		Class<?> jrt = member.type.javaType().clazz;
 		cb.addElement(new CBMethod(
 				member.name,
 				Modifier.PUBLIC,
-				CBType.of(rt),
+				CBType.of(jrt),
 				List.of(new CBAnnotation(NativeType.class, StringUtils.quote(member.type.nativeTypeName()))),
 				new CBJavadoc(member.comment),
 				List.of(new CBMethod.Arg(int.class, "i")),
@@ -292,7 +293,35 @@ interface IStruct extends IDataType {
 						+ "_HANDLE.get(this.segment, this.offset + "
 						+ StringUtils.uppercaseUnderlined(member.name) + "_OFFSET + "
 						+ VKGen.referMemLayout(subLayout, cb)
-						+ ".byteSize() * i);"
+						+ ".byteSize() * i)" + member.type.booleanCastAppender() + ";"
+				)
+		));
+		cb.addElement(new CBMethod(
+				member.name + "Array",
+				Modifier.PUBLIC,
+				CBType.of(jrt.arrayType()),
+				List.of(new CBAnnotation(NativeType.class, StringUtils.quote(member.type.nativeTypeName()))),
+				new CBJavadoc(member.comment),
+				null,
+				new CodeBody("var array = new "
+						+ jrt.getSimpleName() + "[" + ((ArrayType) member.type).getLength() + "];",
+						"\tMemorySegment.copy(this.segment, "
+								+ rt.getSimpleName().toUpperCase()
+								+ ", this.offset + "
+								+ StringUtils.uppercaseUnderlined(member.name)
+								+ "_OFFSET, array, 0, array.length);",
+						"\treturn array;"
+				)
+		));
+		if (member.type.nativeType() == NativeTypeEnum.CHAR) cb.addElement(new CBMethod(
+				member.name,
+				Modifier.PUBLIC,
+				CBType.of(String.class),
+				List.of(new CBAnnotation(NativeType.class, StringUtils.quote(member.type.nativeTypeName()))),
+				new CBJavadoc(member.comment),
+				null,
+				new CodeBody("return this.segment.getString(this.offset + "
+						+ StringUtils.uppercaseUnderlined(member.name) + "_OFFSET);"
 				)
 		));
 	}
@@ -304,6 +333,7 @@ interface IStruct extends IDataType {
 			return;
 		}
 		Class<?> in = member.type.nativeType().javaType.clazz;
+		Class<?> jin = member.type.javaType().clazz;
 		cb.importStatic(SafeLinker.class, "*");
 		cb.importStatic(ValueLayout.class, "*");
 		cb.addElement(new CBMethod(
@@ -312,12 +342,39 @@ interface IStruct extends IDataType {
 				cb.thisType(),
 				List.of(new CBAnnotation(NativeType.class, StringUtils.quote(member.type.nativeTypeName()))),
 				new CBJavadoc(member.comment),
-				List.of(new CBMethod.Arg(int.class, "i"), new CBMethod.Arg(in, "value")),
+				List.of(new CBMethod.Arg(int.class, "i"), new CBMethod.Arg(jin, "value")),
 				new CodeBody(in.getSimpleName().toUpperCase()
 						+ "_HANDLE.set(this.segment, this.offset + "
 						+ StringUtils.uppercaseUnderlined(member.name) + "_OFFSET + "
 						+ VKGen.referMemLayout(subLayout, cb)
-						+ ".byteSize() * i, value);",
+						+ ".byteSize() * i, value" + member.type.booleanUnCastAppender() + ");",
+						"\treturn this;"
+				)
+		));
+		cb.addElement(new CBMethod(
+				member.name,
+				Modifier.PUBLIC,
+				cb.thisType(),
+				List.of(new CBAnnotation(NativeType.class, StringUtils.quote(member.type.nativeTypeName()))),
+				new CBJavadoc(member.comment),
+				List.of(new CBMethod.Arg(jin.arrayType(), "value")),
+				new CodeBody("MemorySegment.copy(value, 0, this.segment, "
+						+ in.getSimpleName().toUpperCase()
+						+ ", this.offset + "
+						+ StringUtils.uppercaseUnderlined(member.name) + "_OFFSET"
+						+ ", value.length);",
+						"\treturn this;"
+				)
+		));
+		if (member.type.nativeType() == NativeTypeEnum.CHAR) cb.addElement(new CBMethod(
+				member.name,
+				Modifier.PUBLIC,
+				cb.thisType(),
+				List.of(new CBAnnotation(NativeType.class, StringUtils.quote(member.type.nativeTypeName()))),
+				new CBJavadoc(member.comment),
+				List.of(new CBMethod.Arg(String.class, "value")),
+				new CodeBody("this.segment.setString(this.offset + "
+						+ StringUtils.uppercaseUnderlined(member.name) + "_OFFSET, value" + member.type.booleanUnCastAppender() + ");",
 						"\treturn this;"
 				)
 		));
@@ -330,6 +387,7 @@ interface IStruct extends IDataType {
 			return;
 		}
 		Class<?> in = member.type.nativeType().javaType.clazz;
+		Class<?> jin = member.type.javaType().clazz;
 		cb.importStatic(SafeLinker.class, "*");
 		cb.addElement(new CBMethod(
 				member.name,
@@ -337,11 +395,11 @@ interface IStruct extends IDataType {
 				cb.thisType(),
 				List.of(new CBAnnotation(NativeType.class, StringUtils.quote(member.type.nativeTypeName()))),
 				new CBJavadoc(member.comment),
-				List.of(new CBMethod.Arg(in, "value")),
+				List.of(new CBMethod.Arg(jin, "value")),
 				new CodeBody(in.getSimpleName().toUpperCase() +
 						"_HANDLE.set(this.segment, this.offset + "
 						+ StringUtils.uppercaseUnderlined(member.name) + "_OFFSET"
-						+ ", value);",
+						+ ", value" + member.type.booleanUnCastAppender() + ");",
 						"\treturn this;"
 				)
 		));
@@ -353,7 +411,7 @@ interface IStruct extends IDataType {
 				new CBJavadoc(member.comment),
 				null,
 				new CodeBody(in.getSimpleName().toUpperCase()
-						+ "_HANDLE.get(this.segment, this.offset + "
+						+ "_HANDLE.set(this.segment, this.offset + "
 						+ StringUtils.uppercaseUnderlined(member.name) + "_OFFSET"
 						+ ", "
 						+ init

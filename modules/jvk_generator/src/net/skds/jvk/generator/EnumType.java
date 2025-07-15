@@ -1,5 +1,6 @@
 package net.skds.jvk.generator;
 
+import net.skds.jvk.VkDefinitions;
 import org.w3c.dom.Element;
 
 import java.lang.foreign.MemoryLayout;
@@ -37,7 +38,7 @@ class EnumType extends DataType implements IEnumType {
 		for (int i = 0; i < l.getLength(); i++) {
 			var n = l.item(i);
 			if (n instanceof Element e2) {
-				if (e2.getNodeName().equals("enum")) {
+				if (e2.getNodeName().equals("enum") && VKGen.isApiAllowed(e2.getAttribute("api"))) {
 
 					String name2 = e2.getAttribute("name");
 					String comment2 = e2.getAttribute("comment");
@@ -49,7 +50,8 @@ class EnumType extends DataType implements IEnumType {
 								continue loopa;
 							}
 						}
-						throw new RuntimeException("alias " + alias2);
+						continue;
+						//throw new RuntimeException("alias " + alias2);
 					}
 					String type = e2.getAttribute("type");
 					NativeTypeEnum nt = et.nativeType;
@@ -146,7 +148,20 @@ class EnumType extends DataType implements IEnumType {
 					nt = NativeTypeEnum.UINT64_T;
 				}
 			} else {
+				String extnumber = e.getAttribute("extnumber");
 				val = nt.parse(value);
+				if (!extnumber.isEmpty()) {
+					int v0 = (int) val;
+					int ext = Integer.parseInt(extnumber);
+					val = VkDefinitions.getExtEnumValue(ext, v0);
+				} else if (e.getParentNode().getParentNode().getNodeName().equals("extension")) {
+					extnumber = ((Element) e.getParentNode().getParentNode()).getAttribute("number");
+					if (!extnumber.isEmpty()) {
+						int v0 = (int) val;
+						int ext = Integer.parseInt(extnumber);
+						val = VkDefinitions.getExtEnumValue(ext, v0);
+					}
+				}
 			}
 			Value v2 = new Value(val, name2, comment2, nt);
 			//et.values().add(v2);

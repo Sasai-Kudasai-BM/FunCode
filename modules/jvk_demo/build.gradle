@@ -1,0 +1,29 @@
+plugins {
+    id "com.gradleup.shadow" version "9.0.0-beta4"
+}
+version = "1.0"
+group = "net.skds"
+mainClass = "net.skds.jvk.demo.JVKDemo"
+useShadowJar = "true"
+
+dependencies {
+    implementation project(":skdslib")
+    implementation project(":jvk_base")
+    implementation project(":jvk_generated")
+}
+
+shadowJar {
+    archiveBaseName.set("JVK")
+    archiveClassifier.set("demo")
+    archiveVersion.set("1.1.4")
+    minimize()
+    dependencies {
+        include(dependency { it.moduleGroup == "net.skds" })
+    }
+}
+
+tasks.jar.finalizedBy("shadowJar");
+
+tasks.shadowJar {
+    destinationDirectory.set(project.rootProject.file("out/" + project.name))
+}

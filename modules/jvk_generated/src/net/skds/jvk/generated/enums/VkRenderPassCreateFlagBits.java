@@ -7,4 +7,5 @@ public final class VkRenderPassCreateFlagBits {
 	
 	public static final int VK_RENDER_PASS_CREATE_RESERVED_0_BIT_KHR = 1;
 	public static final int VK_RENDER_PASS_CREATE_TRANSFORM_BIT_QCOM = 2;
+	public static final int VK_RENDER_PASS_CREATE_PER_LAYER_FRAGMENT_DENSITY_BIT_VALVE = 4;
 }

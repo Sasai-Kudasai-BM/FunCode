@@ -13,14 +13,14 @@ public final class VkExtExtendedDynamicState2 {
 	// Not promoted to 1.3
 	
 	/** Not promoted to 1.3 **/
-	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTENDED_DYNAMIC_STATE_2_FEATURES_EXT = 0;
+	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTENDED_DYNAMIC_STATE_2_FEATURES_EXT = 1000377000;
 	/** Not promoted to 1.3 **/
-	public static final int VK_DYNAMIC_STATE_PATCH_CONTROL_POINTS_EXT = 0;
-	public static final int VK_DYNAMIC_STATE_RASTERIZER_DISCARD_ENABLE_EXT = 1;
-	public static final int VK_DYNAMIC_STATE_DEPTH_BIAS_ENABLE_EXT = 2;
+	public static final int VK_DYNAMIC_STATE_PATCH_CONTROL_POINTS_EXT = 1000377000;
+	public static final int VK_DYNAMIC_STATE_RASTERIZER_DISCARD_ENABLE_EXT = 1000377001;
+	public static final int VK_DYNAMIC_STATE_DEPTH_BIAS_ENABLE_EXT = 1000377002;
 	/** Not promoted to 1.3 **/
-	public static final int VK_DYNAMIC_STATE_LOGIC_OP_EXT = 3;
-	public static final int VK_DYNAMIC_STATE_PRIMITIVE_RESTART_ENABLE_EXT = 4;
+	public static final int VK_DYNAMIC_STATE_LOGIC_OP_EXT = 1000377003;
+	public static final int VK_DYNAMIC_STATE_PRIMITIVE_RESTART_ENABLE_EXT = 1000377004;
 	private static final MethodHandle vkCmdSetPatchControlPointsEXT = createHandle(VkDefinitions.LIBRARY_LOOKUP, "vkCmdSetPatchControlPointsEXT", VOID, LONG, INT);
 	
 	@NativeType("void")
@@ -33,24 +33,24 @@ public final class VkExtExtendedDynamicState2 {
 	}
 	
 	
-	private static final MethodHandle vkCmdSetRasterizerDiscardEnableEXT = createHandle(VkDefinitions.LIBRARY_LOOKUP, "vkCmdSetRasterizerDiscardEnableEXT", VOID, LONG, INT);
+	private static final MethodHandle vkCmdSetRasterizerDiscardEnableEXT = createHandle(VkDefinitions.LIBRARY_LOOKUP, "vkCmdSetRasterizerDiscardEnableEXT", VOID, LONG, BOOLEAN);
 	
 	@NativeType("void")
-	public static void vkCmdSetRasterizerDiscardEnableEXT(/* external sync */ @NativeType("VkCommandBuffer*") long commandBuffer, @NativeType("VkBool32") int rasterizerDiscardEnable) {
+	public static void vkCmdSetRasterizerDiscardEnableEXT(/* external sync */ @NativeType("VkCommandBuffer*") long commandBuffer, @NativeType("VkBool32") boolean rasterizerDiscardEnable) {
 		try {
-			vkCmdSetRasterizerDiscardEnableEXT.invokeExact(commandBuffer, rasterizerDiscardEnable);
+			vkCmdSetRasterizerDiscardEnableEXT.invokeExact(commandBuffer, rasterizerDiscardEnable ? (int) 1 : (int) 0);
 		} catch (Throwable e) {
 			throw new Error(e);
 		}
 	}
 	
 	
-	private static final MethodHandle vkCmdSetDepthBiasEnableEXT = createHandle(VkDefinitions.LIBRARY_LOOKUP, "vkCmdSetDepthBiasEnableEXT", VOID, LONG, INT);
+	private static final MethodHandle vkCmdSetDepthBiasEnableEXT = createHandle(VkDefinitions.LIBRARY_LOOKUP, "vkCmdSetDepthBiasEnableEXT", VOID, LONG, BOOLEAN);
 	
 	@NativeType("void")
-	public static void vkCmdSetDepthBiasEnableEXT(/* external sync */ @NativeType("VkCommandBuffer*") long commandBuffer, @NativeType("VkBool32") int depthBiasEnable) {
+	public static void vkCmdSetDepthBiasEnableEXT(/* external sync */ @NativeType("VkCommandBuffer*") long commandBuffer, @NativeType("VkBool32") boolean depthBiasEnable) {
 		try {
-			vkCmdSetDepthBiasEnableEXT.invokeExact(commandBuffer, depthBiasEnable);
+			vkCmdSetDepthBiasEnableEXT.invokeExact(commandBuffer, depthBiasEnable ? (int) 1 : (int) 0);
 		} catch (Throwable e) {
 			throw new Error(e);
 		}
@@ -69,12 +69,12 @@ public final class VkExtExtendedDynamicState2 {
 	}
 	
 	
-	private static final MethodHandle vkCmdSetPrimitiveRestartEnableEXT = createHandle(VkDefinitions.LIBRARY_LOOKUP, "vkCmdSetPrimitiveRestartEnableEXT", VOID, LONG, INT);
+	private static final MethodHandle vkCmdSetPrimitiveRestartEnableEXT = createHandle(VkDefinitions.LIBRARY_LOOKUP, "vkCmdSetPrimitiveRestartEnableEXT", VOID, LONG, BOOLEAN);
 	
 	@NativeType("void")
-	public static void vkCmdSetPrimitiveRestartEnableEXT(/* external sync */ @NativeType("VkCommandBuffer*") long commandBuffer, @NativeType("VkBool32") int primitiveRestartEnable) {
+	public static void vkCmdSetPrimitiveRestartEnableEXT(/* external sync */ @NativeType("VkCommandBuffer*") long commandBuffer, @NativeType("VkBool32") boolean primitiveRestartEnable) {
 		try {
-			vkCmdSetPrimitiveRestartEnableEXT.invokeExact(commandBuffer, primitiveRestartEnable);
+			vkCmdSetPrimitiveRestartEnableEXT.invokeExact(commandBuffer, primitiveRestartEnable ? (int) 1 : (int) 0);
 		} catch (Throwable e) {
 			throw new Error(e);
 		}

@@ -9,5 +9,5 @@ import static net.skds.lib2.natives.SafeLinker.*;
 public final class VkKhrPipelineLibrary {
 	
 	public static final int VK_PIPELINE_CREATE_LIBRARY_BIT_KHR = 2048;
-	public static final int VK_STRUCTURE_TYPE_PIPELINE_LIBRARY_CREATE_INFO_KHR = 0;
+	public static final int VK_STRUCTURE_TYPE_PIPELINE_LIBRARY_CREATE_INFO_KHR = 1000290000;
 }

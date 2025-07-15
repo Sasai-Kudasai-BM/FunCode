@@ -7,6 +7,7 @@ import java.util.function.Function;
 
 @AllArgsConstructor
 enum JavaTypeEnum {
+	BOOLEAN(boolean.class, ValueLayout.JAVA_BOOLEAN, 1, Boolean::valueOf),
 	BYTE(byte.class, ValueLayout.JAVA_BYTE, 1, Byte::valueOf),
 	SHORT(short.class, ValueLayout.JAVA_SHORT, 2, Short::valueOf),
 	INT(int.class, ValueLayout.JAVA_INT, 4, Integer::valueOf),

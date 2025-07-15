@@ -14,9 +14,10 @@ record CommandArgument(String name, IDataType type, String comment) {
 		List<CBMethod.Arg> args = new ArrayList<>();
 		for (int i = 0; i < arguments.size(); i++) {
 			CommandArgument a = arguments.get(i);
-			Class<?> t = a.type().nativeType().javaType.clazz;
+			//Class<?> t = a.type().nativeType().javaType.clazz;
+			Class<?> jt = a.type().javaType().clazz;
 			args.add(new CBMethod.Arg(
-					t,
+					jt,
 					a.name(),
 					List.of(new CBAnnotation(NativeType.class, StringUtils.quote(a.type().nativeTypeName()))),
 					a.comment()

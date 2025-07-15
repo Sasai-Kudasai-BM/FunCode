@@ -2,6 +2,7 @@ package net.skds.jvk.generator;
 
 import net.skds.lib2.misc.clazz.classbuilder.CBType;
 import net.skds.lib2.misc.clazz.classbuilder.TextClassBuilder;
+import net.skds.lib2.utils.ArrayUtils;
 import net.skds.lib2.utils.StringUtils;
 import net.skds.lib2.utils.logger.SKDSLogger;
 import org.w3c.dom.Document;
@@ -16,7 +17,11 @@ import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 import java.util.*;
 
+import static net.skds.jvk.VkDefinitions.VK_API_NAME;
+
 class VKGen {
+
+	//https://raw.githubusercontent.com/KhronosGroup/Vulkan-Docs/refs/heads/main/xml/vk.xml
 
 	private static final Map<ValueLayout, String> valueLayouts = new TreeMap<>(VKGen::layoutCompare);
 
@@ -30,7 +35,7 @@ class VKGen {
 
 	public static final Map<String, EnumType.Value> enumValues = new HashMap<>();
 
-	public static final File EXPORT_DIR = new File("generated/jvk");
+	public static final File EXPORT_DIR = new File("vkGenerated");
 	public static final String ROOT_PACKAGE = "net.skds.jvk.generated";
 
 	// import static ValueLayout, MemoryLayout
@@ -39,11 +44,17 @@ class VKGen {
 		return layout1.carrier().getSimpleName().compareTo(layout2.carrier().getSimpleName());
 	}
 
+	public static boolean isApiAllowed(String api) {
+		if (api == null || api.isBlank()) return true;
+		api = api.replace(" ", "").replace("\n", "");
+		return ArrayUtils.find(VK_API_NAME, api.split(",")) != -1;
+	}
+
 	public static CBType cbType(IDataType type) {
 		return switch (type) {
 			case IStruct s -> new CBType(type.getName(), IStruct.PACKAGE);
 			case Union s -> new CBType(type.getName(), Union.PACKAGE);
-			// TODO fpn
+			// fpn - is pointer
 
 			default -> CBType.of(type.nativeType().javaType.clazz);
 		};
@@ -125,6 +136,18 @@ class VKGen {
 		types.put(name, tp);
 	}
 
+	private static void booleanType(String name, NativeTypeEnum nativeType) {
+		DataType tp = new DataType() {
+			@Override
+			public JavaTypeEnum javaType() {
+				return JavaTypeEnum.BOOLEAN;
+			}
+		};
+		tp.name = name;
+		tp.nativeType = nativeType;
+		types.put(name, tp);
+	}
+
 	private static void addDefaultTypes() {
 		defaultType("Display", NativeTypeEnum.POINTER);
 		defaultType("VisualID", NativeTypeEnum.POINTER);
@@ -149,6 +172,16 @@ class VKGen {
 		defaultType("GgpFrameToken", NativeTypeEnum.POINTER);
 		defaultType("_screen_context", NativeTypeEnum.POINTER);
 		defaultType("_screen_window", NativeTypeEnum.POINTER);
+		defaultType("_screen_buffer", NativeTypeEnum.POINTER);
+		defaultType("MTLBuffer_id", NativeTypeEnum.POINTER);
+		defaultType("MTLTexture_id", NativeTypeEnum.POINTER);
+		defaultType("MTLSharedEvent_id", NativeTypeEnum.POINTER);
+		defaultType("MTLDevice_id", NativeTypeEnum.POINTER);
+		defaultType("MTLCommandQueue_id", NativeTypeEnum.POINTER);
+		defaultType("IOSurfaceRef", NativeTypeEnum.POINTER);
+
+		// wtf
+		defaultType("OHNativeWindow", NativeTypeEnum.VOID);
 
 		// FPN
 		defaultType("PFN_vkAllocationFunction", NativeTypeEnum.POINTER);
@@ -158,7 +191,30 @@ class VKGen {
 		defaultType("PFN_vkReallocationFunction", NativeTypeEnum.POINTER);
 		defaultType("PFN_vkVoidFunction", NativeTypeEnum.POINTER);
 
+		// nvscibuf.h
+		defaultType("NvSciBufAttrList", NativeTypeEnum.POINTER);
+		defaultType("NvSciBufObj", NativeTypeEnum.POINTER);
+
+		// nvscisync.h
+		defaultType("NvSciSyncAttrList", NativeTypeEnum.POINTER);
+		defaultType("NvSciSyncObj", NativeTypeEnum.POINTER);
+		defaultType("NvSciSyncFence", NativeTypeEnum.POINTER);
+
 		// std video
+		defaultType("StdVideoH265LevelIdc", NativeTypeEnum.VOID);
+		defaultType("StdVideoVP9Profile", NativeTypeEnum.VOID);
+		defaultType("StdVideoVP9Level", NativeTypeEnum.VOID);
+		defaultType("StdVideoDecodeVP9PictureInfo", NativeTypeEnum.VOID);
+		defaultType("StdVideoDecodeAV1PictureInfo", NativeTypeEnum.VOID);
+		defaultType("StdVideoDecodeAV1ReferenceInfo", NativeTypeEnum.VOID);
+		defaultType("StdVideoAV1Profile", NativeTypeEnum.VOID);
+		defaultType("StdVideoEncodeAV1PictureInfo", NativeTypeEnum.VOID);
+		defaultType("StdVideoEncodeAV1ReferenceInfo", NativeTypeEnum.VOID);
+		defaultType("StdVideoEncodeAV1OperatingPointInfo", NativeTypeEnum.VOID);
+		defaultType("StdVideoEncodeAV1DecoderModelInfo", NativeTypeEnum.VOID);
+		defaultType("StdVideoAV1SequenceHeader", NativeTypeEnum.VOID);
+		defaultType("StdVideoAV1Level", NativeTypeEnum.VOID);
+		defaultType("StdVideoH264LevelIdc", NativeTypeEnum.VOID);
 		defaultType("StdVideoH264ProfileIdc", NativeTypeEnum.VOID);
 		defaultType("StdVideoH264Level", NativeTypeEnum.VOID);
 		defaultType("StdVideoH264SequenceParameterSet", NativeTypeEnum.VOID);
@@ -194,8 +250,10 @@ class VKGen {
 		defaultType("AHardwareBuffer", NativeTypeEnum.VOID); // Android struct
 		defaultType("CAMetalLayer", NativeTypeEnum.VOID); // OBJC
 
+
+		// Vulkan
 		defaultType("VkSampleMask", NativeTypeEnum.UINT32_T);
-		defaultType("VkBool32", NativeTypeEnum.UINT32_T);
+		booleanType("VkBool32", NativeTypeEnum.UINT32_T);
 		defaultType("VkFlags", NativeTypeEnum.UINT32_T);
 		defaultType("VkFlags64", NativeTypeEnum.UINT64_T);
 		defaultType("VkDeviceSize", NativeTypeEnum.UINT64_T);
@@ -333,7 +391,7 @@ class VKGen {
 		nl = ((Element) doc.getDocumentElement().getElementsByTagName("types").item(0)).getElementsByTagName("type");
 		for (int i = 0; i < nl.getLength(); i++) {
 			var n = nl.item(i);
-			if (n instanceof Element e) {
+			if (n instanceof Element e && isApiAllowed(e.getAttribute("api"))) {
 				String category = e.getAttribute("category");
 				switch (category) {
 					case "handle" -> handleType(e);
@@ -355,7 +413,7 @@ class VKGen {
 		nl = ((Element) doc.getDocumentElement().getElementsByTagName("commands").item(0)).getElementsByTagName("command");
 		for (int i = 0; i < nl.getLength(); i++) {
 			var n = nl.item(i);
-			if (n instanceof Element e) {
+			if (n instanceof Element e && isApiAllowed(e.getAttribute("api"))) {
 				ICommand command = VKCommand.create(e);
 				commands.put(command.name(), command);
 			}
@@ -364,7 +422,7 @@ class VKGen {
 		nl = doc.getDocumentElement().getElementsByTagName("feature");
 		for (int i = 0; i < nl.getLength(); i++) {
 			var n = nl.item(i);
-			if (n instanceof Element e) {
+			if (n instanceof Element e && isApiAllowed(e.getAttribute("api"))) {
 				VKVersion version = VKVersion.create(e);
 				versions.add(version);
 			}
@@ -376,7 +434,7 @@ class VKGen {
 			nl = ((Element) nl0.item(j)).getElementsByTagName("extension");
 			for (int i = 0; i < nl.getLength(); i++) {
 				var n = nl.item(i);
-				if (n instanceof Element e) {
+				if (n instanceof Element e && isApiAllowed(e.getAttribute("api"))) {
 					VKVersion version = VKVersion.create(e);
 					versions.add(version);
 				}

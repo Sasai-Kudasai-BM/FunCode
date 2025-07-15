@@ -66,6 +66,8 @@ class Struct extends DataType implements IStruct {
 			var members = e.getElementsByTagName("member");
 			for (int i = 0; i < members.getLength(); i++) {
 				Element member = (Element) members.item(i);
+				if (!VKGen.isApiAllowed(member.getAttribute("api")))
+					continue;
 				StringBuilder mc = new StringBuilder();
 
 				boolean optional = member.hasAttribute("optional");
@@ -81,19 +83,22 @@ class Struct extends DataType implements IStruct {
 
 					mc.append("values = ").append(values);
 				}
-				String stn = member.getElementsByTagName("type").item(0).getTextContent();
+				var tNode = member.getElementsByTagName("type").item(0);
+				String stn = tNode.getTextContent();
 				IDataType st = VKGen.getDataType(stn);
 				if (st == null) {
-					System.out.println(stn);
+					System.err.println(stn);
+				} else if (tNode.getNextSibling() != null && tNode.getNextSibling().getTextContent().startsWith("*")) {
+					st = new PointerType(st);
 				}
 				Node nn = member.getElementsByTagName("name").item(0);
 				String sn = nn.getTextContent();
 
-				String mt = member.getTextContent();
+				//String mt = member.getTextContent();
 
+				var sib1 = nn.getNextSibling();
+				if (sib1 != null && sib1.getTextContent().startsWith("[")) {
 
-				if (mt.contains("[")) {
-					var sib1 = nn.getNextSibling();
 					var sib2 = sib1.getNextSibling();
 					boolean ok = false;
 					if (sib2 != null) {
@@ -112,7 +117,7 @@ class Struct extends DataType implements IStruct {
 					}
 
 					if (!ok) {
-						mt = sib1.getTextContent().replace("\n", "").replace(" ", "");
+						String mt = sib1.getTextContent().replace("\n", "").replace(" ", "");
 						if (!mt.isBlank()) {
 
 							String mt2 = StringUtils.cutStringAfter(mt, '[');
@@ -134,10 +139,6 @@ class Struct extends DataType implements IStruct {
 							//System.out.println(mt);
 						}
 					}
-				}
-
-				if (member.getTextContent().contains("*")) {
-					st = new PointerType(st);
 				}
 				VkgStructMember member1 = new VkgStructMember(sn, st, mc.toString());
 				if (!values.isEmpty()) VKGen.addEndTask(() -> {

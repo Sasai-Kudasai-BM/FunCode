@@ -21,4 +21,16 @@ public final class VkAmdBufferMarker {
 		}
 	}
 	
+	
+	private static final MethodHandle vkCmdWriteBufferMarker2AMD = createHandle(VkDefinitions.LIBRARY_LOOKUP, "vkCmdWriteBufferMarker2AMD", VOID, LONG, LONG, LONG, LONG, INT);
+	
+	@NativeType("void")
+	public static void vkCmdWriteBufferMarker2AMD(/* external sync */ @NativeType("VkCommandBuffer*") long commandBuffer, /* optional */ @NativeType("VkPipelineStageFlags2") long stage, @NativeType("VkBuffer*") long dstBuffer, @NativeType("VkDeviceSize") long dstOffset, @NativeType("uint32_t") int marker) {
+		try {
+			vkCmdWriteBufferMarker2AMD.invokeExact(commandBuffer, stage, dstBuffer, dstOffset, marker);
+		} catch (Throwable e) {
+			throw new Error(e);
+		}
+	}
+	
 }

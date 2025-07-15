@@ -40,14 +40,14 @@ subprojects {
     }
 }
 
-sourceSets {
-    main {
-        resources {
-            srcDirs = ["src/main/resources"]
-            exclude "java/**"
-        }
-    }
-}
+//sourceSets {
+//    main {
+//        resources {
+//            srcDirs = ["src/main/resources"]
+//            exclude "java/**"
+//        }
+//    }
+//}
 
 //dependsOn "build"
 
@@ -57,18 +57,28 @@ tasks.register('buildAll') {
     subprojects.forEach {
         Project p = it;
         p.tasks.jar {
+            destinationDirectory.set(file("out/" + p.name))
+        }
+        if (!p.useShadowJar) {
+            p.tasks.jar {
+                manifest {
+                    attributes(
+                            "Main-Class": p.property("mainClass"),
+                            //'Class-Path': configurations.runtimeClasspath.files.collect { "lib/" + it.name }.join(' ')
+                            'Class-Path': p.configurations.runtimeClasspath.collect { "lib/" + it.name }.join(' ')
+                    )
+                }
+            }.doLast {
+                copy {
+                    from p.configurations.runtimeClasspath
+                    into "out/" + p.name + "/lib"
+                }
+            }
+        } else {
             manifest {
                 attributes(
-                        "Main-Class": p.property("mainClass"),
-                        //'Class-Path': configurations.runtimeClasspath.files.collect { "lib/" + it.name }.join(' ')
-                        'Class-Path': p.configurations.runtimeClasspath.collect { "lib/" + it.name }.join(' ')
+                        "Main-Class": p.property("mainClass")
                 )
-            }
-            destinationDirectory.set(file("out/" + p.name))
-        }.doLast {
-            copy {
-                from p.configurations.runtimeClasspath
-                into "out/" + p.name + "/lib"
             }
         }
     }

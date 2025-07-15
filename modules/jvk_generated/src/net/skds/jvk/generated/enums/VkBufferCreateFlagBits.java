@@ -14,5 +14,6 @@ public final class VkBufferCreateFlagBits {
 	/** Buffer requires protected memory **/
 	public static final int VK_BUFFER_CREATE_PROTECTED_BIT = 8;
 	public static final int VK_BUFFER_CREATE_DEVICE_ADDRESS_CAPTURE_REPLAY_BIT = 16;
-	public static final int VK_BUFFER_CREATE_RESERVED_5_BIT_AMD = 32;
+	public static final int VK_BUFFER_CREATE_DESCRIPTOR_BUFFER_CAPTURE_REPLAY_BIT_EXT = 32;
+	public static final int VK_BUFFER_CREATE_VIDEO_PROFILE_INDEPENDENT_BIT_KHR = 64;
 }

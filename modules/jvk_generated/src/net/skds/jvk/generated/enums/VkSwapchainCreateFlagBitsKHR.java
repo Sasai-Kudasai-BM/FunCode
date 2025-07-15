@@ -10,4 +10,11 @@ public final class VkSwapchainCreateFlagBitsKHR {
 	/** Swapchain is protected **/
 	public static final int VK_SWAPCHAIN_CREATE_PROTECTED_BIT_KHR = 2;
 	public static final int VK_SWAPCHAIN_CREATE_MUTABLE_FORMAT_BIT_KHR = 4;
+	public static final int VK_SWAPCHAIN_CREATE_RESERVED_4_BIT_EXT = 16;
+	/** Allow use of VK_KHR_present_id2 with this swapchain **/
+	public static final int VK_SWAPCHAIN_CREATE_PRESENT_ID_2_BIT_KHR = 64;
+	/** Allow use of VK_KHR_present_wait2 with this swapchain **/
+	public static final int VK_SWAPCHAIN_CREATE_PRESENT_WAIT_2_BIT_KHR = 128;
+	public static final int VK_SWAPCHAIN_CREATE_DEFERRED_MEMORY_ALLOCATION_BIT_KHR = 8;
+	public static final int VK_SWAPCHAIN_CREATE_RESERVED_5_BIT_EXT = 32;
 }

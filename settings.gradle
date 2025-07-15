@@ -7,8 +7,8 @@ include(
         ":jvk_base",
         ":jvk_generator",
         ":jvk_generated",
-        //":nativelib",
-        ":engine",
+        ":jvk_demo",
+        //":engine",
 
         ":sosaldb-base",
         ":sosaldb-server",

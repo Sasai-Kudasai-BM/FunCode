@@ -647,7 +647,7 @@ public sealed class VK10 permits VK11 {
 	}
 	
 	
-	private static final MethodHandle vkWaitForFences = createHandle(VkDefinitions.LIBRARY_LOOKUP, "vkWaitForFences", INT, LONG, INT, LONG, INT, LONG);
+	private static final MethodHandle vkWaitForFences = createHandle(VkDefinitions.LIBRARY_LOOKUP, "vkWaitForFences", INT, LONG, INT, LONG, BOOLEAN, LONG);
 	
 	/**
 	*<pre>
@@ -656,9 +656,9 @@ public sealed class VK10 permits VK11 {
 	*</pre>
 	**/
 	@NativeType("VkResult")
-	public static int vkWaitForFences(@NativeType("VkDevice*") long device, @NativeType("uint32_t") int fenceCount, @NativeType("VkFence**") long pFences, @NativeType("VkBool32") int waitAll, @NativeType("uint64_t") long timeout) {
+	public static int vkWaitForFences(@NativeType("VkDevice*") long device, @NativeType("uint32_t") int fenceCount, @NativeType("VkFence**") long pFences, @NativeType("VkBool32") boolean waitAll, @NativeType("uint64_t") long timeout) {
 		try {
-			return (int) vkWaitForFences.invokeExact(device, fenceCount, pFences, waitAll, timeout);
+			return (int) vkWaitForFences.invokeExact(device, fenceCount, pFences, waitAll ? (int) 1 : (int) 0, timeout);
 		} catch (Throwable e) {
 			throw new Error(e);
 		}
@@ -785,7 +785,6 @@ public sealed class VK10 permits VK11 {
 	
 	
 	// Query commands
-	// Will add VkQueryPoolCreateFlagBits when bits are defined in the future
 	
 	private static final MethodHandle vkCreateQueryPool = createHandle(VkDefinitions.LIBRARY_LOOKUP, "vkCreateQueryPool", INT, LONG, LONG, LONG, LONG);
 	
@@ -907,7 +906,7 @@ public sealed class VK10 permits VK11 {
 	/**
 	*<pre>
 	* successcodes = VK_SUCCESS
-	* errorcodes = VK_ERROR_OUT_OF_HOST_MEMORY,VK_ERROR_OUT_OF_DEVICE_MEMORY,VK_ERROR_COMPRESSION_EXHAUSTED_EXT
+	* errorcodes = VK_ERROR_OUT_OF_HOST_MEMORY,VK_ERROR_OUT_OF_DEVICE_MEMORY,VK_ERROR_COMPRESSION_EXHAUSTED_EXT,VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS_KHR
 	*</pre>
 	**/
 	@NativeType("VkResult")
@@ -951,7 +950,7 @@ public sealed class VK10 permits VK11 {
 	/**
 	*<pre>
 	* successcodes = VK_SUCCESS
-	* errorcodes = VK_ERROR_OUT_OF_HOST_MEMORY,VK_ERROR_OUT_OF_DEVICE_MEMORY
+	* errorcodes = VK_ERROR_OUT_OF_HOST_MEMORY,VK_ERROR_OUT_OF_DEVICE_MEMORY,VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS_KHR
 	*</pre>
 	**/
 	@NativeType("VkResult")
@@ -1095,7 +1094,7 @@ public sealed class VK10 permits VK11 {
 	*</pre>
 	**/
 	@NativeType("VkResult")
-	public static int vkCreateGraphicsPipelines(@NativeType("VkDevice*") long device, /* optional */ @NativeType("VkPipelineCache*") long pipelineCache, @NativeType("uint32_t") int createInfoCount, @NativeType("VkGraphicsPipelineCreateInfo*") long pCreateInfos, /* optional */ @NativeType("VkAllocationCallbacks*") long pAllocator, @NativeType("VkPipeline**") long pPipelines) {
+	public static int vkCreateGraphicsPipelines(@NativeType("VkDevice*") long device, /* optional, external sync */ @NativeType("VkPipelineCache*") long pipelineCache, @NativeType("uint32_t") int createInfoCount, @NativeType("VkGraphicsPipelineCreateInfo*") long pCreateInfos, /* optional */ @NativeType("VkAllocationCallbacks*") long pAllocator, @NativeType("VkPipeline**") long pPipelines) {
 		try {
 			return (int) vkCreateGraphicsPipelines.invokeExact(device, pipelineCache, createInfoCount, pCreateInfos, pAllocator, pPipelines);
 		} catch (Throwable e) {
@@ -1113,7 +1112,7 @@ public sealed class VK10 permits VK11 {
 	*</pre>
 	**/
 	@NativeType("VkResult")
-	public static int vkCreateComputePipelines(@NativeType("VkDevice*") long device, /* optional */ @NativeType("VkPipelineCache*") long pipelineCache, @NativeType("uint32_t") int createInfoCount, @NativeType("VkComputePipelineCreateInfo*") long pCreateInfos, /* optional */ @NativeType("VkAllocationCallbacks*") long pAllocator, @NativeType("VkPipeline**") long pPipelines) {
+	public static int vkCreateComputePipelines(@NativeType("VkDevice*") long device, /* optional, external sync */ @NativeType("VkPipelineCache*") long pipelineCache, @NativeType("uint32_t") int createInfoCount, @NativeType("VkComputePipelineCreateInfo*") long pCreateInfos, /* optional */ @NativeType("VkAllocationCallbacks*") long pAllocator, @NativeType("VkPipeline**") long pPipelines) {
 		try {
 			return (int) vkCreateComputePipelines.invokeExact(device, pipelineCache, createInfoCount, pCreateInfos, pAllocator, pPipelines);
 		} catch (Throwable e) {
@@ -1173,7 +1172,7 @@ public sealed class VK10 permits VK11 {
 	/**
 	*<pre>
 	* successcodes = VK_SUCCESS
-	* errorcodes = VK_ERROR_OUT_OF_HOST_MEMORY,VK_ERROR_OUT_OF_DEVICE_MEMORY
+	* errorcodes = VK_ERROR_OUT_OF_HOST_MEMORY,VK_ERROR_OUT_OF_DEVICE_MEMORY,VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS_KHR
 	*</pre>
 	**/
 	@NativeType("VkResult")
@@ -1282,7 +1281,7 @@ public sealed class VK10 permits VK11 {
 	*</pre>
 	**/
 	@NativeType("VkResult")
-	public static int vkAllocateDescriptorSets(@NativeType("VkDevice*") long device, /* external sync */ @NativeType("VkDescriptorSetAllocateInfo*") long pAllocateInfo, @NativeType("VkDescriptorSet**") long pDescriptorSets) {
+	public static int vkAllocateDescriptorSets(@NativeType("VkDevice*") long device, @NativeType("VkDescriptorSetAllocateInfo*") long pAllocateInfo, @NativeType("VkDescriptorSet**") long pDescriptorSets) {
 		try {
 			return (int) vkAllocateDescriptorSets.invokeExact(device, pAllocateInfo, pDescriptorSets);
 		} catch (Throwable e) {
@@ -1307,7 +1306,7 @@ public sealed class VK10 permits VK11 {
 	private static final MethodHandle vkUpdateDescriptorSets = createHandle(VkDefinitions.LIBRARY_LOOKUP, "vkUpdateDescriptorSets", VOID, LONG, INT, LONG, INT, LONG);
 	
 	@NativeType("void")
-	public static void vkUpdateDescriptorSets(@NativeType("VkDevice*") long device, /* optional */ @NativeType("uint32_t") int descriptorWriteCount, /* external sync */ @NativeType("VkWriteDescriptorSet*") long pDescriptorWrites, /* optional */ @NativeType("uint32_t") int descriptorCopyCount, /* external sync */ @NativeType("VkCopyDescriptorSet*") long pDescriptorCopies) {
+	public static void vkUpdateDescriptorSets(@NativeType("VkDevice*") long device, /* optional */ @NativeType("uint32_t") int descriptorWriteCount, /* external sync */ @NativeType("VkWriteDescriptorSet*") long pDescriptorWrites, /* optional */ @NativeType("uint32_t") int descriptorCopyCount, @NativeType("VkCopyDescriptorSet*") long pDescriptorCopies) {
 		try {
 			vkUpdateDescriptorSets.invokeExact(device, descriptorWriteCount, pDescriptorWrites, descriptorCopyCount, pDescriptorCopies);
 		} catch (Throwable e) {
@@ -1451,7 +1450,7 @@ public sealed class VK10 permits VK11 {
 	*</pre>
 	**/
 	@NativeType("VkResult")
-	public static int vkAllocateCommandBuffers(@NativeType("VkDevice*") long device, /* external sync */ @NativeType("VkCommandBufferAllocateInfo*") long pAllocateInfo, @NativeType("VkCommandBuffer**") long pCommandBuffers) {
+	public static int vkAllocateCommandBuffers(@NativeType("VkDevice*") long device, @NativeType("VkCommandBufferAllocateInfo*") long pAllocateInfo, @NativeType("VkCommandBuffer**") long pCommandBuffers) {
 		try {
 			return (int) vkAllocateCommandBuffers.invokeExact(device, pAllocateInfo, pCommandBuffers);
 		} catch (Throwable e) {
@@ -1495,7 +1494,7 @@ public sealed class VK10 permits VK11 {
 	/**
 	*<pre>
 	* successcodes = VK_SUCCESS
-	* errorcodes = VK_ERROR_OUT_OF_HOST_MEMORY,VK_ERROR_OUT_OF_DEVICE_MEMORY
+	* errorcodes = VK_ERROR_OUT_OF_HOST_MEMORY,VK_ERROR_OUT_OF_DEVICE_MEMORY,VK_ERROR_INVALID_VIDEO_STD_PARAMETERS_KHR
 	*</pre>
 	**/
 	@NativeType("VkResult")
@@ -1663,7 +1662,7 @@ public sealed class VK10 permits VK11 {
 	private static final MethodHandle vkCmdBindIndexBuffer = createHandle(VkDefinitions.LIBRARY_LOOKUP, "vkCmdBindIndexBuffer", VOID, LONG, LONG, LONG, INT);
 	
 	@NativeType("void")
-	public static void vkCmdBindIndexBuffer(/* external sync */ @NativeType("VkCommandBuffer*") long commandBuffer, @NativeType("VkBuffer*") long buffer, @NativeType("VkDeviceSize") long offset, @NativeType("VkIndexType") int indexType) {
+	public static void vkCmdBindIndexBuffer(/* external sync */ @NativeType("VkCommandBuffer*") long commandBuffer, /* optional */ @NativeType("VkBuffer*") long buffer, @NativeType("VkDeviceSize") long offset, @NativeType("VkIndexType") int indexType) {
 		try {
 			vkCmdBindIndexBuffer.invokeExact(commandBuffer, buffer, offset, indexType);
 		} catch (Throwable e) {

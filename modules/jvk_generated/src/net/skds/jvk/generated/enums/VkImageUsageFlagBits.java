@@ -21,19 +21,22 @@ public final class VkImageUsageFlagBits {
 	public static final int VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT = 64;
 	/** Can be used as framebuffer input attachment **/
 	public static final int VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT = 128;
+	public static final int VK_IMAGE_USAGE_HOST_TRANSFER_BIT = 4194304;
 	public static final int VK_IMAGE_USAGE_VIDEO_DECODE_DST_BIT_KHR = 1024;
 	public static final int VK_IMAGE_USAGE_VIDEO_DECODE_SRC_BIT_KHR = 2048;
 	public static final int VK_IMAGE_USAGE_VIDEO_DECODE_DPB_BIT_KHR = 4096;
-	public static final int VK_IMAGE_USAGE_RESERVED_16_BIT_QCOM = 65536;
-	public static final int VK_IMAGE_USAGE_RESERVED_17_BIT_QCOM = 131072;
 	public static final int VK_IMAGE_USAGE_FRAGMENT_DENSITY_MAP_BIT_EXT = 512;
 	public static final int VK_IMAGE_USAGE_FRAGMENT_SHADING_RATE_ATTACHMENT_BIT_KHR = 256;
-	public static final int VK_IMAGE_USAGE_RESERVED_22_BIT_EXT = 4194304;
 	public static final int VK_IMAGE_USAGE_VIDEO_ENCODE_DST_BIT_KHR = 8192;
 	public static final int VK_IMAGE_USAGE_VIDEO_ENCODE_SRC_BIT_KHR = 16384;
 	public static final int VK_IMAGE_USAGE_VIDEO_ENCODE_DPB_BIT_KHR = 32768;
-	public static final int VK_IMAGE_USAGE_RESERVED_19_BIT_EXT = 524288;
+	public static final int VK_IMAGE_USAGE_ATTACHMENT_FEEDBACK_LOOP_BIT_EXT = 524288;
 	public static final int VK_IMAGE_USAGE_INVOCATION_MASK_BIT_HUAWEI = 262144;
-	public static final int VK_IMAGE_USAGE_RESERVED_20_BIT_QCOM = 1048576;
-	public static final int VK_IMAGE_USAGE_RESERVED_21_BIT_QCOM = 2097152;
+	public static final int VK_IMAGE_USAGE_SAMPLE_WEIGHT_BIT_QCOM = 1048576;
+	public static final int VK_IMAGE_USAGE_SAMPLE_BLOCK_MATCH_BIT_QCOM = 2097152;
+	public static final int VK_IMAGE_USAGE_RESERVED_24_BIT_COREAVI = 16777216;
+	public static final int VK_IMAGE_USAGE_TENSOR_ALIASING_BIT_ARM = 8388608;
+	public static final int VK_IMAGE_USAGE_TILE_MEMORY_BIT_QCOM = 134217728;
+	public static final int VK_IMAGE_USAGE_VIDEO_ENCODE_QUANTIZATION_DELTA_MAP_BIT_KHR = 33554432;
+	public static final int VK_IMAGE_USAGE_VIDEO_ENCODE_EMPHASIS_MAP_BIT_KHR = 67108864;
 }

@@ -18,5 +18,7 @@ public final class VkQueueFlagBits {
 	public static final int VK_QUEUE_VIDEO_DECODE_BIT_KHR = 32;
 	public static final int VK_QUEUE_VIDEO_ENCODE_BIT_KHR = 64;
 	public static final int VK_QUEUE_RESERVED_7_BIT_QCOM = 128;
-	public static final int VK_QUEUE_RESERVED_8_BIT_NV = 256;
+	public static final int VK_QUEUE_RESERVED_11_BIT_ARM = 2048;
+	public static final int VK_QUEUE_OPTICAL_FLOW_BIT_NV = 256;
+	public static final int VK_QUEUE_DATA_GRAPH_BIT_ARM = 1024;
 }

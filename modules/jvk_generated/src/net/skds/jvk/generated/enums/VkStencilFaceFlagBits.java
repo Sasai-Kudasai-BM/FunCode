@@ -11,6 +11,5 @@ public final class VkStencilFaceFlagBits {
 	public static final int VK_STENCIL_FACE_BACK_BIT = 2;
 	/** Front and back faces **/
 	public static final int VK_STENCIL_FACE_FRONT_AND_BACK = 3;
-	/** Backwards-compatible alias containing a typo **/
 	public static final int VK_STENCIL_FRONT_AND_BACK = 3;
 }

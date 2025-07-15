@@ -13,11 +13,20 @@ public final class VkKhrVideoEncodeQueue {
 	public static final long VK_PIPELINE_STAGE_2_VIDEO_ENCODE_BIT_KHR = 134217728L;
 	public static final long VK_ACCESS_2_VIDEO_ENCODE_READ_BIT_KHR = 137438953472L;
 	public static final long VK_ACCESS_2_VIDEO_ENCODE_WRITE_BIT_KHR = 274877906944L;
-	public static final int VK_STRUCTURE_TYPE_VIDEO_ENCODE_INFO_KHR = 0;
-	public static final int VK_STRUCTURE_TYPE_VIDEO_ENCODE_RATE_CONTROL_INFO_KHR = 1;
-	public static final int VK_STRUCTURE_TYPE_VIDEO_ENCODE_RATE_CONTROL_LAYER_INFO_KHR = 2;
-	public static final int VK_STRUCTURE_TYPE_VIDEO_ENCODE_CAPABILITIES_KHR = 3;
+	public static final int VK_STRUCTURE_TYPE_VIDEO_ENCODE_INFO_KHR = 1000299000;
+	public static final int VK_STRUCTURE_TYPE_VIDEO_ENCODE_RATE_CONTROL_INFO_KHR = 1000299001;
+	public static final int VK_STRUCTURE_TYPE_VIDEO_ENCODE_RATE_CONTROL_LAYER_INFO_KHR = 1000299002;
+	public static final int VK_STRUCTURE_TYPE_VIDEO_ENCODE_CAPABILITIES_KHR = 1000299003;
+	public static final int VK_STRUCTURE_TYPE_VIDEO_ENCODE_USAGE_INFO_KHR = 1000299004;
+	public static final int VK_STRUCTURE_TYPE_QUERY_POOL_VIDEO_ENCODE_FEEDBACK_CREATE_INFO_KHR = 1000299005;
+	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VIDEO_ENCODE_QUALITY_LEVEL_INFO_KHR = 1000299006;
+	public static final int VK_STRUCTURE_TYPE_VIDEO_ENCODE_QUALITY_LEVEL_PROPERTIES_KHR = 1000299007;
+	public static final int VK_STRUCTURE_TYPE_VIDEO_ENCODE_QUALITY_LEVEL_INFO_KHR = 1000299008;
+	public static final int VK_STRUCTURE_TYPE_VIDEO_ENCODE_SESSION_PARAMETERS_GET_INFO_KHR = 1000299009;
+	public static final int VK_STRUCTURE_TYPE_VIDEO_ENCODE_SESSION_PARAMETERS_FEEDBACK_INFO_KHR = 1000299010;
 	public static final int VK_QUEUE_VIDEO_ENCODE_BIT_KHR = 64;
+	public static final int VK_VIDEO_CODING_CONTROL_ENCODE_RATE_CONTROL_BIT_KHR = 2;
+	public static final int VK_VIDEO_CODING_CONTROL_ENCODE_QUALITY_LEVEL_BIT_KHR = 4;
 	public static final int VK_BUFFER_USAGE_VIDEO_ENCODE_DST_BIT_KHR = 32768;
 	public static final int VK_BUFFER_USAGE_VIDEO_ENCODE_SRC_BIT_KHR = 65536;
 	public static final int VK_IMAGE_USAGE_VIDEO_ENCODE_DST_BIT_KHR = 8192;
@@ -25,14 +34,53 @@ public final class VkKhrVideoEncodeQueue {
 	public static final int VK_IMAGE_USAGE_VIDEO_ENCODE_DPB_BIT_KHR = 32768;
 	public static final int VK_FORMAT_FEATURE_VIDEO_ENCODE_INPUT_BIT_KHR = 134217728;
 	public static final int VK_FORMAT_FEATURE_VIDEO_ENCODE_DPB_BIT_KHR = 268435456;
-	public static final int VK_IMAGE_LAYOUT_VIDEO_ENCODE_DST_KHR = 0;
-	public static final int VK_IMAGE_LAYOUT_VIDEO_ENCODE_SRC_KHR = 1;
-	public static final int VK_IMAGE_LAYOUT_VIDEO_ENCODE_DPB_KHR = 2;
-	public static final int VK_QUERY_TYPE_VIDEO_ENCODE_BITSTREAM_BUFFER_RANGE_KHR = 0;
+	public static final int VK_VIDEO_SESSION_CREATE_ALLOW_ENCODE_PARAMETER_OPTIMIZATIONS_BIT_KHR = 2;
+	public static final int VK_IMAGE_LAYOUT_VIDEO_ENCODE_DST_KHR = 1000299000;
+	public static final int VK_IMAGE_LAYOUT_VIDEO_ENCODE_SRC_KHR = 1000299001;
+	public static final int VK_IMAGE_LAYOUT_VIDEO_ENCODE_DPB_KHR = 1000299002;
+	public static final int VK_QUERY_TYPE_VIDEO_ENCODE_FEEDBACK_KHR = 1000299000;
+	public static final int VK_QUERY_RESULT_STATUS_INSUFFICIENT_BITSTREAM_BUFFER_RANGE_KHR = 1000299000;
+	public static final int VK_ERROR_INVALID_VIDEO_STD_PARAMETERS_KHR = 1000299000;
+	private static final MethodHandle vkGetPhysicalDeviceVideoEncodeQualityLevelPropertiesKHR = createHandle(VkDefinitions.LIBRARY_LOOKUP, "vkGetPhysicalDeviceVideoEncodeQualityLevelPropertiesKHR", INT, LONG, LONG, LONG);
+	
+	/**
+	*<pre>
+	* successcodes = VK_SUCCESS
+	* errorcodes = VK_ERROR_OUT_OF_HOST_MEMORY,VK_ERROR_OUT_OF_DEVICE_MEMORY,VK_ERROR_VIDEO_PROFILE_OPERATION_NOT_SUPPORTED_KHR,VK_ERROR_VIDEO_PROFILE_FORMAT_NOT_SUPPORTED_KHR,VK_ERROR_VIDEO_PICTURE_LAYOUT_NOT_SUPPORTED_KHR,VK_ERROR_VIDEO_PROFILE_CODEC_NOT_SUPPORTED_KHR
+	*</pre>
+	**/
+	@NativeType("VkResult")
+	public static int vkGetPhysicalDeviceVideoEncodeQualityLevelPropertiesKHR(@NativeType("VkPhysicalDevice*") long physicalDevice, @NativeType("VkPhysicalDeviceVideoEncodeQualityLevelInfoKHR*") long pQualityLevelInfo, @NativeType("VkVideoEncodeQualityLevelPropertiesKHR*") long pQualityLevelProperties) {
+		try {
+			return (int) vkGetPhysicalDeviceVideoEncodeQualityLevelPropertiesKHR.invokeExact(physicalDevice, pQualityLevelInfo, pQualityLevelProperties);
+		} catch (Throwable e) {
+			throw new Error(e);
+		}
+	}
+	
+	
+	private static final MethodHandle vkGetEncodedVideoSessionParametersKHR = createHandle(VkDefinitions.LIBRARY_LOOKUP, "vkGetEncodedVideoSessionParametersKHR", INT, LONG, LONG, LONG, LONG, LONG);
+	
+	/**
+	*<pre>
+	* successcodes = VK_SUCCESS,VK_INCOMPLETE
+	* errorcodes = VK_ERROR_OUT_OF_HOST_MEMORY,VK_ERROR_OUT_OF_DEVICE_MEMORY
+	*</pre>
+	**/
+	@NativeType("VkResult")
+	public static int vkGetEncodedVideoSessionParametersKHR(@NativeType("VkDevice*") long device, @NativeType("VkVideoEncodeSessionParametersGetInfoKHR*") long pVideoSessionParametersInfo, /* optional */ @NativeType("VkVideoEncodeSessionParametersFeedbackInfoKHR*") long pFeedbackInfo, /* optional */ @NativeType("size_t*") long pDataSize, /* optional */ @NativeType("void*") long pData) {
+		try {
+			return (int) vkGetEncodedVideoSessionParametersKHR.invokeExact(device, pVideoSessionParametersInfo, pFeedbackInfo, pDataSize, pData);
+		} catch (Throwable e) {
+			throw new Error(e);
+		}
+	}
+	
+	
 	private static final MethodHandle vkCmdEncodeVideoKHR = createHandle(VkDefinitions.LIBRARY_LOOKUP, "vkCmdEncodeVideoKHR", VOID, LONG, LONG);
 	
 	@NativeType("void")
-	public static void vkCmdEncodeVideoKHR(@NativeType("VkCommandBuffer*") long commandBuffer, @NativeType("VkVideoEncodeInfoKHR*") long pEncodeInfo) {
+	public static void vkCmdEncodeVideoKHR(/* external sync */ @NativeType("VkCommandBuffer*") long commandBuffer, @NativeType("VkVideoEncodeInfoKHR*") long pEncodeInfo) {
 		try {
 			vkCmdEncodeVideoKHR.invokeExact(commandBuffer, pEncodeInfo);
 		} catch (Throwable e) {

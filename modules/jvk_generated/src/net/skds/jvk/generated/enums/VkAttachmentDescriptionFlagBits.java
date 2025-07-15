@@ -7,4 +7,6 @@ public final class VkAttachmentDescriptionFlagBits {
 	
 	/** The attachment may alias physical memory of another attachment in the same render pass **/
 	public static final int VK_ATTACHMENT_DESCRIPTION_MAY_ALIAS_BIT = 1;
+	public static final int VK_ATTACHMENT_DESCRIPTION_RESERVED_1_BIT_KHR = 2;
+	public static final int VK_ATTACHMENT_DESCRIPTION_RESERVED_2_BIT_KHR = 4;
 }

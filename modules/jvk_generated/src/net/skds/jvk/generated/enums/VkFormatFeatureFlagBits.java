@@ -49,11 +49,10 @@ public final class VkFormatFeatureFlagBits {
 	public static final int VK_FORMAT_FEATURE_COSITED_CHROMA_SAMPLES_BIT = 8388608;
 	/** Format can be used with min/max reduction filtering **/
 	public static final int VK_FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_MINMAX_BIT = 65536;
-	/** Format can be filtered with VK_FILTER_CUBIC_IMG when being sampled **/
-	public static final int VK_FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_CUBIC_BIT_IMG = 8192;
 	public static final int VK_FORMAT_FEATURE_VIDEO_DECODE_OUTPUT_BIT_KHR = 33554432;
 	public static final int VK_FORMAT_FEATURE_VIDEO_DECODE_DPB_BIT_KHR = 67108864;
 	public static final int VK_FORMAT_FEATURE_ACCELERATION_STRUCTURE_VERTEX_BUFFER_BIT_KHR = 536870912;
+	public static final int VK_FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_CUBIC_BIT_EXT = 8192;
 	public static final int VK_FORMAT_FEATURE_FRAGMENT_DENSITY_MAP_BIT_EXT = 16777216;
 	public static final int VK_FORMAT_FEATURE_FRAGMENT_SHADING_RATE_ATTACHMENT_BIT_KHR = 1073741824;
 	public static final int VK_FORMAT_FEATURE_VIDEO_ENCODE_INPUT_BIT_KHR = 134217728;

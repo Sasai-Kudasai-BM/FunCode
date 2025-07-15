@@ -42,7 +42,7 @@ class VKCommand implements ICommand {
 		var params = e.getElementsByTagName("param");
 		for (int i = 0; i < params.getLength(); i++) {
 			Element param = (Element) params.item(i);
-
+			if (!VKGen.isApiAllowed(param.getAttribute("api"))) continue;
 			boolean prOp = param.hasAttribute("optional");
 			boolean extSync = param.hasAttribute("externsync");
 
@@ -78,6 +78,11 @@ class VKCommand implements ICommand {
 	@Override
 	public List<CBMethod.Arg> arguments() {
 		return CommandArgument.arguments(arguments);
+	}
+
+	@Override
+	public List<CommandArgument> rawArguments() {
+		return arguments;
 	}
 
 	@Override
@@ -143,6 +148,11 @@ class VKCommand implements ICommand {
 		@Override
 		public List<CBMethod.Arg> arguments() {
 			return getParent().arguments();
+		}
+
+		@Override
+		public List<CommandArgument> rawArguments() {
+			return parent.rawArguments();
 		}
 
 		@Override

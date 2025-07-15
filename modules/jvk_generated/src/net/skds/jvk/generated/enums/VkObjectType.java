@@ -31,27 +31,41 @@ public final class VkObjectType {
 	public static final int VK_OBJECT_TYPE_DESCRIPTOR_SET = 23;
 	public static final int VK_OBJECT_TYPE_FRAMEBUFFER = 24;
 	public static final int VK_OBJECT_TYPE_COMMAND_POOL = 25;
-	public static final int VK_OBJECT_TYPE_SAMPLER_YCBCR_CONVERSION = 0;
-	public static final int VK_OBJECT_TYPE_DESCRIPTOR_UPDATE_TEMPLATE = 0;
-	public static final int VK_OBJECT_TYPE_PRIVATE_DATA_SLOT = 0;
-	public static final int VK_OBJECT_TYPE_SURFACE_KHR = 0;
-	public static final int VK_OBJECT_TYPE_SWAPCHAIN_KHR = 0;
-	public static final int VK_OBJECT_TYPE_DISPLAY_KHR = 0;
-	public static final int VK_OBJECT_TYPE_DISPLAY_MODE_KHR = 1;
-	public static final int VK_OBJECT_TYPE_DEBUG_REPORT_CALLBACK_EXT = 0;
+	public static final int VK_OBJECT_TYPE_SAMPLER_YCBCR_CONVERSION = 1000156000;
+	public static final int VK_OBJECT_TYPE_DESCRIPTOR_UPDATE_TEMPLATE = 1000085000;
+	public static final int VK_OBJECT_TYPE_PRIVATE_DATA_SLOT = 1000295000;
+	public static final int VK_OBJECT_TYPE_SURFACE_KHR = 1000000000;
+	public static final int VK_OBJECT_TYPE_SWAPCHAIN_KHR = 1000001000;
+	public static final int VK_OBJECT_TYPE_DISPLAY_KHR = 1000002000;
+	public static final int VK_OBJECT_TYPE_DISPLAY_MODE_KHR = 1000002001;
+	public static final int VK_OBJECT_TYPE_DEBUG_REPORT_CALLBACK_EXT = 1000011000;
 	/** VkVideoSessionKHR **/
-	public static final int VK_OBJECT_TYPE_VIDEO_SESSION_KHR = 0;
+	public static final int VK_OBJECT_TYPE_VIDEO_SESSION_KHR = 1000023000;
 	/** VkVideoSessionParametersKHR **/
-	public static final int VK_OBJECT_TYPE_VIDEO_SESSION_PARAMETERS_KHR = 1;
-	public static final int VK_OBJECT_TYPE_CU_MODULE_NVX = 0;
-	public static final int VK_OBJECT_TYPE_CU_FUNCTION_NVX = 1;
-	public static final int VK_OBJECT_TYPE_DEBUG_UTILS_MESSENGER_EXT = 0;
-	public static final int VK_OBJECT_TYPE_ACCELERATION_STRUCTURE_KHR = 0;
-	public static final int VK_OBJECT_TYPE_VALIDATION_CACHE_EXT = 0;
-	public static final int VK_OBJECT_TYPE_ACCELERATION_STRUCTURE_NV = 0;
-	public static final int VK_OBJECT_TYPE_PERFORMANCE_CONFIGURATION_INTEL = 0;
-	public static final int VK_OBJECT_TYPE_DEFERRED_OPERATION_KHR = 0;
-	public static final int VK_OBJECT_TYPE_INDIRECT_COMMANDS_LAYOUT_NV = 0;
+	public static final int VK_OBJECT_TYPE_VIDEO_SESSION_PARAMETERS_KHR = 1000023001;
+	public static final int VK_OBJECT_TYPE_CU_MODULE_NVX = 1000029000;
+	public static final int VK_OBJECT_TYPE_CU_FUNCTION_NVX = 1000029001;
+	public static final int VK_OBJECT_TYPE_DEBUG_UTILS_MESSENGER_EXT = 1000128000;
+	public static final int VK_OBJECT_TYPE_ACCELERATION_STRUCTURE_KHR = 1000150000;
+	public static final int VK_OBJECT_TYPE_VALIDATION_CACHE_EXT = 1000160000;
+	public static final int VK_OBJECT_TYPE_ACCELERATION_STRUCTURE_NV = 1000165000;
+	public static final int VK_OBJECT_TYPE_PERFORMANCE_CONFIGURATION_INTEL = 1000210000;
+	public static final int VK_OBJECT_TYPE_DEFERRED_OPERATION_KHR = 1000268000;
+	public static final int VK_OBJECT_TYPE_INDIRECT_COMMANDS_LAYOUT_NV = 1000277000;
+	public static final int VK_OBJECT_TYPE_CUDA_MODULE_NV = 1000307000;
+	public static final int VK_OBJECT_TYPE_CUDA_FUNCTION_NV = 1000307001;
 	/** VkBufferCollectionFUCHSIA **/
-	public static final int VK_OBJECT_TYPE_BUFFER_COLLECTION_FUCHSIA = 0;
+	public static final int VK_OBJECT_TYPE_BUFFER_COLLECTION_FUCHSIA = 1000366000;
+	public static final int VK_OBJECT_TYPE_MICROMAP_EXT = 1000396000;
+	public static final int VK_OBJECT_TYPE_TENSOR_ARM = 1000460000;
+	public static final int VK_OBJECT_TYPE_TENSOR_VIEW_ARM = 1000460001;
+	public static final int VK_OBJECT_TYPE_OPTICAL_FLOW_SESSION_NV = 1000464000;
+	public static final int VK_OBJECT_TYPE_SHADER_EXT = 1000482000;
+	public static final int VK_OBJECT_TYPE_PIPELINE_BINARY_KHR = 1000483000;
+	/** VkSemaphoreSciSyncPoolNV **/
+	public static final int VK_OBJECT_TYPE_SEMAPHORE_SCI_SYNC_POOL_NV = 1000489000;
+	public static final int VK_OBJECT_TYPE_DATA_GRAPH_PIPELINE_SESSION_ARM = 1000507000;
+	public static final int VK_OBJECT_TYPE_EXTERNAL_COMPUTE_QUEUE_NV = 1000556000;
+	public static final int VK_OBJECT_TYPE_INDIRECT_COMMANDS_LAYOUT_EXT = 1000572000;
+	public static final int VK_OBJECT_TYPE_INDIRECT_EXECUTION_SET_EXT = 1000572001;
 }

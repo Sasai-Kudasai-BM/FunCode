@@ -28,5 +28,5 @@ public final class VkKhrPresentWait {
 	}
 	
 	
-	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PRESENT_WAIT_FEATURES_KHR = 0;
+	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PRESENT_WAIT_FEATURES_KHR = 1000248000;
 }

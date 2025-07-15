@@ -11,13 +11,16 @@ public class VkDefinitions {
 	public static final SymbolLookup LIBRARY_LOOKUP = VKPlatformFeatures.getInstance().getLibrary();
 	public static final boolean INITIALIZED = LIBRARY_LOOKUP != null;
 
-	public static final int VK_HEADER_VERSION = 216;
+	public static final String VK_API_NAME = "vulkan";
+
+	public static final int VK_HEADER_VERSION = 322;
 
 	public static final int VK_API_VERSION_1_0 = vkMakeApiVersion(0, 1, 0, 0);
 	public static final int VK_API_VERSION_1_1 = vkMakeApiVersion(0, 1, 1, 0);
 	public static final int VK_API_VERSION_1_2 = vkMakeApiVersion(0, 1, 2, 0);
 	public static final int VK_API_VERSION_1_3 = vkMakeApiVersion(0, 1, 3, 0);
-	public static final int VK_HEADER_VERSION_COMPLETE = vkMakeApiVersion(0, 1, 3, VK_HEADER_VERSION);
+	public static final int VK_API_VERSION_1_4 = vkMakeApiVersion(0, 1, 4, 0);
+	public static final int VK_HEADER_VERSION_COMPLETE = vkMakeApiVersion(0, 1, 4, VK_HEADER_VERSION);
 	public static final int VK_USE_64_BIT_PTR_DEFINES = 1;
 	public static final long VK_NULL_HANDLE = 0;
 
@@ -45,6 +48,10 @@ public class VkDefinitions {
 		return vkApiVersionMajor(version) + "."
 				+ vkApiVersionMinor(version) + "."
 				+ vkApiVersionPatch(version);
+	}
+
+	public static int getExtEnumValue(int extNumber, int value) {
+		return 1000000000 + 1000 * (extNumber - 1) + value;
 	}
 
 	public static String getErr(int err) {

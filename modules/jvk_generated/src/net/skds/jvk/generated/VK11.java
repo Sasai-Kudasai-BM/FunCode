@@ -34,7 +34,7 @@ public sealed class VK11 extends VK10 permits VK12 {
 	// Promoted from VK_KHR_storage_buffer_storage_class, which has no API
 	// Originally based on VK_KHR_subgroup (extension 94), but the actual enum block used was, incorrectly, that of extension 95
 	
-	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SUBGROUP_PROPERTIES = 0;
+	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SUBGROUP_PROPERTIES = 1000094000;
 	
 	// Promoted from VK_KHR_bind_memory2
 	
@@ -74,30 +74,30 @@ public sealed class VK11 extends VK10 permits VK12 {
 	}
 	
 	
-	public static final int VK_STRUCTURE_TYPE_BIND_BUFFER_MEMORY_INFO = 0;
-	public static final int VK_STRUCTURE_TYPE_BIND_IMAGE_MEMORY_INFO = 1;
+	public static final int VK_STRUCTURE_TYPE_BIND_BUFFER_MEMORY_INFO = 1000157000;
+	public static final int VK_STRUCTURE_TYPE_BIND_IMAGE_MEMORY_INFO = 1000157001;
 	public static final int VK_IMAGE_CREATE_ALIAS_BIT = 1024;
 	
 	// Promoted from VK_KHR_16bit_storage
 	
-	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_16BIT_STORAGE_FEATURES = 0;
+	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_16BIT_STORAGE_FEATURES = 1000083000;
 	
 	// Promoted from VK_KHR_dedicated_allocation
 	
-	public static final int VK_STRUCTURE_TYPE_MEMORY_DEDICATED_REQUIREMENTS = 0;
-	public static final int VK_STRUCTURE_TYPE_MEMORY_DEDICATED_ALLOCATE_INFO = 1;
+	public static final int VK_STRUCTURE_TYPE_MEMORY_DEDICATED_REQUIREMENTS = 1000127000;
+	public static final int VK_STRUCTURE_TYPE_MEMORY_DEDICATED_ALLOCATE_INFO = 1000127001;
 	
 	// Promoted from VK_KHR_device_group
 	
-	public static final int VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_FLAGS_INFO = 0;
+	public static final int VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_FLAGS_INFO = 1000060000;
 	
 	// offset 1 reserved for the old VK_STRUCTURE_TYPE_BIND_BUFFER_MEMORY_INFO_KHX enum
 	// offset 2 reserved for the old VK_STRUCTURE_TYPE_BIND_IMAGE_MEMORY_INFO_KHX enum
 	
-	public static final int VK_STRUCTURE_TYPE_DEVICE_GROUP_RENDER_PASS_BEGIN_INFO = 3;
-	public static final int VK_STRUCTURE_TYPE_DEVICE_GROUP_COMMAND_BUFFER_BEGIN_INFO = 4;
-	public static final int VK_STRUCTURE_TYPE_DEVICE_GROUP_SUBMIT_INFO = 5;
-	public static final int VK_STRUCTURE_TYPE_DEVICE_GROUP_BIND_SPARSE_INFO = 6;
+	public static final int VK_STRUCTURE_TYPE_DEVICE_GROUP_RENDER_PASS_BEGIN_INFO = 1000060003;
+	public static final int VK_STRUCTURE_TYPE_DEVICE_GROUP_COMMAND_BUFFER_BEGIN_INFO = 1000060004;
+	public static final int VK_STRUCTURE_TYPE_DEVICE_GROUP_SUBMIT_INFO = 1000060005;
+	public static final int VK_STRUCTURE_TYPE_DEVICE_GROUP_BIND_SPARSE_INFO = 1000060006;
 	private static final MethodHandle vkGetDeviceGroupPeerMemoryFeatures = createHandle(VkDefinitions.LIBRARY_LOOKUP, "vkGetDeviceGroupPeerMemoryFeatures", VOID, LONG, INT, INT, INT, LONG);
 	
 	@NativeType("void")
@@ -145,8 +145,8 @@ public sealed class VK11 extends VK10 permits VK12 {
 	
 	// Promoted from VK_KHR_device_group + VK_KHR_bind_memory2
 	
-	public static final int VK_STRUCTURE_TYPE_BIND_BUFFER_MEMORY_DEVICE_GROUP_INFO = 13;
-	public static final int VK_STRUCTURE_TYPE_BIND_IMAGE_MEMORY_DEVICE_GROUP_INFO = 14;
+	public static final int VK_STRUCTURE_TYPE_BIND_BUFFER_MEMORY_DEVICE_GROUP_INFO = 1000060013;
+	public static final int VK_STRUCTURE_TYPE_BIND_IMAGE_MEMORY_DEVICE_GROUP_INFO = 1000060014;
 	
 	// Allows using VkBindImageMemoryDeviceGroupInfo::pSplitInstanceBindRegions when binding memory to the image
 	
@@ -155,8 +155,8 @@ public sealed class VK11 extends VK10 permits VK12 {
 	
 	// Promoted from VK_KHR_device_group_creation
 	
-	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_GROUP_PROPERTIES = 0;
-	public static final int VK_STRUCTURE_TYPE_DEVICE_GROUP_DEVICE_CREATE_INFO = 1;
+	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_GROUP_PROPERTIES = 1000070000;
+	public static final int VK_STRUCTURE_TYPE_DEVICE_GROUP_DEVICE_CREATE_INFO = 1000070001;
 	public static final int VK_MAX_DEVICE_GROUP_SIZE = 32;
 	private static final MethodHandle vkEnumeratePhysicalDeviceGroups = createHandle(VkDefinitions.LIBRARY_LOOKUP, "vkEnumeratePhysicalDeviceGroups", INT, LONG, LONG, LONG);
 	
@@ -183,11 +183,11 @@ public sealed class VK11 extends VK10 permits VK12 {
 	
 	// Promoted from VK_KHR_get_memory_requirements2
 	
-	public static final int VK_STRUCTURE_TYPE_BUFFER_MEMORY_REQUIREMENTS_INFO_2 = 0;
-	public static final int VK_STRUCTURE_TYPE_IMAGE_MEMORY_REQUIREMENTS_INFO_2 = 1;
-	public static final int VK_STRUCTURE_TYPE_IMAGE_SPARSE_MEMORY_REQUIREMENTS_INFO_2 = 2;
-	public static final int VK_STRUCTURE_TYPE_MEMORY_REQUIREMENTS_2 = 3;
-	public static final int VK_STRUCTURE_TYPE_SPARSE_IMAGE_MEMORY_REQUIREMENTS_2 = 4;
+	public static final int VK_STRUCTURE_TYPE_BUFFER_MEMORY_REQUIREMENTS_INFO_2 = 1000146000;
+	public static final int VK_STRUCTURE_TYPE_IMAGE_MEMORY_REQUIREMENTS_INFO_2 = 1000146001;
+	public static final int VK_STRUCTURE_TYPE_IMAGE_SPARSE_MEMORY_REQUIREMENTS_INFO_2 = 1000146002;
+	public static final int VK_STRUCTURE_TYPE_MEMORY_REQUIREMENTS_2 = 1000146003;
+	public static final int VK_STRUCTURE_TYPE_SPARSE_IMAGE_MEMORY_REQUIREMENTS_2 = 1000146004;
 	private static final MethodHandle vkGetImageMemoryRequirements2 = createHandle(VkDefinitions.LIBRARY_LOOKUP, "vkGetImageMemoryRequirements2", VOID, LONG, LONG, LONG);
 	
 	@NativeType("void")
@@ -226,15 +226,15 @@ public sealed class VK11 extends VK10 permits VK12 {
 	
 	// Promoted from VK_KHR_get_physical_device_properties2
 	
-	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2 = 0;
-	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2 = 1;
-	public static final int VK_STRUCTURE_TYPE_FORMAT_PROPERTIES_2 = 2;
-	public static final int VK_STRUCTURE_TYPE_IMAGE_FORMAT_PROPERTIES_2 = 3;
-	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_IMAGE_FORMAT_INFO_2 = 4;
-	public static final int VK_STRUCTURE_TYPE_QUEUE_FAMILY_PROPERTIES_2 = 5;
-	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MEMORY_PROPERTIES_2 = 6;
-	public static final int VK_STRUCTURE_TYPE_SPARSE_IMAGE_FORMAT_PROPERTIES_2 = 7;
-	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SPARSE_IMAGE_FORMAT_INFO_2 = 8;
+	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2 = 1000059000;
+	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2 = 1000059001;
+	public static final int VK_STRUCTURE_TYPE_FORMAT_PROPERTIES_2 = 1000059002;
+	public static final int VK_STRUCTURE_TYPE_IMAGE_FORMAT_PROPERTIES_2 = 1000059003;
+	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_IMAGE_FORMAT_INFO_2 = 1000059004;
+	public static final int VK_STRUCTURE_TYPE_QUEUE_FAMILY_PROPERTIES_2 = 1000059005;
+	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MEMORY_PROPERTIES_2 = 1000059006;
+	public static final int VK_STRUCTURE_TYPE_SPARSE_IMAGE_FORMAT_PROPERTIES_2 = 1000059007;
+	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SPARSE_IMAGE_FORMAT_INFO_2 = 1000059008;
 	private static final MethodHandle vkGetPhysicalDeviceFeatures2 = createHandle(VkDefinitions.LIBRARY_LOOKUP, "vkGetPhysicalDeviceFeatures2", VOID, LONG, LONG);
 	
 	@NativeType("void")
@@ -276,7 +276,7 @@ public sealed class VK11 extends VK10 permits VK12 {
 	/**
 	*<pre>
 	* successcodes = VK_SUCCESS
-	* errorcodes = VK_ERROR_OUT_OF_HOST_MEMORY,VK_ERROR_OUT_OF_DEVICE_MEMORY,VK_ERROR_FORMAT_NOT_SUPPORTED
+	* errorcodes = VK_ERROR_OUT_OF_HOST_MEMORY,VK_ERROR_OUT_OF_DEVICE_MEMORY,VK_ERROR_FORMAT_NOT_SUPPORTED,VK_ERROR_IMAGE_USAGE_NOT_SUPPORTED_KHR,VK_ERROR_VIDEO_PROFILE_OPERATION_NOT_SUPPORTED_KHR,VK_ERROR_VIDEO_PROFILE_FORMAT_NOT_SUPPORTED_KHR,VK_ERROR_VIDEO_PICTURE_LAYOUT_NOT_SUPPORTED_KHR,VK_ERROR_VIDEO_PROFILE_CODEC_NOT_SUPPORTED_KHR
 	*</pre>
 	**/
 	@NativeType("VkResult")
@@ -327,7 +327,7 @@ public sealed class VK11 extends VK10 permits VK12 {
 	
 	// Promoted from VK_KHR_maintenance1
 	
-	public static final int VK_ERROR_OUT_OF_POOL_MEMORY = 0;
+	public static final int VK_ERROR_OUT_OF_POOL_MEMORY = 1000069000;
 	
 	// Format can be used as the source image of image transfer commands
 	
@@ -360,31 +360,31 @@ public sealed class VK11 extends VK10 permits VK12 {
 	
 	public static final int VK_IMAGE_CREATE_BLOCK_TEXEL_VIEW_COMPATIBLE_BIT = 128;
 	public static final int VK_IMAGE_CREATE_EXTENDED_USAGE_BIT = 256;
-	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_POINT_CLIPPING_PROPERTIES = 0;
-	public static final int VK_STRUCTURE_TYPE_RENDER_PASS_INPUT_ATTACHMENT_ASPECT_CREATE_INFO = 1;
-	public static final int VK_STRUCTURE_TYPE_IMAGE_VIEW_USAGE_CREATE_INFO = 2;
-	public static final int VK_STRUCTURE_TYPE_PIPELINE_TESSELLATION_DOMAIN_ORIGIN_STATE_CREATE_INFO = 3;
-	public static final int VK_IMAGE_LAYOUT_DEPTH_READ_ONLY_STENCIL_ATTACHMENT_OPTIMAL = 0;
-	public static final int VK_IMAGE_LAYOUT_DEPTH_ATTACHMENT_STENCIL_READ_ONLY_OPTIMAL = 1;
+	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_POINT_CLIPPING_PROPERTIES = 1000117000;
+	public static final int VK_STRUCTURE_TYPE_RENDER_PASS_INPUT_ATTACHMENT_ASPECT_CREATE_INFO = 1000117001;
+	public static final int VK_STRUCTURE_TYPE_IMAGE_VIEW_USAGE_CREATE_INFO = 1000117002;
+	public static final int VK_STRUCTURE_TYPE_PIPELINE_TESSELLATION_DOMAIN_ORIGIN_STATE_CREATE_INFO = 1000117003;
+	public static final int VK_IMAGE_LAYOUT_DEPTH_READ_ONLY_STENCIL_ATTACHMENT_OPTIMAL = 1000117000;
+	public static final int VK_IMAGE_LAYOUT_DEPTH_ATTACHMENT_STENCIL_READ_ONLY_OPTIMAL = 1000117001;
 	
 	// Promoted from VK_KHR_multiview
 	
-	public static final int VK_STRUCTURE_TYPE_RENDER_PASS_MULTIVIEW_CREATE_INFO = 0;
-	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MULTIVIEW_FEATURES = 1;
-	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MULTIVIEW_PROPERTIES = 2;
+	public static final int VK_STRUCTURE_TYPE_RENDER_PASS_MULTIVIEW_CREATE_INFO = 1000053000;
+	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MULTIVIEW_FEATURES = 1000053001;
+	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MULTIVIEW_PROPERTIES = 1000053002;
 	public static final int VK_DEPENDENCY_VIEW_LOCAL_BIT = 2;
 	
 	// Promoted from VK_KHR_variable_pointers
 	
-	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VARIABLE_POINTERS_FEATURES = 0;
-	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VARIABLE_POINTER_FEATURES = 0;
+	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VARIABLE_POINTERS_FEATURES = 1000120000;
+	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VARIABLE_POINTER_FEATURES = 1000120000;
 	
 	// Originally based on VK_KHR_protected_memory (extension 146), which was never published; thus the mystifying large value= numbers below. These are not aliased since they were not actually promoted from an extension.
 	
-	public static final int VK_STRUCTURE_TYPE_PROTECTED_SUBMIT_INFO = 0;
-	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROTECTED_MEMORY_FEATURES = 1;
-	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROTECTED_MEMORY_PROPERTIES = 2;
-	public static final int VK_STRUCTURE_TYPE_DEVICE_QUEUE_INFO_2 = 3;
+	public static final int VK_STRUCTURE_TYPE_PROTECTED_SUBMIT_INFO = 1000145000;
+	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROTECTED_MEMORY_FEATURES = 1000145001;
+	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROTECTED_MEMORY_PROPERTIES = 1000145002;
+	public static final int VK_STRUCTURE_TYPE_DEVICE_QUEUE_INFO_2 = 1000145003;
 	
 	// Queues may support protected operations
 	
@@ -430,47 +430,47 @@ public sealed class VK11 extends VK10 permits VK12 {
 	
 	// Promoted from VK_KHR_sampler_ycbcr_conversion
 	
-	public static final int VK_STRUCTURE_TYPE_SAMPLER_YCBCR_CONVERSION_CREATE_INFO = 0;
-	public static final int VK_STRUCTURE_TYPE_SAMPLER_YCBCR_CONVERSION_INFO = 1;
-	public static final int VK_STRUCTURE_TYPE_BIND_IMAGE_PLANE_MEMORY_INFO = 2;
-	public static final int VK_STRUCTURE_TYPE_IMAGE_PLANE_MEMORY_REQUIREMENTS_INFO = 3;
-	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SAMPLER_YCBCR_CONVERSION_FEATURES = 4;
-	public static final int VK_STRUCTURE_TYPE_SAMPLER_YCBCR_CONVERSION_IMAGE_FORMAT_PROPERTIES = 5;
-	public static final int VK_OBJECT_TYPE_SAMPLER_YCBCR_CONVERSION = 0;
-	public static final int VK_FORMAT_G8B8G8R8_422_UNORM = 0;
-	public static final int VK_FORMAT_B8G8R8G8_422_UNORM = 1;
-	public static final int VK_FORMAT_G8_B8_R8_3PLANE_420_UNORM = 2;
-	public static final int VK_FORMAT_G8_B8R8_2PLANE_420_UNORM = 3;
-	public static final int VK_FORMAT_G8_B8_R8_3PLANE_422_UNORM = 4;
-	public static final int VK_FORMAT_G8_B8R8_2PLANE_422_UNORM = 5;
-	public static final int VK_FORMAT_G8_B8_R8_3PLANE_444_UNORM = 6;
-	public static final int VK_FORMAT_R10X6_UNORM_PACK16 = 7;
-	public static final int VK_FORMAT_R10X6G10X6_UNORM_2PACK16 = 8;
-	public static final int VK_FORMAT_R10X6G10X6B10X6A10X6_UNORM_4PACK16 = 9;
-	public static final int VK_FORMAT_G10X6B10X6G10X6R10X6_422_UNORM_4PACK16 = 10;
-	public static final int VK_FORMAT_B10X6G10X6R10X6G10X6_422_UNORM_4PACK16 = 11;
-	public static final int VK_FORMAT_G10X6_B10X6_R10X6_3PLANE_420_UNORM_3PACK16 = 12;
-	public static final int VK_FORMAT_G10X6_B10X6R10X6_2PLANE_420_UNORM_3PACK16 = 13;
-	public static final int VK_FORMAT_G10X6_B10X6_R10X6_3PLANE_422_UNORM_3PACK16 = 14;
-	public static final int VK_FORMAT_G10X6_B10X6R10X6_2PLANE_422_UNORM_3PACK16 = 15;
-	public static final int VK_FORMAT_G10X6_B10X6_R10X6_3PLANE_444_UNORM_3PACK16 = 16;
-	public static final int VK_FORMAT_R12X4_UNORM_PACK16 = 17;
-	public static final int VK_FORMAT_R12X4G12X4_UNORM_2PACK16 = 18;
-	public static final int VK_FORMAT_R12X4G12X4B12X4A12X4_UNORM_4PACK16 = 19;
-	public static final int VK_FORMAT_G12X4B12X4G12X4R12X4_422_UNORM_4PACK16 = 20;
-	public static final int VK_FORMAT_B12X4G12X4R12X4G12X4_422_UNORM_4PACK16 = 21;
-	public static final int VK_FORMAT_G12X4_B12X4_R12X4_3PLANE_420_UNORM_3PACK16 = 22;
-	public static final int VK_FORMAT_G12X4_B12X4R12X4_2PLANE_420_UNORM_3PACK16 = 23;
-	public static final int VK_FORMAT_G12X4_B12X4_R12X4_3PLANE_422_UNORM_3PACK16 = 24;
-	public static final int VK_FORMAT_G12X4_B12X4R12X4_2PLANE_422_UNORM_3PACK16 = 25;
-	public static final int VK_FORMAT_G12X4_B12X4_R12X4_3PLANE_444_UNORM_3PACK16 = 26;
-	public static final int VK_FORMAT_G16B16G16R16_422_UNORM = 27;
-	public static final int VK_FORMAT_B16G16R16G16_422_UNORM = 28;
-	public static final int VK_FORMAT_G16_B16_R16_3PLANE_420_UNORM = 29;
-	public static final int VK_FORMAT_G16_B16R16_2PLANE_420_UNORM = 30;
-	public static final int VK_FORMAT_G16_B16_R16_3PLANE_422_UNORM = 31;
-	public static final int VK_FORMAT_G16_B16R16_2PLANE_422_UNORM = 32;
-	public static final int VK_FORMAT_G16_B16_R16_3PLANE_444_UNORM = 33;
+	public static final int VK_STRUCTURE_TYPE_SAMPLER_YCBCR_CONVERSION_CREATE_INFO = 1000156000;
+	public static final int VK_STRUCTURE_TYPE_SAMPLER_YCBCR_CONVERSION_INFO = 1000156001;
+	public static final int VK_STRUCTURE_TYPE_BIND_IMAGE_PLANE_MEMORY_INFO = 1000156002;
+	public static final int VK_STRUCTURE_TYPE_IMAGE_PLANE_MEMORY_REQUIREMENTS_INFO = 1000156003;
+	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SAMPLER_YCBCR_CONVERSION_FEATURES = 1000156004;
+	public static final int VK_STRUCTURE_TYPE_SAMPLER_YCBCR_CONVERSION_IMAGE_FORMAT_PROPERTIES = 1000156005;
+	public static final int VK_OBJECT_TYPE_SAMPLER_YCBCR_CONVERSION = 1000156000;
+	public static final int VK_FORMAT_G8B8G8R8_422_UNORM = 1000156000;
+	public static final int VK_FORMAT_B8G8R8G8_422_UNORM = 1000156001;
+	public static final int VK_FORMAT_G8_B8_R8_3PLANE_420_UNORM = 1000156002;
+	public static final int VK_FORMAT_G8_B8R8_2PLANE_420_UNORM = 1000156003;
+	public static final int VK_FORMAT_G8_B8_R8_3PLANE_422_UNORM = 1000156004;
+	public static final int VK_FORMAT_G8_B8R8_2PLANE_422_UNORM = 1000156005;
+	public static final int VK_FORMAT_G8_B8_R8_3PLANE_444_UNORM = 1000156006;
+	public static final int VK_FORMAT_R10X6_UNORM_PACK16 = 1000156007;
+	public static final int VK_FORMAT_R10X6G10X6_UNORM_2PACK16 = 1000156008;
+	public static final int VK_FORMAT_R10X6G10X6B10X6A10X6_UNORM_4PACK16 = 1000156009;
+	public static final int VK_FORMAT_G10X6B10X6G10X6R10X6_422_UNORM_4PACK16 = 1000156010;
+	public static final int VK_FORMAT_B10X6G10X6R10X6G10X6_422_UNORM_4PACK16 = 1000156011;
+	public static final int VK_FORMAT_G10X6_B10X6_R10X6_3PLANE_420_UNORM_3PACK16 = 1000156012;
+	public static final int VK_FORMAT_G10X6_B10X6R10X6_2PLANE_420_UNORM_3PACK16 = 1000156013;
+	public static final int VK_FORMAT_G10X6_B10X6_R10X6_3PLANE_422_UNORM_3PACK16 = 1000156014;
+	public static final int VK_FORMAT_G10X6_B10X6R10X6_2PLANE_422_UNORM_3PACK16 = 1000156015;
+	public static final int VK_FORMAT_G10X6_B10X6_R10X6_3PLANE_444_UNORM_3PACK16 = 1000156016;
+	public static final int VK_FORMAT_R12X4_UNORM_PACK16 = 1000156017;
+	public static final int VK_FORMAT_R12X4G12X4_UNORM_2PACK16 = 1000156018;
+	public static final int VK_FORMAT_R12X4G12X4B12X4A12X4_UNORM_4PACK16 = 1000156019;
+	public static final int VK_FORMAT_G12X4B12X4G12X4R12X4_422_UNORM_4PACK16 = 1000156020;
+	public static final int VK_FORMAT_B12X4G12X4R12X4G12X4_422_UNORM_4PACK16 = 1000156021;
+	public static final int VK_FORMAT_G12X4_B12X4_R12X4_3PLANE_420_UNORM_3PACK16 = 1000156022;
+	public static final int VK_FORMAT_G12X4_B12X4R12X4_2PLANE_420_UNORM_3PACK16 = 1000156023;
+	public static final int VK_FORMAT_G12X4_B12X4_R12X4_3PLANE_422_UNORM_3PACK16 = 1000156024;
+	public static final int VK_FORMAT_G12X4_B12X4R12X4_2PLANE_422_UNORM_3PACK16 = 1000156025;
+	public static final int VK_FORMAT_G12X4_B12X4_R12X4_3PLANE_444_UNORM_3PACK16 = 1000156026;
+	public static final int VK_FORMAT_G16B16G16R16_422_UNORM = 1000156027;
+	public static final int VK_FORMAT_B16G16R16G16_422_UNORM = 1000156028;
+	public static final int VK_FORMAT_G16_B16_R16_3PLANE_420_UNORM = 1000156029;
+	public static final int VK_FORMAT_G16_B16R16_2PLANE_420_UNORM = 1000156030;
+	public static final int VK_FORMAT_G16_B16_R16_3PLANE_422_UNORM = 1000156031;
+	public static final int VK_FORMAT_G16_B16R16_2PLANE_422_UNORM = 1000156032;
+	public static final int VK_FORMAT_G16_B16_R16_3PLANE_444_UNORM = 1000156033;
 	public static final int VK_IMAGE_ASPECT_PLANE_0_BIT = 16;
 	public static final int VK_IMAGE_ASPECT_PLANE_1_BIT = 32;
 	public static final int VK_IMAGE_ASPECT_PLANE_2_BIT = 64;
@@ -534,8 +534,8 @@ public sealed class VK11 extends VK10 permits VK12 {
 	
 	// Promoted from VK_KHR_descriptor_update_template
 	
-	public static final int VK_STRUCTURE_TYPE_DESCRIPTOR_UPDATE_TEMPLATE_CREATE_INFO = 0;
-	public static final int VK_OBJECT_TYPE_DESCRIPTOR_UPDATE_TEMPLATE = 0;
+	public static final int VK_STRUCTURE_TYPE_DESCRIPTOR_UPDATE_TEMPLATE_CREATE_INFO = 1000085000;
+	public static final int VK_OBJECT_TYPE_DESCRIPTOR_UPDATE_TEMPLATE = 1000085000;
 	private static final MethodHandle vkCreateDescriptorUpdateTemplate = createHandle(VkDefinitions.LIBRARY_LOOKUP, "vkCreateDescriptorUpdateTemplate", INT, LONG, LONG, LONG, LONG);
 	
 	/**
@@ -580,11 +580,11 @@ public sealed class VK11 extends VK10 permits VK12 {
 	
 	// Promoted from VK_KHR_external_memory_capabilities
 	
-	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTERNAL_IMAGE_FORMAT_INFO = 0;
-	public static final int VK_STRUCTURE_TYPE_EXTERNAL_IMAGE_FORMAT_PROPERTIES = 1;
-	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTERNAL_BUFFER_INFO = 2;
-	public static final int VK_STRUCTURE_TYPE_EXTERNAL_BUFFER_PROPERTIES = 3;
-	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_ID_PROPERTIES = 4;
+	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTERNAL_IMAGE_FORMAT_INFO = 1000071000;
+	public static final int VK_STRUCTURE_TYPE_EXTERNAL_IMAGE_FORMAT_PROPERTIES = 1000071001;
+	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTERNAL_BUFFER_INFO = 1000071002;
+	public static final int VK_STRUCTURE_TYPE_EXTERNAL_BUFFER_PROPERTIES = 1000071003;
+	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_ID_PROPERTIES = 1000071004;
 	public static final int VK_LUID_SIZE = 8;
 	private static final MethodHandle vkGetPhysicalDeviceExternalBufferProperties = createHandle(VkDefinitions.LIBRARY_LOOKUP, "vkGetPhysicalDeviceExternalBufferProperties", VOID, LONG, LONG, LONG);
 	
@@ -600,16 +600,16 @@ public sealed class VK11 extends VK10 permits VK12 {
 	
 	// Promoted from VK_KHR_external_memory
 	
-	public static final int VK_STRUCTURE_TYPE_EXTERNAL_MEMORY_BUFFER_CREATE_INFO = 0;
-	public static final int VK_STRUCTURE_TYPE_EXTERNAL_MEMORY_IMAGE_CREATE_INFO = 1;
-	public static final int VK_STRUCTURE_TYPE_EXPORT_MEMORY_ALLOCATE_INFO = 2;
-	public static final int VK_ERROR_INVALID_EXTERNAL_HANDLE = 3;
+	public static final int VK_STRUCTURE_TYPE_EXTERNAL_MEMORY_BUFFER_CREATE_INFO = 1000072000;
+	public static final int VK_STRUCTURE_TYPE_EXTERNAL_MEMORY_IMAGE_CREATE_INFO = 1000072001;
+	public static final int VK_STRUCTURE_TYPE_EXPORT_MEMORY_ALLOCATE_INFO = 1000072002;
+	public static final int VK_ERROR_INVALID_EXTERNAL_HANDLE = 1000072003;
 	public static final int VK_QUEUE_FAMILY_EXTERNAL = 1;
 	
 	// Promoted from VK_KHR_external_fence_capabilities
 	
-	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTERNAL_FENCE_INFO = 0;
-	public static final int VK_STRUCTURE_TYPE_EXTERNAL_FENCE_PROPERTIES = 1;
+	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTERNAL_FENCE_INFO = 1000112000;
+	public static final int VK_STRUCTURE_TYPE_EXTERNAL_FENCE_PROPERTIES = 1000112001;
 	private static final MethodHandle vkGetPhysicalDeviceExternalFenceProperties = createHandle(VkDefinitions.LIBRARY_LOOKUP, "vkGetPhysicalDeviceExternalFenceProperties", VOID, LONG, LONG, LONG);
 	
 	@NativeType("void")
@@ -624,16 +624,16 @@ public sealed class VK11 extends VK10 permits VK12 {
 	
 	// Promoted from VK_KHR_external_fence
 	
-	public static final int VK_STRUCTURE_TYPE_EXPORT_FENCE_CREATE_INFO = 0;
+	public static final int VK_STRUCTURE_TYPE_EXPORT_FENCE_CREATE_INFO = 1000113000;
 	
 	// Promoted from VK_KHR_external_semaphore
 	
-	public static final int VK_STRUCTURE_TYPE_EXPORT_SEMAPHORE_CREATE_INFO = 0;
+	public static final int VK_STRUCTURE_TYPE_EXPORT_SEMAPHORE_CREATE_INFO = 1000077000;
 	
 	// Promoted from VK_KHR_external_semaphore_capabilities
 	
-	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTERNAL_SEMAPHORE_INFO = 0;
-	public static final int VK_STRUCTURE_TYPE_EXTERNAL_SEMAPHORE_PROPERTIES = 1;
+	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTERNAL_SEMAPHORE_INFO = 1000076000;
+	public static final int VK_STRUCTURE_TYPE_EXTERNAL_SEMAPHORE_PROPERTIES = 1000076001;
 	private static final MethodHandle vkGetPhysicalDeviceExternalSemaphoreProperties = createHandle(VkDefinitions.LIBRARY_LOOKUP, "vkGetPhysicalDeviceExternalSemaphoreProperties", VOID, LONG, LONG, LONG);
 	
 	@NativeType("void")
@@ -648,8 +648,8 @@ public sealed class VK11 extends VK10 permits VK12 {
 	
 	// Promoted from VK_KHR_maintenance3
 	
-	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MAINTENANCE_3_PROPERTIES = 0;
-	public static final int VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_SUPPORT = 1;
+	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MAINTENANCE_3_PROPERTIES = 1000168000;
+	public static final int VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_SUPPORT = 1000168001;
 	private static final MethodHandle vkGetDescriptorSetLayoutSupport = createHandle(VkDefinitions.LIBRARY_LOOKUP, "vkGetDescriptorSetLayoutSupport", VOID, LONG, LONG, LONG);
 	
 	@NativeType("void")
@@ -664,6 +664,6 @@ public sealed class VK11 extends VK10 permits VK12 {
 	
 	// Promoted from VK_KHR_shader_draw_parameters, with a feature support query added
 	
-	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_DRAW_PARAMETERS_FEATURES = 0;
-	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_DRAW_PARAMETER_FEATURES = 0;
+	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_DRAW_PARAMETERS_FEATURES = 1000063000;
+	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_DRAW_PARAMETER_FEATURES = 1000063000;
 }

@@ -17,7 +17,7 @@ public sealed class VK12 extends VK11 permits VK13 {
 	
 	// Promoted from VK_KHR_image_format_list (extension 148)
 	
-	public static final int VK_STRUCTURE_TYPE_IMAGE_FORMAT_LIST_CREATE_INFO = 0;
+	public static final int VK_STRUCTURE_TYPE_IMAGE_FORMAT_LIST_CREATE_INFO = 1000147000;
 	
 	// Promoted from VK_KHR_sampler_mirror_clamp_to_edge (extension 15)
 	// No need to add an extnumber attribute, since this uses a core enum value
@@ -53,13 +53,13 @@ public sealed class VK12 extends VK11 permits VK13 {
 	
 	// Promoted from VK_KHR_create_renderpass2 (extension 110)
 	
-	public static final int VK_STRUCTURE_TYPE_ATTACHMENT_DESCRIPTION_2 = 0;
-	public static final int VK_STRUCTURE_TYPE_ATTACHMENT_REFERENCE_2 = 1;
-	public static final int VK_STRUCTURE_TYPE_SUBPASS_DESCRIPTION_2 = 2;
-	public static final int VK_STRUCTURE_TYPE_SUBPASS_DEPENDENCY_2 = 3;
-	public static final int VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO_2 = 4;
-	public static final int VK_STRUCTURE_TYPE_SUBPASS_BEGIN_INFO = 5;
-	public static final int VK_STRUCTURE_TYPE_SUBPASS_END_INFO = 6;
+	public static final int VK_STRUCTURE_TYPE_ATTACHMENT_DESCRIPTION_2 = 1000109000;
+	public static final int VK_STRUCTURE_TYPE_ATTACHMENT_REFERENCE_2 = 1000109001;
+	public static final int VK_STRUCTURE_TYPE_SUBPASS_DESCRIPTION_2 = 1000109002;
+	public static final int VK_STRUCTURE_TYPE_SUBPASS_DEPENDENCY_2 = 1000109003;
+	public static final int VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO_2 = 1000109004;
+	public static final int VK_STRUCTURE_TYPE_SUBPASS_BEGIN_INFO = 1000109005;
+	public static final int VK_STRUCTURE_TYPE_SUBPASS_END_INFO = 1000109006;
 	private static final MethodHandle vkCreateRenderPass2 = createHandle(VkDefinitions.LIBRARY_LOOKUP, "vkCreateRenderPass2", INT, LONG, LONG, LONG, LONG);
 	
 	/**
@@ -116,55 +116,55 @@ public sealed class VK12 extends VK11 permits VK13 {
 	
 	// Promoted from VK_KHR_8bit_storage (extension 178)
 	
-	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_8BIT_STORAGE_FEATURES = 0;
+	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_8BIT_STORAGE_FEATURES = 1000177000;
 	
 	// Promoted from VK_KHR_driver_properties (extension 197)
 	
-	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DRIVER_PROPERTIES = 0;
+	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DRIVER_PROPERTIES = 1000196000;
 	public static final int VK_MAX_DRIVER_NAME_SIZE = 256;
 	public static final int VK_MAX_DRIVER_INFO_SIZE = 256;
 	
 	// Promoted from VK_KHR_shader_atomic_int64 (extension 181)
 	
-	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_ATOMIC_INT64_FEATURES = 0;
+	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_ATOMIC_INT64_FEATURES = 1000180000;
 	
 	// Promoted from VK_KHR_shader_float16_int8 (extension 83)
 	
-	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_FLOAT16_INT8_FEATURES = 0;
+	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_FLOAT16_INT8_FEATURES = 1000082000;
 	
 	// Promoted from VK_KHR_shader_float_controls (extension 198)
 	
-	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FLOAT_CONTROLS_PROPERTIES = 0;
+	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FLOAT_CONTROLS_PROPERTIES = 1000197000;
 	
 	// Promoted from VK_EXT_descriptor_indexing (extension 162)
 	
-	public static final int VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_BINDING_FLAGS_CREATE_INFO = 0;
-	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DESCRIPTOR_INDEXING_FEATURES = 1;
-	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DESCRIPTOR_INDEXING_PROPERTIES = 2;
-	public static final int VK_STRUCTURE_TYPE_DESCRIPTOR_SET_VARIABLE_DESCRIPTOR_COUNT_ALLOCATE_INFO = 3;
-	public static final int VK_STRUCTURE_TYPE_DESCRIPTOR_SET_VARIABLE_DESCRIPTOR_COUNT_LAYOUT_SUPPORT = 4;
+	public static final int VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_BINDING_FLAGS_CREATE_INFO = 1000161000;
+	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DESCRIPTOR_INDEXING_FEATURES = 1000161001;
+	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DESCRIPTOR_INDEXING_PROPERTIES = 1000161002;
+	public static final int VK_STRUCTURE_TYPE_DESCRIPTOR_SET_VARIABLE_DESCRIPTOR_COUNT_ALLOCATE_INFO = 1000161003;
+	public static final int VK_STRUCTURE_TYPE_DESCRIPTOR_SET_VARIABLE_DESCRIPTOR_COUNT_LAYOUT_SUPPORT = 1000161004;
 	public static final int VK_DESCRIPTOR_POOL_CREATE_UPDATE_AFTER_BIND_BIT = 2;
 	public static final int VK_DESCRIPTOR_SET_LAYOUT_CREATE_UPDATE_AFTER_BIND_POOL_BIT = 2;
-	public static final int VK_ERROR_FRAGMENTATION = 0;
+	public static final int VK_ERROR_FRAGMENTATION = 1000161000;
 	
 	// Promoted from VK_KHR_depth_stencil_resolve (extension 200)
 	
-	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DEPTH_STENCIL_RESOLVE_PROPERTIES = 0;
-	public static final int VK_STRUCTURE_TYPE_SUBPASS_DESCRIPTION_DEPTH_STENCIL_RESOLVE = 1;
+	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DEPTH_STENCIL_RESOLVE_PROPERTIES = 1000199000;
+	public static final int VK_STRUCTURE_TYPE_SUBPASS_DESCRIPTION_DEPTH_STENCIL_RESOLVE = 1000199001;
 	
 	// Promoted from VK_EXT_scalar_block_layout (extension 222))
 	
-	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SCALAR_BLOCK_LAYOUT_FEATURES = 0;
+	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SCALAR_BLOCK_LAYOUT_FEATURES = 1000221000;
 	
 	// Promoted from VK_EXT_shader_viewport_index_layer, which has no API (extension 163)
 	// Promoted from VK_EXT_separate_stencil_usage (extension 247)
 	
-	public static final int VK_STRUCTURE_TYPE_IMAGE_STENCIL_USAGE_CREATE_INFO = 0;
+	public static final int VK_STRUCTURE_TYPE_IMAGE_STENCIL_USAGE_CREATE_INFO = 1000246000;
 	
 	// Promoted from VK_EXT_sampler_filter_minmax (extension 131)
 	
-	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SAMPLER_FILTER_MINMAX_PROPERTIES = 0;
-	public static final int VK_STRUCTURE_TYPE_SAMPLER_REDUCTION_MODE_CREATE_INFO = 1;
+	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SAMPLER_FILTER_MINMAX_PROPERTIES = 1000130000;
+	public static final int VK_STRUCTURE_TYPE_SAMPLER_REDUCTION_MODE_CREATE_INFO = 1000130001;
 	
 	// Format can be used with min/max reduction filtering
 	
@@ -173,38 +173,38 @@ public sealed class VK12 extends VK11 permits VK13 {
 	
 	// Promoted from VK_KHR_vulkan_memory_model (extension 212)
 	
-	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_MEMORY_MODEL_FEATURES = 0;
+	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_MEMORY_MODEL_FEATURES = 1000211000;
 	
 	// Promoted from VK_KHR_imageless_framebuffer (extension 109)
 	
-	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_IMAGELESS_FRAMEBUFFER_FEATURES = 0;
-	public static final int VK_STRUCTURE_TYPE_FRAMEBUFFER_ATTACHMENTS_CREATE_INFO = 1;
-	public static final int VK_STRUCTURE_TYPE_FRAMEBUFFER_ATTACHMENT_IMAGE_INFO = 2;
-	public static final int VK_STRUCTURE_TYPE_RENDER_PASS_ATTACHMENT_BEGIN_INFO = 3;
+	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_IMAGELESS_FRAMEBUFFER_FEATURES = 1000108000;
+	public static final int VK_STRUCTURE_TYPE_FRAMEBUFFER_ATTACHMENTS_CREATE_INFO = 1000108001;
+	public static final int VK_STRUCTURE_TYPE_FRAMEBUFFER_ATTACHMENT_IMAGE_INFO = 1000108002;
+	public static final int VK_STRUCTURE_TYPE_RENDER_PASS_ATTACHMENT_BEGIN_INFO = 1000108003;
 	public static final int VK_FRAMEBUFFER_CREATE_IMAGELESS_BIT = 1;
 	
 	// Promoted from VK_KHR_uniform_buffer_standard_layout (extension 254)
 	
-	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_UNIFORM_BUFFER_STANDARD_LAYOUT_FEATURES = 0;
+	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_UNIFORM_BUFFER_STANDARD_LAYOUT_FEATURES = 1000253000;
 	
 	// Promoted from VK_KHR_shader_subgroup_extended_types (extension 176)
 	
-	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_SUBGROUP_EXTENDED_TYPES_FEATURES = 0;
+	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_SUBGROUP_EXTENDED_TYPES_FEATURES = 1000175000;
 	
 	// Promoted from VK_KHR_spirv_1_4 (extension 237)
 	// Promoted from VK_KHR_separate_depth_stencil_layouts (extension 242)
 	
-	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SEPARATE_DEPTH_STENCIL_LAYOUTS_FEATURES = 0;
-	public static final int VK_STRUCTURE_TYPE_ATTACHMENT_REFERENCE_STENCIL_LAYOUT = 1;
-	public static final int VK_STRUCTURE_TYPE_ATTACHMENT_DESCRIPTION_STENCIL_LAYOUT = 2;
-	public static final int VK_IMAGE_LAYOUT_DEPTH_ATTACHMENT_OPTIMAL = 0;
-	public static final int VK_IMAGE_LAYOUT_DEPTH_READ_ONLY_OPTIMAL = 1;
-	public static final int VK_IMAGE_LAYOUT_STENCIL_ATTACHMENT_OPTIMAL = 2;
-	public static final int VK_IMAGE_LAYOUT_STENCIL_READ_ONLY_OPTIMAL = 3;
+	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SEPARATE_DEPTH_STENCIL_LAYOUTS_FEATURES = 1000241000;
+	public static final int VK_STRUCTURE_TYPE_ATTACHMENT_REFERENCE_STENCIL_LAYOUT = 1000241001;
+	public static final int VK_STRUCTURE_TYPE_ATTACHMENT_DESCRIPTION_STENCIL_LAYOUT = 1000241002;
+	public static final int VK_IMAGE_LAYOUT_DEPTH_ATTACHMENT_OPTIMAL = 1000241000;
+	public static final int VK_IMAGE_LAYOUT_DEPTH_READ_ONLY_OPTIMAL = 1000241001;
+	public static final int VK_IMAGE_LAYOUT_STENCIL_ATTACHMENT_OPTIMAL = 1000241002;
+	public static final int VK_IMAGE_LAYOUT_STENCIL_READ_ONLY_OPTIMAL = 1000241003;
 	
 	// Promoted from VK_EXT_host_query_reset (extension 262)
 	
-	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_HOST_QUERY_RESET_FEATURES = 0;
+	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_HOST_QUERY_RESET_FEATURES = 1000261000;
 	private static final MethodHandle vkResetQueryPool = createHandle(VkDefinitions.LIBRARY_LOOKUP, "vkResetQueryPool", VOID, LONG, LONG, INT, INT);
 	
 	@NativeType("void")
@@ -219,12 +219,12 @@ public sealed class VK12 extends VK11 permits VK13 {
 	
 	// Promoted from VK_KHR_timeline_semaphore (extension 208)
 	
-	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_TIMELINE_SEMAPHORE_FEATURES = 0;
-	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_TIMELINE_SEMAPHORE_PROPERTIES = 1;
-	public static final int VK_STRUCTURE_TYPE_SEMAPHORE_TYPE_CREATE_INFO = 2;
-	public static final int VK_STRUCTURE_TYPE_TIMELINE_SEMAPHORE_SUBMIT_INFO = 3;
-	public static final int VK_STRUCTURE_TYPE_SEMAPHORE_WAIT_INFO = 4;
-	public static final int VK_STRUCTURE_TYPE_SEMAPHORE_SIGNAL_INFO = 5;
+	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_TIMELINE_SEMAPHORE_FEATURES = 1000207000;
+	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_TIMELINE_SEMAPHORE_PROPERTIES = 1000207001;
+	public static final int VK_STRUCTURE_TYPE_SEMAPHORE_TYPE_CREATE_INFO = 1000207002;
+	public static final int VK_STRUCTURE_TYPE_TIMELINE_SEMAPHORE_SUBMIT_INFO = 1000207003;
+	public static final int VK_STRUCTURE_TYPE_SEMAPHORE_WAIT_INFO = 1000207004;
+	public static final int VK_STRUCTURE_TYPE_SEMAPHORE_SIGNAL_INFO = 1000207005;
 	private static final MethodHandle vkGetSemaphoreCounterValue = createHandle(VkDefinitions.LIBRARY_LOOKUP, "vkGetSemaphoreCounterValue", INT, LONG, LONG, LONG);
 	
 	/**
@@ -281,16 +281,16 @@ public sealed class VK12 extends VK11 permits VK13 {
 	
 	// Promoted from VK_KHR_buffer_device_address (extension 258)
 	
-	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_BUFFER_DEVICE_ADDRESS_FEATURES = 0;
-	public static final int VK_STRUCTURE_TYPE_BUFFER_DEVICE_ADDRESS_INFO = 1;
-	public static final int VK_STRUCTURE_TYPE_BUFFER_OPAQUE_CAPTURE_ADDRESS_CREATE_INFO = 2;
-	public static final int VK_STRUCTURE_TYPE_MEMORY_OPAQUE_CAPTURE_ADDRESS_ALLOCATE_INFO = 3;
-	public static final int VK_STRUCTURE_TYPE_DEVICE_MEMORY_OPAQUE_CAPTURE_ADDRESS_INFO = 4;
+	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_BUFFER_DEVICE_ADDRESS_FEATURES = 1000257000;
+	public static final int VK_STRUCTURE_TYPE_BUFFER_DEVICE_ADDRESS_INFO = 1000244001;
+	public static final int VK_STRUCTURE_TYPE_BUFFER_OPAQUE_CAPTURE_ADDRESS_CREATE_INFO = 1000257002;
+	public static final int VK_STRUCTURE_TYPE_MEMORY_OPAQUE_CAPTURE_ADDRESS_ALLOCATE_INFO = 1000257003;
+	public static final int VK_STRUCTURE_TYPE_DEVICE_MEMORY_OPAQUE_CAPTURE_ADDRESS_INFO = 1000257004;
 	public static final int VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT = 131072;
 	public static final int VK_BUFFER_CREATE_DEVICE_ADDRESS_CAPTURE_REPLAY_BIT = 16;
 	public static final int VK_MEMORY_ALLOCATE_DEVICE_ADDRESS_BIT = 2;
 	public static final int VK_MEMORY_ALLOCATE_DEVICE_ADDRESS_CAPTURE_REPLAY_BIT = 4;
-	public static final int VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS = 0;
+	public static final int VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS = 1000257000;
 	private static final MethodHandle vkGetBufferDeviceAddress = createHandle(VkDefinitions.LIBRARY_LOOKUP, "vkGetBufferDeviceAddress", LONG, LONG, LONG);
 	
 	@NativeType("VkDeviceAddress")

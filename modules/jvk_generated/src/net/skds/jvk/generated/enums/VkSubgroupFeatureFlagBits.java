@@ -21,5 +21,7 @@ public final class VkSubgroupFeatureFlagBits {
 	public static final int VK_SUBGROUP_FEATURE_CLUSTERED_BIT = 64;
 	/** Quad subgroup operations **/
 	public static final int VK_SUBGROUP_FEATURE_QUAD_BIT = 128;
+	public static final int VK_SUBGROUP_FEATURE_ROTATE_BIT = 512;
+	public static final int VK_SUBGROUP_FEATURE_ROTATE_CLUSTERED_BIT = 1024;
 	public static final int VK_SUBGROUP_FEATURE_PARTITIONED_BIT_NV = 256;
 }

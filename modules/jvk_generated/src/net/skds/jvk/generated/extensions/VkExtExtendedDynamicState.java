@@ -13,19 +13,19 @@ public final class VkExtExtendedDynamicState {
 	// Not promoted to 1.3
 	
 	/** Not promoted to 1.3 **/
-	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTENDED_DYNAMIC_STATE_FEATURES_EXT = 0;
-	public static final int VK_DYNAMIC_STATE_CULL_MODE_EXT = 0;
-	public static final int VK_DYNAMIC_STATE_FRONT_FACE_EXT = 1;
-	public static final int VK_DYNAMIC_STATE_PRIMITIVE_TOPOLOGY_EXT = 2;
-	public static final int VK_DYNAMIC_STATE_VIEWPORT_WITH_COUNT_EXT = 3;
-	public static final int VK_DYNAMIC_STATE_SCISSOR_WITH_COUNT_EXT = 4;
-	public static final int VK_DYNAMIC_STATE_VERTEX_INPUT_BINDING_STRIDE_EXT = 5;
-	public static final int VK_DYNAMIC_STATE_DEPTH_TEST_ENABLE_EXT = 6;
-	public static final int VK_DYNAMIC_STATE_DEPTH_WRITE_ENABLE_EXT = 7;
-	public static final int VK_DYNAMIC_STATE_DEPTH_COMPARE_OP_EXT = 8;
-	public static final int VK_DYNAMIC_STATE_DEPTH_BOUNDS_TEST_ENABLE_EXT = 9;
-	public static final int VK_DYNAMIC_STATE_STENCIL_TEST_ENABLE_EXT = 10;
-	public static final int VK_DYNAMIC_STATE_STENCIL_OP_EXT = 11;
+	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTENDED_DYNAMIC_STATE_FEATURES_EXT = 1000267000;
+	public static final int VK_DYNAMIC_STATE_CULL_MODE_EXT = 1000267000;
+	public static final int VK_DYNAMIC_STATE_FRONT_FACE_EXT = 1000267001;
+	public static final int VK_DYNAMIC_STATE_PRIMITIVE_TOPOLOGY_EXT = 1000267002;
+	public static final int VK_DYNAMIC_STATE_VIEWPORT_WITH_COUNT_EXT = 1000267003;
+	public static final int VK_DYNAMIC_STATE_SCISSOR_WITH_COUNT_EXT = 1000267004;
+	public static final int VK_DYNAMIC_STATE_VERTEX_INPUT_BINDING_STRIDE_EXT = 1000267005;
+	public static final int VK_DYNAMIC_STATE_DEPTH_TEST_ENABLE_EXT = 1000267006;
+	public static final int VK_DYNAMIC_STATE_DEPTH_WRITE_ENABLE_EXT = 1000267007;
+	public static final int VK_DYNAMIC_STATE_DEPTH_COMPARE_OP_EXT = 1000267008;
+	public static final int VK_DYNAMIC_STATE_DEPTH_BOUNDS_TEST_ENABLE_EXT = 1000267009;
+	public static final int VK_DYNAMIC_STATE_STENCIL_TEST_ENABLE_EXT = 1000267010;
+	public static final int VK_DYNAMIC_STATE_STENCIL_OP_EXT = 1000267011;
 	private static final MethodHandle vkCmdSetCullModeEXT = createHandle(VkDefinitions.LIBRARY_LOOKUP, "vkCmdSetCullModeEXT", VOID, LONG, INT);
 	
 	@NativeType("void")
@@ -98,24 +98,24 @@ public final class VkExtExtendedDynamicState {
 	}
 	
 	
-	private static final MethodHandle vkCmdSetDepthTestEnableEXT = createHandle(VkDefinitions.LIBRARY_LOOKUP, "vkCmdSetDepthTestEnableEXT", VOID, LONG, INT);
+	private static final MethodHandle vkCmdSetDepthTestEnableEXT = createHandle(VkDefinitions.LIBRARY_LOOKUP, "vkCmdSetDepthTestEnableEXT", VOID, LONG, BOOLEAN);
 	
 	@NativeType("void")
-	public static void vkCmdSetDepthTestEnableEXT(/* external sync */ @NativeType("VkCommandBuffer*") long commandBuffer, @NativeType("VkBool32") int depthTestEnable) {
+	public static void vkCmdSetDepthTestEnableEXT(/* external sync */ @NativeType("VkCommandBuffer*") long commandBuffer, @NativeType("VkBool32") boolean depthTestEnable) {
 		try {
-			vkCmdSetDepthTestEnableEXT.invokeExact(commandBuffer, depthTestEnable);
+			vkCmdSetDepthTestEnableEXT.invokeExact(commandBuffer, depthTestEnable ? (int) 1 : (int) 0);
 		} catch (Throwable e) {
 			throw new Error(e);
 		}
 	}
 	
 	
-	private static final MethodHandle vkCmdSetDepthWriteEnableEXT = createHandle(VkDefinitions.LIBRARY_LOOKUP, "vkCmdSetDepthWriteEnableEXT", VOID, LONG, INT);
+	private static final MethodHandle vkCmdSetDepthWriteEnableEXT = createHandle(VkDefinitions.LIBRARY_LOOKUP, "vkCmdSetDepthWriteEnableEXT", VOID, LONG, BOOLEAN);
 	
 	@NativeType("void")
-	public static void vkCmdSetDepthWriteEnableEXT(/* external sync */ @NativeType("VkCommandBuffer*") long commandBuffer, @NativeType("VkBool32") int depthWriteEnable) {
+	public static void vkCmdSetDepthWriteEnableEXT(/* external sync */ @NativeType("VkCommandBuffer*") long commandBuffer, @NativeType("VkBool32") boolean depthWriteEnable) {
 		try {
-			vkCmdSetDepthWriteEnableEXT.invokeExact(commandBuffer, depthWriteEnable);
+			vkCmdSetDepthWriteEnableEXT.invokeExact(commandBuffer, depthWriteEnable ? (int) 1 : (int) 0);
 		} catch (Throwable e) {
 			throw new Error(e);
 		}
@@ -134,24 +134,24 @@ public final class VkExtExtendedDynamicState {
 	}
 	
 	
-	private static final MethodHandle vkCmdSetDepthBoundsTestEnableEXT = createHandle(VkDefinitions.LIBRARY_LOOKUP, "vkCmdSetDepthBoundsTestEnableEXT", VOID, LONG, INT);
+	private static final MethodHandle vkCmdSetDepthBoundsTestEnableEXT = createHandle(VkDefinitions.LIBRARY_LOOKUP, "vkCmdSetDepthBoundsTestEnableEXT", VOID, LONG, BOOLEAN);
 	
 	@NativeType("void")
-	public static void vkCmdSetDepthBoundsTestEnableEXT(/* external sync */ @NativeType("VkCommandBuffer*") long commandBuffer, @NativeType("VkBool32") int depthBoundsTestEnable) {
+	public static void vkCmdSetDepthBoundsTestEnableEXT(/* external sync */ @NativeType("VkCommandBuffer*") long commandBuffer, @NativeType("VkBool32") boolean depthBoundsTestEnable) {
 		try {
-			vkCmdSetDepthBoundsTestEnableEXT.invokeExact(commandBuffer, depthBoundsTestEnable);
+			vkCmdSetDepthBoundsTestEnableEXT.invokeExact(commandBuffer, depthBoundsTestEnable ? (int) 1 : (int) 0);
 		} catch (Throwable e) {
 			throw new Error(e);
 		}
 	}
 	
 	
-	private static final MethodHandle vkCmdSetStencilTestEnableEXT = createHandle(VkDefinitions.LIBRARY_LOOKUP, "vkCmdSetStencilTestEnableEXT", VOID, LONG, INT);
+	private static final MethodHandle vkCmdSetStencilTestEnableEXT = createHandle(VkDefinitions.LIBRARY_LOOKUP, "vkCmdSetStencilTestEnableEXT", VOID, LONG, BOOLEAN);
 	
 	@NativeType("void")
-	public static void vkCmdSetStencilTestEnableEXT(/* external sync */ @NativeType("VkCommandBuffer*") long commandBuffer, @NativeType("VkBool32") int stencilTestEnable) {
+	public static void vkCmdSetStencilTestEnableEXT(/* external sync */ @NativeType("VkCommandBuffer*") long commandBuffer, @NativeType("VkBool32") boolean stencilTestEnable) {
 		try {
-			vkCmdSetStencilTestEnableEXT.invokeExact(commandBuffer, stencilTestEnable);
+			vkCmdSetStencilTestEnableEXT.invokeExact(commandBuffer, stencilTestEnable ? (int) 1 : (int) 0);
 		} catch (Throwable e) {
 			throw new Error(e);
 		}

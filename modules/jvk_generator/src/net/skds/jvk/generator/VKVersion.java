@@ -32,7 +32,7 @@ class VKVersion {
 
 		var lst = e.getElementsByTagName("require");
 		for (int i = 0; i < lst.getLength(); i++) {
-			if (lst.item(i) instanceof Element e2) {
+			if (lst.item(i) instanceof Element e2 && VKGen.isApiAllowed(e2.getAttribute("api"))) {
 				String comment = e2.getAttribute("comment");
 				if (!comment.isEmpty()) {
 					vkv.contents.add(comment);
@@ -92,16 +92,17 @@ class VKVersion {
 			String pack = VKGen.ROOT_PACKAGE;
 			cb = new TextClassBuilder(pack, name, ClassType.CLASS);
 
-			CBType vk10 = new CBType("VK10", pack);
-			CBType vk11 = new CBType("VK11", pack);
-			CBType vk12 = new CBType("VK12", pack);
-			CBType vk13 = new CBType("VK13", pack);
-
-			switch (name) {
-				case "VK10" -> cb.permit(vk11);
-				case "VK11" -> cb.permit(vk12).extend(vk10);
-				case "VK12" -> cb.permit(vk13).extend(vk11);
-				case "VK13" -> cb.setFinal(true).extend(vk12);
+			if (name.startsWith("VK")) {
+				int n = Integer.parseInt(name.substring(3));
+				if (n == 0) {
+					cb.permit(new CBType("VK11", pack));
+				} else if (n == VkDefinitions.vkApiVersionMinor(VkDefinitions.VK_HEADER_VERSION_COMPLETE)) {
+					cb.setFinal(true)
+							.extend(new CBType("VK1" + (n - 1), pack));
+				} else {
+					cb.permit(new CBType("VK1" + (n + 1), pack))
+							.extend(new CBType("VK1" + (n - 1), pack));
+				}
 			}
 		} else {
 			String pack = VKGen.ROOT_PACKAGE + ".extensions";
@@ -146,6 +147,7 @@ class VKVersion {
 		} else if (o instanceof ICommand command) {
 
 			var t = command.returnType().nativeType().javaType.clazz;
+			var jt = command.returnType().javaType().clazz;
 
 			StringBuilder mh = new StringBuilder("createHandle(")
 					.append("VkDefinitions.LIBRARY_LOOKUP, \"")
@@ -155,20 +157,23 @@ class VKVersion {
 
 
 			StringBuilder body0 = new StringBuilder("\t");
-			if (t != void.class) {
+			if (jt != void.class) {
 				body0.append("return (").append(t.getSimpleName()).append(") ");
 			}
 			body0.append(command.name()).append(".invokeExact(");
 			List<CBMethod.Arg> args = command.arguments();
-			for (var arg : args) {
-				body0.append(arg.name()).append(", ");
+			List<CommandArgument> rawArgs = command.rawArguments();
+			for (int i = 0; i < args.size(); i++) {
+				var arg = args.get(i);
+				var rawArg = rawArgs.get(i);
+				body0.append(arg.name()).append(rawArg.type().booleanUnCastAppender()).append(", ");
 				mh.append(", ").append(arg.type().name().toUpperCase());
 			}
 			if (!args.isEmpty()) {
 				body0.setLength(body0.length() - 2);
 			}
 			mh.append(");");
-			body0.append(");");
+			body0.append(")").append(command.returnType().booleanCastAppender()).append(";");
 
 			List<String> body = List.of(
 					"try {",
@@ -190,7 +195,7 @@ class VKVersion {
 			CBMethod method = new CBMethod(
 					command.name(),
 					Modifier.PUBLIC | Modifier.STATIC,
-					CBType.of(t),
+					CBType.of(jt),
 					List.of(new CBAnnotation(NativeType.class, StringUtils.quote(command.returnType().nativeTypeName()))),
 					new CBJavadoc(command.comment()),
 					args,

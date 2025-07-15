@@ -13,24 +13,23 @@ public final class VkNvDeviceGeneratedCommands {
 	/*
 	
 	                    This extension requires buffer_device_address functionality.
-	                    VK_EXT_buffer_device_address is also acceptable, but since it is deprecated the KHR version is
-	                    preferred.
+	                    VK_EXT_buffer_device_address is also acceptable, but since it is deprecated the KHR version is preferred.
 	                
 	*/
 	
-	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DEVICE_GENERATED_COMMANDS_PROPERTIES_NV = 0;
-	public static final int VK_STRUCTURE_TYPE_GRAPHICS_SHADER_GROUP_CREATE_INFO_NV = 1;
-	public static final int VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_SHADER_GROUPS_CREATE_INFO_NV = 2;
-	public static final int VK_STRUCTURE_TYPE_INDIRECT_COMMANDS_LAYOUT_TOKEN_NV = 3;
-	public static final int VK_STRUCTURE_TYPE_INDIRECT_COMMANDS_LAYOUT_CREATE_INFO_NV = 4;
-	public static final int VK_STRUCTURE_TYPE_GENERATED_COMMANDS_INFO_NV = 5;
-	public static final int VK_STRUCTURE_TYPE_GENERATED_COMMANDS_MEMORY_REQUIREMENTS_INFO_NV = 6;
-	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DEVICE_GENERATED_COMMANDS_FEATURES_NV = 7;
+	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DEVICE_GENERATED_COMMANDS_PROPERTIES_NV = 1000277000;
+	public static final int VK_STRUCTURE_TYPE_GRAPHICS_SHADER_GROUP_CREATE_INFO_NV = 1000277001;
+	public static final int VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_SHADER_GROUPS_CREATE_INFO_NV = 1000277002;
+	public static final int VK_STRUCTURE_TYPE_INDIRECT_COMMANDS_LAYOUT_TOKEN_NV = 1000277003;
+	public static final int VK_STRUCTURE_TYPE_INDIRECT_COMMANDS_LAYOUT_CREATE_INFO_NV = 1000277004;
+	public static final int VK_STRUCTURE_TYPE_GENERATED_COMMANDS_INFO_NV = 1000277005;
+	public static final int VK_STRUCTURE_TYPE_GENERATED_COMMANDS_MEMORY_REQUIREMENTS_INFO_NV = 1000277006;
+	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DEVICE_GENERATED_COMMANDS_FEATURES_NV = 1000277007;
 	public static final int VK_PIPELINE_CREATE_INDIRECT_BINDABLE_BIT_NV = 262144;
 	public static final int VK_PIPELINE_STAGE_COMMAND_PREPROCESS_BIT_NV = 131072;
 	public static final int VK_ACCESS_COMMAND_PREPROCESS_READ_BIT_NV = 131072;
 	public static final int VK_ACCESS_COMMAND_PREPROCESS_WRITE_BIT_NV = 262144;
-	public static final int VK_OBJECT_TYPE_INDIRECT_COMMANDS_LAYOUT_NV = 0;
+	public static final int VK_OBJECT_TYPE_INDIRECT_COMMANDS_LAYOUT_NV = 1000277000;
 	private static final MethodHandle vkGetGeneratedCommandsMemoryRequirementsNV = createHandle(VkDefinitions.LIBRARY_LOOKUP, "vkGetGeneratedCommandsMemoryRequirementsNV", VOID, LONG, LONG, LONG);
 	
 	@NativeType("void")
@@ -55,12 +54,12 @@ public final class VkNvDeviceGeneratedCommands {
 	}
 	
 	
-	private static final MethodHandle vkCmdExecuteGeneratedCommandsNV = createHandle(VkDefinitions.LIBRARY_LOOKUP, "vkCmdExecuteGeneratedCommandsNV", VOID, LONG, INT, LONG);
+	private static final MethodHandle vkCmdExecuteGeneratedCommandsNV = createHandle(VkDefinitions.LIBRARY_LOOKUP, "vkCmdExecuteGeneratedCommandsNV", VOID, LONG, BOOLEAN, LONG);
 	
 	@NativeType("void")
-	public static void vkCmdExecuteGeneratedCommandsNV(/* external sync */ @NativeType("VkCommandBuffer*") long commandBuffer, @NativeType("VkBool32") int isPreprocessed, @NativeType("VkGeneratedCommandsInfoNV*") long pGeneratedCommandsInfo) {
+	public static void vkCmdExecuteGeneratedCommandsNV(/* external sync */ @NativeType("VkCommandBuffer*") long commandBuffer, @NativeType("VkBool32") boolean isPreprocessed, @NativeType("VkGeneratedCommandsInfoNV*") long pGeneratedCommandsInfo) {
 		try {
-			vkCmdExecuteGeneratedCommandsNV.invokeExact(commandBuffer, isPreprocessed, pGeneratedCommandsInfo);
+			vkCmdExecuteGeneratedCommandsNV.invokeExact(commandBuffer, isPreprocessed ? (int) 1 : (int) 0, pGeneratedCommandsInfo);
 		} catch (Throwable e) {
 			throw new Error(e);
 		}

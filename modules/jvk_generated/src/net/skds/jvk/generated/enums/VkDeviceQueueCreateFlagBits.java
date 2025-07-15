@@ -8,4 +8,5 @@ public final class VkDeviceQueueCreateFlagBits {
 	/** Queue is a protected-capable device queue **/
 	public static final int VK_DEVICE_QUEUE_CREATE_PROTECTED_BIT = 1;
 	public static final int VK_DEVICE_QUEUE_CREATE_RESERVED_1_BIT_QCOM = 2;
+	public static final int VK_DEVICE_QUEUE_CREATE_RESERVED_2_BIT_EXT = 4;
 }

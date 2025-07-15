@@ -11,10 +11,10 @@ public final class VkKhrSamplerMirrorClampToEdge {
 	// Note that this defines what was previously a core enum, and so uses the 'value' attribute rather than 'offset', and does not have a suffix. This is a special case, and should not be repeated
 	
 	/** Note that this defines what was previously a core enum, and so uses the 'value' attribute rather than 'offset', and does not have a suffix. This is a special case, and should not be repeated **/
-	public static final int VK_SAMPLER_ADDRESS_MODE_MIRROR_CLAMP_TO_EDGE = 4;
+	public static final int VK_SAMPLER_ADDRESS_MODE_MIRROR_CLAMP_TO_EDGE = 1000014004;
 	
-	// Alias introduced for consistency with extension suffixing rules
+	// Introduced for consistency with extension suffixing rules
 	
-	/** Alias introduced for consistency with extension suffixing rules **/
-	public static final int VK_SAMPLER_ADDRESS_MODE_MIRROR_CLAMP_TO_EDGE_KHR = 4;
+	/** Introduced for consistency with extension suffixing rules **/
+	public static final int VK_SAMPLER_ADDRESS_MODE_MIRROR_CLAMP_TO_EDGE_KHR = 1000014004;
 }

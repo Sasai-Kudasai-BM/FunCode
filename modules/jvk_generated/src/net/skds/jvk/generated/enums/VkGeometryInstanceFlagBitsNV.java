@@ -10,6 +10,6 @@ public final class VkGeometryInstanceFlagBitsNV {
 	public static final int VK_GEOMETRY_INSTANCE_FORCE_OPAQUE_BIT_KHR = 4;
 	public static final int VK_GEOMETRY_INSTANCE_FORCE_NO_OPAQUE_BIT_KHR = 8;
 	public static final int VK_GEOMETRY_INSTANCE_TRIANGLE_FRONT_COUNTERCLOCKWISE_BIT_KHR = 2;
-	public static final int VK_GEOMETRY_INSTANCE_RESERVED_4_BIT_NV = 16;
-	public static final int VK_GEOMETRY_INSTANCE_RESERVED_5_BIT_NV = 32;
+	public static final int VK_GEOMETRY_INSTANCE_FORCE_OPACITY_MICROMAP_2_STATE_BIT_EXT = 16;
+	public static final int VK_GEOMETRY_INSTANCE_DISABLE_OPACITY_MICROMAPS_BIT_EXT = 32;
 }

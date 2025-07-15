@@ -6,10 +6,3 @@ dependencies {
     implementation project(":jvk_base")
 }
 
-
-//repositories {
-//    project(':skdslib')
-//    project(':ninvoker')
-//    project(':nativelib')
-//}
-

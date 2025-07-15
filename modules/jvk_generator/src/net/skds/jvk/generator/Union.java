@@ -235,10 +235,11 @@ class Union extends DataType {
 	private static void expGetter(IDataType member, TextClassBuilder cb) {
 		cb.importStatic(SafeLinker.class, "*");
 		Class<?> rt = member.nativeType().javaType.clazz;
+		Class<?> jrt = member.javaType().clazz;
 		cb.addElement(new CBMethod(
 				"as" + StringUtils.uppercaseFirstChar(rt.getSimpleName()),
 				Modifier.PUBLIC,
-				CBType.of(rt),
+				CBType.of(jrt),
 				List.of(new CBAnnotation(NativeType.class, StringUtils.quote(member.nativeTypeName()))),
 				null,
 				null,
@@ -246,7 +247,7 @@ class Union extends DataType {
 						+ rt.getSimpleName()
 						+ ") "
 						+ rt.getSimpleName().toUpperCase()
-						+ "_HANDLE.get(this.segment, this.offset);"
+						+ "_HANDLE.get(this.segment, this.offset)" + member.booleanCastAppender() + ";"
 				)
 		));
 	}
@@ -255,10 +256,11 @@ class Union extends DataType {
 		cb.importStatic(SafeLinker.class, "*");
 		cb.importStatic(ValueLayout.class, "*");
 		Class<?> rt = member.nativeType().javaType.clazz;
+		Class<?> jrt = member.javaType().clazz;
 		cb.addElement(new CBMethod(
 				"as" + StringUtils.uppercaseFirstChar(rt.getSimpleName()),
 				Modifier.PUBLIC,
-				CBType.of(rt),
+				CBType.of(jrt),
 				List.of(new CBAnnotation(NativeType.class, StringUtils.quote(member.nativeTypeName()))),
 				null,
 				List.of(new CBMethod.Arg(int.class, "i")),
@@ -268,7 +270,22 @@ class Union extends DataType {
 						+ rt.getSimpleName().toUpperCase()
 						+ "_HANDLE.get(this.segment, this.offset + "
 						+ VKGen.referMemLayout(subLayout, cb)
-						+ ".byteSize() * i);"
+						+ ".byteSize() * i)" + member.booleanCastAppender() + ";"
+				)
+		));
+		cb.addElement(new CBMethod(
+				"as" + StringUtils.uppercaseFirstChar(rt.getSimpleName()) + "Array",
+				Modifier.PUBLIC,
+				CBType.of(jrt.arrayType()),
+				List.of(new CBAnnotation(NativeType.class, StringUtils.quote(member.nativeTypeName()))),
+				null,
+				null,
+				new CodeBody("var array = new "
+						+ jrt.getSimpleName() + "[" + ((ArrayType) member).getLength() + "];",
+						"\tMemorySegment.copy(this.segment, "
+								+ rt.getSimpleName().toUpperCase()
+								+ ", this.offset, array, 0, array.length);",
+						"\treturn array;"
 				)
 		));
 	}
@@ -279,6 +296,7 @@ class Union extends DataType {
 			return;
 		}
 		Class<?> in = member.nativeType().javaType.clazz;
+		Class<?> jin = member.javaType().clazz;
 		cb.importStatic(SafeLinker.class, "*");
 		cb.importStatic(ValueLayout.class, "*");
 		cb.addElement(new CBMethod(
@@ -287,11 +305,24 @@ class Union extends DataType {
 				cb.thisType(),
 				List.of(new CBAnnotation(NativeType.class, StringUtils.quote(member.nativeTypeName()))),
 				null,
-				List.of(new CBMethod.Arg(int.class, "i"), new CBMethod.Arg(in, "value")),
+				List.of(new CBMethod.Arg(int.class, "i"), new CBMethod.Arg(jin, "value")),
 				new CodeBody(in.getSimpleName().toUpperCase()
 						+ "_HANDLE.set(this.segment, this.offset + "
 						+ VKGen.referMemLayout(subLayout, cb)
-						+ ".byteSize() * i, value);",
+						+ ".byteSize() * i, value" + member.booleanUnCastAppender() + ");",
+						"\treturn this;"
+				)
+		));
+		cb.addElement(new CBMethod(
+				"as" + StringUtils.uppercaseFirstChar(in.getSimpleName()),
+				Modifier.PUBLIC,
+				cb.thisType(),
+				List.of(new CBAnnotation(NativeType.class, StringUtils.quote(member.nativeTypeName()))),
+				null,
+				List.of(new CBMethod.Arg(jin.arrayType(), "value")),
+				new CodeBody("MemorySegment.copy(value, 0, this.segment, "
+						+ in.getSimpleName().toUpperCase()
+						+ ", this.offset, value.length);",
 						"\treturn this;"
 				)
 		));
@@ -303,6 +334,7 @@ class Union extends DataType {
 			return;
 		}
 		Class<?> in = member.nativeType().javaType.clazz;
+		Class<?> jin = member.javaType().clazz;
 		cb.importStatic(SafeLinker.class, "*");
 		cb.addElement(new CBMethod(
 				"as" + StringUtils.uppercaseFirstChar(in.getSimpleName()),
@@ -310,10 +342,10 @@ class Union extends DataType {
 				cb.thisType(),
 				List.of(new CBAnnotation(NativeType.class, StringUtils.quote(member.nativeTypeName()))),
 				null,
-				List.of(new CBMethod.Arg(in, "value")),
+				List.of(new CBMethod.Arg(jin, "value")),
 				new CodeBody(
 						in.getSimpleName().toUpperCase() +
-								"_HANDLE.set(this.segment, this.offset, value);",
+								"_HANDLE.set(this.segment, this.offset, value" + member.booleanUnCastAppender() + ");",
 						"\treturn this;"
 				)
 		));

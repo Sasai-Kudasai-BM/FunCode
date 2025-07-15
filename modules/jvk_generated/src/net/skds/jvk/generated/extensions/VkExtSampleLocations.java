@@ -11,12 +11,12 @@ import static net.skds.lib2.natives.SafeLinker.*;
 public final class VkExtSampleLocations {
 	
 	public static final int VK_IMAGE_CREATE_SAMPLE_LOCATIONS_COMPATIBLE_DEPTH_BIT_EXT = 4096;
-	public static final int VK_STRUCTURE_TYPE_SAMPLE_LOCATIONS_INFO_EXT = 0;
-	public static final int VK_STRUCTURE_TYPE_RENDER_PASS_SAMPLE_LOCATIONS_BEGIN_INFO_EXT = 1;
-	public static final int VK_STRUCTURE_TYPE_PIPELINE_SAMPLE_LOCATIONS_STATE_CREATE_INFO_EXT = 2;
-	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SAMPLE_LOCATIONS_PROPERTIES_EXT = 3;
-	public static final int VK_STRUCTURE_TYPE_MULTISAMPLE_PROPERTIES_EXT = 4;
-	public static final int VK_DYNAMIC_STATE_SAMPLE_LOCATIONS_EXT = 0;
+	public static final int VK_STRUCTURE_TYPE_SAMPLE_LOCATIONS_INFO_EXT = 1000143000;
+	public static final int VK_STRUCTURE_TYPE_RENDER_PASS_SAMPLE_LOCATIONS_BEGIN_INFO_EXT = 1000143001;
+	public static final int VK_STRUCTURE_TYPE_PIPELINE_SAMPLE_LOCATIONS_STATE_CREATE_INFO_EXT = 1000143002;
+	public static final int VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SAMPLE_LOCATIONS_PROPERTIES_EXT = 1000143003;
+	public static final int VK_STRUCTURE_TYPE_MULTISAMPLE_PROPERTIES_EXT = 1000143004;
+	public static final int VK_DYNAMIC_STATE_SAMPLE_LOCATIONS_EXT = 1000143000;
 	private static final MethodHandle vkCmdSetSampleLocationsEXT = createHandle(VkDefinitions.LIBRARY_LOOKUP, "vkCmdSetSampleLocationsEXT", VOID, LONG, LONG);
 	
 	@NativeType("void")
