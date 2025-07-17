@@ -108,7 +108,7 @@ class VKGen {
 		return sb.toString();
 	}
 
-	public static List<String> createCLayoutJavadoc(GroupLayout layout) {
+	public static List<String> createCLayoutJavadoc(GroupLayout layout, String thisName) {
 		List<String> doc = new ArrayList<>();
 		doc.add("C definition:");
 		String type = switch (layout) {
@@ -123,9 +123,11 @@ class VKGen {
 				doc.add("\t// pad (" + p.byteSize() + ")");
 				continue;
 			}
-			doc.add("\t" + member.name().orElseThrow() + ";");
+			String mn = member.name().orElseThrow();
+			doc.add("\t" + mn + ";");
 		}
 		doc.add("};");
+		doc.add("{@link https://registry.khronos.org/vulkan/specs/latest/man/html/" + thisName + ".html Documentation}");
 		return doc;
 	}
 

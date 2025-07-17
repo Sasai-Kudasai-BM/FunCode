@@ -1,4 +1,4 @@
-package net.skds.jvk.vulkan;
+package net.skds.jvk.vulkan.device.memory;
 
 import net.skds.jvk.generated.enums.VkMemoryHeapFlagBits;
 import net.skds.jvk.generated.enums.VkMemoryPropertyFlagBits;

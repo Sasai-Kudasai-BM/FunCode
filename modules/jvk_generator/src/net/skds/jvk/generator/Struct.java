@@ -1,7 +1,7 @@
 package net.skds.jvk.generator;
 
 import lombok.CustomLog;
-import net.skds.lib2.natives.SafeAnal;
+import net.skds.lib2.natives.MemoryAccess;
 import net.skds.lib2.utils.StringUtils;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -32,7 +32,7 @@ class Struct extends DataType implements IStruct {
 				MemoryLayout e = member.type.memoryLayout();
 				e = e.withName(member.type.nativeTypeName() + " " + member.name);
 				int a = (int) e.byteAlignment();
-				int pad = SafeAnal.calcPadding(offset, a);
+				int pad = MemoryAccess.calcPadding(offset, a);
 				if (pad != 0) {
 					offset += pad;
 					elements.add(MemoryLayout.paddingLayout(pad));
@@ -42,7 +42,7 @@ class Struct extends DataType implements IStruct {
 				max = Math.max(max, a);
 				elements.add(e);
 			}
-			int pad = SafeAnal.calcPadding(offset, max);
+			int pad = MemoryAccess.calcPadding(offset, max);
 			if (pad != 0) {
 				elements.add(MemoryLayout.paddingLayout(pad));
 			}

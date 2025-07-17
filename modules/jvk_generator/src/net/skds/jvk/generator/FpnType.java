@@ -4,7 +4,7 @@ import lombok.CustomLog;
 import lombok.Getter;
 import net.skds.jvk.annotation.NativeType;
 import net.skds.lib2.misc.clazz.classbuilder.*;
-import net.skds.lib2.natives.SafeLinker;
+import net.skds.lib2.natives.LinkerUtils;
 import net.skds.lib2.natives.UpcallLink;
 import net.skds.lib2.utils.StringUtils;
 import org.w3c.dom.Element;
@@ -76,7 +76,7 @@ class FpnType extends DataType {
 		TextClassBuilder cb = new TextClassBuilder(PACKAGE, StringUtils.uppercaseFirstChar(name), ClassType.INTERFACE)
 				.annotation(new CBAnnotation(FunctionalInterface.class))
 				.setJavadoc(new CBJavadoc(comment))
-				.checkImport(SafeLinker.class)
+				.checkImport(LinkerUtils.class)
 				.checkImport(UpcallLink.class);
 
 		cb.addElement(new CBField(

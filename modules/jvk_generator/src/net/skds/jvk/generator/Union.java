@@ -4,7 +4,7 @@ import lombok.CustomLog;
 import lombok.Getter;
 import net.skds.jvk.annotation.NativeType;
 import net.skds.lib2.misc.clazz.classbuilder.*;
-import net.skds.lib2.natives.SafeLinker;
+import net.skds.lib2.natives.LinkerUtils;
 import net.skds.lib2.natives.struct.CStruct;
 import net.skds.lib2.utils.StringUtils;
 import org.w3c.dom.Element;
@@ -79,7 +79,7 @@ class Union extends DataType {
 		TextClassBuilder cb = new TextClassBuilder(PACKAGE, getName(), ClassType.CLASS)
 				.extend(CStruct.class)
 				.setFinal(true)
-				.setJavadoc(new CBJavadoc(VKGen.createCLayoutJavadoc(memoryLayout())))
+				.setJavadoc(new CBJavadoc(VKGen.createCLayoutJavadoc(memoryLayout(), getName())))
 				.checkImport(Arena.class)
 				.importStatic(ValueLayout.class, "*")
 				.importStatic(MemoryLayout.class, "*");
@@ -233,7 +233,7 @@ class Union extends DataType {
 	}
 
 	private static void expGetter(IDataType member, TextClassBuilder cb) {
-		cb.importStatic(SafeLinker.class, "*");
+		cb.importStatic(LinkerUtils.class, "*");
 		Class<?> rt = member.nativeType().javaType.clazz;
 		Class<?> jrt = member.javaType().clazz;
 		cb.addElement(new CBMethod(
@@ -253,7 +253,7 @@ class Union extends DataType {
 	}
 
 	private static void expArrayGetter(IDataType member, TextClassBuilder cb, MemoryLayout subLayout) {
-		cb.importStatic(SafeLinker.class, "*");
+		cb.importStatic(LinkerUtils.class, "*");
 		cb.importStatic(ValueLayout.class, "*");
 		Class<?> rt = member.nativeType().javaType.clazz;
 		Class<?> jrt = member.javaType().clazz;
@@ -297,7 +297,7 @@ class Union extends DataType {
 		}
 		Class<?> in = member.nativeType().javaType.clazz;
 		Class<?> jin = member.javaType().clazz;
-		cb.importStatic(SafeLinker.class, "*");
+		cb.importStatic(LinkerUtils.class, "*");
 		cb.importStatic(ValueLayout.class, "*");
 		cb.addElement(new CBMethod(
 				"as" + StringUtils.uppercaseFirstChar(in.getSimpleName()),
@@ -335,7 +335,7 @@ class Union extends DataType {
 		}
 		Class<?> in = member.nativeType().javaType.clazz;
 		Class<?> jin = member.javaType().clazz;
-		cb.importStatic(SafeLinker.class, "*");
+		cb.importStatic(LinkerUtils.class, "*");
 		cb.addElement(new CBMethod(
 				"as" + StringUtils.uppercaseFirstChar(in.getSimpleName()),
 				Modifier.PUBLIC,

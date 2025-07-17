@@ -3,7 +3,7 @@ package net.skds.jvk.generator;
 import net.skds.jvk.VkDefinitions;
 import net.skds.jvk.annotation.NativeType;
 import net.skds.lib2.misc.clazz.classbuilder.*;
-import net.skds.lib2.natives.SafeLinker;
+import net.skds.lib2.natives.LinkerUtils;
 import net.skds.lib2.utils.Holders;
 import net.skds.lib2.utils.StringUtils;
 import org.w3c.dom.Element;
@@ -111,7 +111,7 @@ class VKVersion {
 
 
 		cb.checkImport(VkDefinitions.class);
-		cb.importStatic(SafeLinker.class, "*");
+		cb.importStatic(LinkerUtils.class, "*");
 
 		for (Object o : contents) {
 			writeContent(o, cb);

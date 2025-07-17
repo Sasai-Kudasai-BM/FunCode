@@ -4,7 +4,7 @@ import net.skds.jvk.StructConstructor;
 import net.skds.jvk.VkStructArray;
 import net.skds.jvk.annotation.NativeType;
 import net.skds.lib2.misc.clazz.classbuilder.*;
-import net.skds.lib2.natives.SafeLinker;
+import net.skds.lib2.natives.LinkerUtils;
 import net.skds.lib2.natives.struct.CStruct;
 import net.skds.lib2.utils.StringUtils;
 
@@ -23,12 +23,15 @@ interface IStruct extends IDataType {
 
 	@Override
 	default void generate() {
+
+		List<String> jd = VKGen.createCLayoutJavadoc(memoryLayout(), getName());
+
 		TextClassBuilder cb = new TextClassBuilder(PACKAGE, getName(), ClassType.CLASS)
 				.extend(CStruct.class)
 				.setFinal(true)
-				.setJavadoc(new CBJavadoc(VKGen.createCLayoutJavadoc(memoryLayout())))
+				.setJavadoc(new CBJavadoc(jd))
 				.checkImport(Arena.class)
-				.importStatic(SafeLinker.class, "*")
+				.importStatic(LinkerUtils.class, "*")
 				.importStatic(ValueLayout.class, "*")
 				.importStatic(MemoryLayout.class, "*");
 		// layout
@@ -253,7 +256,7 @@ interface IStruct extends IDataType {
 	}
 
 	private static void expGetter(VkgStructMember member, TextClassBuilder cb) {
-		cb.importStatic(SafeLinker.class, "*");
+		cb.importStatic(LinkerUtils.class, "*");
 		Class<?> rt = member.type.nativeType().javaType.clazz;
 		Class<?> jrt = member.type.javaType().clazz;
 		cb.addElement(new CBMethod(
@@ -275,7 +278,7 @@ interface IStruct extends IDataType {
 	}
 
 	private static void expArrayGetter(VkgStructMember member, TextClassBuilder cb, MemoryLayout subLayout) {
-		cb.importStatic(SafeLinker.class, "*");
+		cb.importStatic(LinkerUtils.class, "*");
 		cb.importStatic(ValueLayout.class, "*");
 		Class<?> rt = member.type.nativeType().javaType.clazz;
 		Class<?> jrt = member.type.javaType().clazz;
@@ -334,7 +337,7 @@ interface IStruct extends IDataType {
 		}
 		Class<?> in = member.type.nativeType().javaType.clazz;
 		Class<?> jin = member.type.javaType().clazz;
-		cb.importStatic(SafeLinker.class, "*");
+		cb.importStatic(LinkerUtils.class, "*");
 		cb.importStatic(ValueLayout.class, "*");
 		cb.addElement(new CBMethod(
 				member.name,
@@ -388,7 +391,7 @@ interface IStruct extends IDataType {
 		}
 		Class<?> in = member.type.nativeType().javaType.clazz;
 		Class<?> jin = member.type.javaType().clazz;
-		cb.importStatic(SafeLinker.class, "*");
+		cb.importStatic(LinkerUtils.class, "*");
 		cb.addElement(new CBMethod(
 				member.name,
 				Modifier.PUBLIC,

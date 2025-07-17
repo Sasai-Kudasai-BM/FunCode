@@ -3,7 +3,7 @@ package net.skds.jvk.test;
 import net.skds.lib2.benchmark.Benchmark;
 import net.skds.lib2.mat.ByteArrayPrimitiveOperations;
 import net.skds.lib2.mat.NativeByteArrayOperations;
-import net.skds.lib2.natives.SafeAnal;
+import net.skds.lib2.natives.MemoryAccess;
 import net.skds.lib2.utils.logger.SKDSLogger;
 
 import java.lang.foreign.Arena;
@@ -71,7 +71,7 @@ public class JVKBaseTest {
 			@Override
 			protected void bench() {
 				for (int i = 0; i < size; i++) {
-					SafeAnal.setInt(ms, i * 8, i);
+					MemoryAccess.setInt(ms, i * 8, i);
 				}
 			}
 		};
