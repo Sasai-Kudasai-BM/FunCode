@@ -10,9 +10,11 @@ import net.skds.jvk.generated.structs.*;
 import net.skds.jvk.vulkan.command.VkCommandBuffer;
 import net.skds.jvk.vulkan.command.VkCommandPool;
 import net.skds.jvk.vulkan.device.VkDevice;
-import net.skds.jvk.vulkan.device.VkDeviceInfo;
+import net.skds.jvk.vulkan.device.VkPhysicalDevice;
 import net.skds.jvk.vulkan.device.VkQueue;
 import net.skds.jvk.vulkan.device.VkQueueFamilyInfo;
+import net.skds.jvk.vulkan.pipeline.VkRenderPass;
+import net.skds.jvk.vulkan.pipeline.VkRenderPassBuilder;
 import net.skds.jvk.vulkan.support.VkExtension;
 import net.skds.jvk.vulkan.support.VkLayer;
 import net.skds.lib2.utils.SKDSUtils;
@@ -35,13 +37,16 @@ public class VkCore {
 	public static final List<String> EXTENSIONS = List.of("VK_KHR_surface", "VK_KHR_win32_surface");
 	public static final List<String> DEVICE_EXTENSIONS = List.of("VK_KHR_swapchain");
 
+	private final Arena arena = Arena.ofAuto();
+
+	// public
+
+	// private
+	private final VulkanParameters vkParam;
 	@Getter
 	private final Map<String, VkLayer> supportedLayers = new HashMap<>();
 	@Getter
 	private final Map<String, VkExtension> supportedExtensions = new HashMap<>();
-
-	final Arena arena = Arena.ofAuto();
-	private final VulkanParameters vkParam;
 
 	private final int layersCount;
 	private final long layersPPtr;
@@ -58,11 +63,13 @@ public class VkCore {
 	@Getter
 	long instance;
 	@Getter
-	VkDeviceInfo[] devices;
+	VkPhysicalDevice[] physicalDevices;
 	@Getter
 	final LongList deviceInstances = new LongList();
 	@Getter
 	final List<VkCommandPool> commandPools = new ArrayList<>();
+	@Getter
+	final List<VkRenderPass> renderPasses = new ArrayList<>();
 
 	final long[] pointers = allocPointers(arena, 2);
 	final long lPtr0 = pointers[0];
@@ -94,7 +101,7 @@ public class VkCore {
 		listExtensions();
 
 		initInstance();
-		this.devices = listDevices();
+		this.physicalDevices = listDevices();
 		//initCommandBuffer();
 		//initPipeline();
 		//initFramebuffer();
@@ -166,7 +173,7 @@ public class VkCore {
 
 	}
 
-	private VkDeviceInfo[] listDevices() {
+	private VkPhysicalDevice[] listDevices() {
 		Arena localArena = Arena.ofAuto();
 
 		vkCheck(vkEnumeratePhysicalDevices(instance, lPtr0, 0));
@@ -175,7 +182,7 @@ public class VkCore {
 		vkCheck(vkEnumeratePhysicalDevices(instance, lPtr0, pDevArr));
 
 		VkPhysicalDeviceProperties.Array properties = new VkPhysicalDeviceProperties.Array(arena, count);
-		VkDeviceInfo[] infoArr = new VkDeviceInfo[count];
+		VkPhysicalDevice[] infoArr = new VkPhysicalDevice[count];
 		for (int i = 0; i < count; i++) {
 			long device = getLong(pDevArr, i);
 			VkPhysicalDeviceProperties props = properties.get(i);
@@ -213,7 +220,7 @@ public class VkCore {
 				));
 			}
 
-			infoArr[i] = new VkDeviceInfo(
+			infoArr[i] = new VkPhysicalDevice(
 					device,
 					props.apiVersion(),
 					props.driverVersion(),
@@ -224,7 +231,7 @@ public class VkCore {
 					SKDSUtils.uuid(props.pipelineCacheUUIDArray()),
 					props.limits(),
 					props.sparseProperties(),
-					VkDeviceInfo.getMemInfo(memoryProperties),
+					VkPhysicalDevice.getMemInfo(memoryProperties),
 					queues,
 					extensions
 			);
@@ -251,7 +258,7 @@ public class VkCore {
 			deviceCreateInfo.enabledLayerCount(layersCount)
 					.ppEnabledLayerNames(layersPPtr);
 		}
-		VkDeviceInfo deviceInfo = devices[deviceIndex];
+		VkPhysicalDevice deviceInfo = physicalDevices[deviceIndex];
 
 		vkCheck(vkCreateDevice(deviceInfo.handle(), deviceCreateInfo.getAddress(), pAllocator, lPtr0));
 		long device = getLong(lPtr0);
@@ -275,14 +282,13 @@ public class VkCore {
 		return new VkDevice(device, queues2.toArray(new VkQueue[0]), deviceInfo);
 	}
 
-	public VkCommandPool initCommandPool(VkDevice device, VkQueueFamilyInfo queue, @NativeType("VkCommandBufferLevel") int bufferLevel, int bufferCount) {
+	public VkCommandPool initCommandPool(long deviceHandle, VkQueueFamilyInfo queue, @NativeType("VkCommandBufferLevel") int bufferLevel, int bufferCount) {
 		Arena localArena = Arena.ofAuto();
 
 		VkCommandPoolCreateInfo commandPoolCreateInfo = new VkCommandPoolCreateInfo(localArena)
 				.sType$Default()
 				.flags(VkCommandPoolCreateFlagBits.VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT)
 				.queueFamilyIndex(queue.index());
-		long deviceHandle = device.handle();
 		vkCheck(vkCreateCommandPool(deviceHandle, commandPoolCreateInfo.getAddress(), pAllocator, lPtr0));
 		long commandPool = getLong(lPtr0);
 		VkCommandBufferAllocateInfo allocateInfo = new VkCommandBufferAllocateInfo(localArena)
@@ -301,6 +307,26 @@ public class VkCore {
 		return cp;
 	}
 
+	public VkRenderPass createRenderPass(long device, VkRenderPassBuilder builder) {
+		vkCheck(vkCreateRenderPass(device, builder.build().getAddress(), pAllocator, lPtr0));
+		long rp = getLong(lPtr0);
+		VkRenderPass renderPass = new VkRenderPass(device, rp, builder);
+		this.renderPasses.add(renderPass);
+		return renderPass;
+	}
+
+	public void initFrameBuffer(long device) {
+		Arena localArena = Arena.ofAuto();
+
+		VkFramebufferCreateInfo framebufferCreateInfo = new VkFramebufferCreateInfo(localArena)
+				.sType$Default()
+				.flags(0)
+				//.
+				;
+
+		vkCheck(vkCreateFramebuffer(device, framebufferCreateInfo.getAddress(), pAllocator, lPtr0));
+	}
+
 	public void dispose() {
 		if (instance == 0) {
 			log.debug("VK Not initialized");
@@ -315,9 +341,11 @@ public class VkCore {
 		//vkDestroyFramebuffer(device, framebuffer, 0);
 		//VkKhrSwapchain.vkDestroySwapchainKHR(device, swapchain, 0);
 		//VkKhrSurface.vkDestroySurfaceKHR(instance, surface, 0);
+		for (int i = 0; i < renderPasses.size(); i++) {
+			renderPasses.get(i).vkClean(pAllocator);
+		}
 		for (int i = 0; i < commandPools.size(); i++) {
-			VkCommandPool pool = commandPools.get(i);
-			vkDestroyCommandPool(pool.device(), pool.handle(), pAllocator);
+			commandPools.get(i).vkClean(pAllocator);
 		}
 		commandPools.clear();
 		for (int i = 0; i < deviceInstances.size(); i++) {
@@ -331,7 +359,7 @@ public class VkCore {
 	}
 
 
-	private static void vkCheck(int result) {
+	public static void vkCheck(int result) {
 		if (result != VkResult.VK_SUCCESS) {
 			if (result == VkResult.VK_INCOMPLETE) {
 				log.error("[WARN] INCOMPLETE vk result");

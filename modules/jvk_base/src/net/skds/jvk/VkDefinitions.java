@@ -24,6 +24,7 @@ public class VkDefinitions {
 	public static final int VK_USE_64_BIT_PTR_DEFINES = 1;
 	public static final long VK_NULL_HANDLE = 0;
 
+
 	public static int vkMakeApiVersion(int variant, int major, int minor, int patch) {
 		return (variant << 29) | (major << 22) | (minor << 12) | patch;
 	}
@@ -43,6 +44,7 @@ public class VkDefinitions {
 	public static int vkApiVersionPatch(int version) {
 		return version & 0xFFF;
 	}
+
 
 	public static String getVersion(int version) {
 		return vkApiVersionMajor(version) + "."

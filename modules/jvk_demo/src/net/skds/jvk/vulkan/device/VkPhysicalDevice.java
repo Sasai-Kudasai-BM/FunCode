@@ -10,7 +10,7 @@ import net.skds.jvk.vulkan.support.VkExtension;
 import java.util.Map;
 import java.util.UUID;
 
-public record VkDeviceInfo(
+public record VkPhysicalDevice(
 		long handle,
 		int apiVersion,
 		int driverVersion,

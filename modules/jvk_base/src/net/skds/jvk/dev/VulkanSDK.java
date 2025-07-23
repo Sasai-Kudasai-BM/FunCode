@@ -1,6 +1,7 @@
 package net.skds.jvk.dev;
 
 import lombok.Getter;
+import net.skds.jvk.VkUtils;
 import net.skds.lib2.natives.LinkerUtils;
 import net.skds.lib2.utils.SKDSUtils;
 import net.skds.lib2.utils.exception.UnsupportedSystemException;
@@ -8,7 +9,6 @@ import net.skds.lib2.utils.exception.UnsupportedSystemException;
 import java.io.File;
 import java.lang.foreign.Arena;
 import java.lang.foreign.SymbolLookup;
-import java.lang.ref.Cleaner;
 import java.util.stream.Stream;
 
 
@@ -19,7 +19,6 @@ public class VulkanSDK {
 	@Getter
 	private final File rootDir;
 
-	final Cleaner cleaner;
 	private final Shaderc shaderc;
 
 	private VulkanSDK() {
@@ -28,7 +27,10 @@ public class VulkanSDK {
 		Arena arena = Arena.ofAuto();
 		SymbolLookup shadercLib = LinkerUtils.library(shadercBinary.getPath(), arena);
 		this.shaderc = new Shaderc(shadercLib);
-		this.cleaner = Cleaner.create();
+	}
+
+	public ShaderCompiler createCompiler(int vkVersion, int sourceLanguage) {
+		return new ShaderCompiler(shaderc, this, vkVersion, VkUtils.getMaxSpirvVersion(vkVersion), sourceLanguage);
 	}
 
 	public ShaderCompiler createCompiler(int vkVersion, int spirvVersion, int sourceLanguage) {
@@ -43,10 +45,16 @@ public class VulkanSDK {
 	}
 
 	private static File findSDKRoot() {
+
 		File f = null;
-		for (File r : File.listRoots()) {
-			f = findSDK(r, 2);
-			if (f != null) break;
+		File def = new File("C:/VulkanSDK");
+		if (def.exists()) {
+			f = def;
+		} else {
+			for (File r : File.listRoots()) {
+				f = findSDK(r, 2);
+				if (f != null) break;
+			}
 		}
 
 		if (f == null) {
