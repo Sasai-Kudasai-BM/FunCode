@@ -20,6 +20,7 @@ import java.util.*;
 import static net.skds.jvk.VkDefinitions.VK_API_NAME;
 
 class VKGen {
+	///** @noinspection DataFlowIssue*/
 
 	//https://raw.githubusercontent.com/KhronosGroup/Vulkan-Docs/refs/heads/main/xml/vk.xml
 

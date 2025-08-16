@@ -9,14 +9,12 @@ import java.lang.foreign.MemorySegment;
 
 public class ShaderCompiler {
 
-	private final VulkanSDK sdk;
 	private final Shaderc shaderc;
 
 	private final long compiler;
 	private final long options;
 
 	ShaderCompiler(Shaderc shaderc, VulkanSDK sdk, int vkVersion, int spirvVersion, int sourceLanguage) {
-		this.sdk = sdk;
 		this.shaderc = shaderc;
 
 		long compiler = this.compiler = shaderc.compilerInitialize();

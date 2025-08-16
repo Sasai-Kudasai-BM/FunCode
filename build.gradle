@@ -9,7 +9,7 @@ allprojects {
     //apply plugin: 'org.jetbrains.intellij.platform'
     java {
         toolchain {
-            languageVersion = JavaLanguageVersion.of(24)
+            languageVersion = JavaLanguageVersion.of(22)
         }
     }
     repositories {
