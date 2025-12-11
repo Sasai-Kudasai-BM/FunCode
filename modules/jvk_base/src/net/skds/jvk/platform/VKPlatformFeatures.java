@@ -6,7 +6,7 @@ import net.skds.lib2.utils.SKDSUtils;
 import java.lang.foreign.Arena;
 import java.lang.foreign.SymbolLookup;
 
-public abstract sealed class VKPlatformFeatures permits JVKWindowsPlatform {
+public abstract sealed class VKPlatformFeatures permits JVKLinuxPlatform, JVKWindowsPlatform {
 
 	private static VKPlatformFeatures instance;
 
@@ -19,6 +19,7 @@ public abstract sealed class VKPlatformFeatures permits JVKWindowsPlatform {
 		if (platform == null) {
 			platform = switch (SKDSUtils.OS_TYPE) {
 				case WINDOWS -> new JVKWindowsPlatform();
+				case LINUX -> new JVKLinuxPlatform();
 				default ->
 						throw new UnsupportedOperationException(SKDSUtils.OS_TYPE + " VKPlatformFeatures are not supported");
 			};

@@ -3,8 +3,9 @@ plugins {
 }
 version = "1.0"
 group = "net.skds"
-mainClass = "net.skds.jvk.demo.JVKDemo"
-useShadowJar = "true"
+mainClass = "net.skds.jvk.JVKInfo"
+useShadowJar = true
+useNatives = true
 
 dependencies {
 	testImplementation(implementation project(":skdslib"))
@@ -13,8 +14,8 @@ dependencies {
 }
 
 shadowJar {
-	archiveBaseName.set("JVK")
-	archiveClassifier.set("demo")
+	archiveBaseName.set("JVKInfo")
+	archiveClassifier.set("")
 	minimize()
 	dependencies {
 		include({ it.moduleGroup == "net.skds" })

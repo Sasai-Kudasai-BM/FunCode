@@ -1,7 +1,7 @@
 package net.skds.clicker;
 
 import lombok.AllArgsConstructor;
-import net.skds.lib2.io.json.codec.typed.ConfigEnumType;
+import net.skds.lib2.io.codec.typed.ConfigEnumType;
 
 import java.util.ArrayList;
 import java.util.List;

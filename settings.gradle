@@ -2,25 +2,29 @@ rootProject.name = "FunCode"
 
 
 include(
-        ":skdslib",
-        ":funcode",
-        ":jvk_base",
-        ":jvk_generator",
-        ":jvk_generated",
-        ":jvk_demo",
-        //":engine",
+		":skdslib",
+		":funcode",
+		":jvk_base",
+		":jvk_generator",
+		":jvk_generated",
+		":jvk_demo",
+		":jvk_info",
+		//":engine",
 
-        ":sosaldb-base",
-        ":sosaldb-server",
-        ":sosaldb-api",
-        ":sosaldb-gui"
+		":sosaldb-base",
+		":sosaldb-server",
+		":sosaldb-api",
+		":sosaldb-gui",
+
+		//":libuvc"
+		":libusb"
 )
 
 
 rootProject.children.each { project ->
-    String projectDirName = "modules/$project.name"
-    project.projectDir = new File(settingsDir, projectDirName)
-    assert project.projectDir.isDirectory()
-    assert project.buildFile.isFile()
-    //rootProject.includeBuild(project.projectDir)
+	String projectDirName = "modules/$project.name"
+	project.projectDir = new File(settingsDir, projectDirName)
+	assert project.projectDir.isDirectory()
+	assert project.buildFile.isFile()
+	//rootProject.includeBuild(project.projectDir)
 }

@@ -1,14 +1,14 @@
 package net.skds.clicker;
 
-import net.skds.lib2.io.json.JsonPostDeserializeCall;
-import net.skds.lib2.io.json.JsonUtils;
+import net.skds.lib2.io.codec.PostDeserializeCall;
+import net.skds.lib2.io.codec.SosisonUtils;
 import net.skds.lib2.utils.ThreadUtils;
 
 import java.nio.file.Path;
 import java.util.LinkedList;
 
 @SuppressWarnings("FieldMayBeFinal")
-public class Options implements JsonPostDeserializeCall, Cloneable {
+public class Options implements PostDeserializeCall, Cloneable {
 
 	private static final Path path = Path.of("clicker-options.json");
 	private static Options instance;
@@ -48,14 +48,14 @@ public class Options implements JsonPostDeserializeCall, Cloneable {
 	public void save() {
 		if (dirty) {
 			synchronized (path) {
-				JsonUtils.saveJson(path, this);
+				SosisonUtils.saveJson(path, this);
 				dirty = false;
 			}
 		}
 	}
 
 	@Override
-	public void postDeserializedJson() {
+	public void postDeserialized() {
 		for (Script preset : scripts) {
 			preset.options = this;
 		}
@@ -82,10 +82,10 @@ public class Options implements JsonPostDeserializeCall, Cloneable {
 	public static Options getInstance() {
 		Options options = instance;
 		if (options == null) {
-			options = JsonUtils.readJson(path, Options.class);
+			options = SosisonUtils.readJson(path, Options.class);
 			if (options == null) {
 				options = new Options();
-				JsonUtils.saveJson(path, options);
+				SosisonUtils.saveJson(path, options);
 			}
 			instance = options;
 		}

@@ -1,15 +1,8 @@
 package net.skds.sosaldb.server;
 
-import net.skds.lib2.network.ChannelConnection;
-import net.skds.lib2.network.TCPServer;
-import net.skds.lib2.utils.SKDSByteBuf;
-
-import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.nio.channels.SocketChannel;
-
 public class SDbNetServer {
 
+	/*
 	private final TCPServer tcpServer = new TCPServer("SDbNetServer", this::createCC);
 
 	public void start(int port) {
@@ -36,4 +29,5 @@ public class SDbNetServer {
 			}
 		};
 	}
+	 */
 }

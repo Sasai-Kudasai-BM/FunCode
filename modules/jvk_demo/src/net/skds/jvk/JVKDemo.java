@@ -5,12 +5,10 @@ import net.skds.jvk.vulkan.WavesDemo;
 import net.skds.jvk.vulkan.device.VkPhysicalDevice;
 import net.skds.lib2.utils.logger.SKDSLogger;
 
-import java.io.IOException;
-
 @CustomLog
 public class JVKDemo {
 
-	public static void main(String[] args) throws IOException {
+	static void main() {
 		SKDSLogger.replaceOuts();
 		WavesDemo wavesDemo = new WavesDemo();
 

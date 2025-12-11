@@ -4,40 +4,43 @@
 version = project.version
 
 allprojects {
-    apply plugin: 'java'
-    apply plugin: 'idea'
-    //apply plugin: 'org.jetbrains.intellij.platform'
-    java {
-        toolchain {
-            languageVersion = JavaLanguageVersion.of(22)
-        }
-    }
-    repositories {
-        mavenCentral()
-    }
+	apply plugin: 'java'
+	apply plugin: 'idea'
+	//apply plugin: 'org.jetbrains.intellij.platform'
+	java {
+		toolchain {
+			languageVersion = JavaLanguageVersion.of(25)
+		}
+	}
+	repositories {
+		mavenCentral()
+	}
 }
 
 subprojects {
-    //build {
-    //}
-    sourceSets {
-        main {
-            java.srcDir 'src'
-            resources.srcDir 'resources'
-        }
-        test {
-            java.srcDir 'test_src'
-            resources.srcDir 'test_resources'
-        }
-    }
-    dependencies {
-        //implementation("com.google.code.gson:gson:2.10.1")
-        //implementation("it.unimi.dsi:fastutil:8.5.6")
-        compileOnly 'org.projectlombok:lombok:1.18.38'
-        annotationProcessor 'org.projectlombok:lombok:1.18.38'
-        testCompileOnly 'org.projectlombok:lombok:1.18.38'
-        testAnnotationProcessor 'org.projectlombok:lombok:1.18.38'
-    }
+	//build {
+	//}
+	sourceSets {
+		main {
+			java.srcDir 'src'
+			resources.srcDir 'resources'
+		}
+		test {
+			java.srcDir 'test_src'
+			resources.srcDir 'test_resources'
+		}
+	}
+	dependencies {
+		//implementation("com.google.code.gson:gson:2.10.1")
+		//implementation("it.unimi.dsi:fastutil:8.5.6")
+		compileOnly 'org.projectlombok:lombok:1.18.40'
+		annotationProcessor 'org.projectlombok:lombok:1.18.40'
+		testCompileOnly 'org.projectlombok:lombok:1.18.40'
+		testAnnotationProcessor 'org.projectlombok:lombok:1.18.40'
+	}
+	test {
+		exclude '**'
+	}
 }
 
 //sourceSets {
@@ -52,36 +55,41 @@ subprojects {
 //dependsOn "build"
 
 tasks.register('buildAll') {
-    group "custom"
-    dependsOn "clean", subprojects.tasks.build
-    subprojects.forEach {
-        Project p = it;
-        p.tasks.jar {
-            destinationDirectory.set(file("out/" + p.name))
-        }
-        if (!p.useShadowJar) {
-            p.tasks.jar {
-                manifest {
-                    attributes(
-                            "Main-Class": p.property("mainClass"),
-                            //'Class-Path': configurations.runtimeClasspath.files.collect { "lib/" + it.name }.join(' ')
-                            'Class-Path': p.configurations.runtimeClasspath.collect { "lib/" + it.name }.join(' ')
-                    )
-                }
-            }.doLast {
-                copy {
-                    from p.configurations.runtimeClasspath
-                    into "out/" + p.name + "/lib"
-                }
-            }
-        } else {
-            manifest {
-                attributes(
-                        "Main-Class": p.property("mainClass")
-                )
-            }
-        }
-    }
+	group "custom"
+	dependsOn "clean", subprojects.tasks.build
+	subprojects.forEach {
+		Project p = it;
+		p.tasks.jar {
+			destinationDirectory.set(file("out/" + p.name))
+		}
+		if (!p.useShadowJar) {
+			p.tasks.jar {
+				manifest {
+					attributes(
+							"Main-Class": p.property("mainClass"),
+							//'Class-Path': configurations.runtimeClasspath.files.collect { "lib/" + it.name }.join(' ')
+							'Class-Path': p.configurations.runtimeClasspath.collect { "lib/" + it.name }.join(' ')
+					)
+				}
+			}.doLast {
+				copy {
+					from p.configurations.runtimeClasspath
+					into "out/" + p.name + "/lib"
+				}
+			}
+		} else {
+			p.tasks.jar {
+				manifest {
+					attributes(
+							"Main-Class": p.property("mainClass")
+					)
+				}
+			}
+		}
+		if (p.useNatives) {
+			p.tasks.jar.manifest.attributes.put("Enable-Native-Access", "ALL-UNNAMED")
+		}
+	}
 }
 
 //jar {

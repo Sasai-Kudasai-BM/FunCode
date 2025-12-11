@@ -5,10 +5,7 @@ group = "net.skds"
 dependencies {
 
     implementation project(':skdslib')
-
+    //implementation 'com.github.sarxos:webcam-capture:0.3.12'
+    //implementation fileTree(new File(projectDir, "lib"))
 }
 
-
-compileJava {
-
-}

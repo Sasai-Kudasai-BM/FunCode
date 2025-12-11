@@ -9,8 +9,9 @@ import net.skds.jvk.dev.Shaderc;
 import net.skds.jvk.dev.VulkanSDK;
 import net.skds.jvk.shader.ShaderType;
 import net.skds.jvk.shader.SpirvPointer;
-import net.skds.lib2.io.json.JsonUtils;
+import net.skds.lib2.io.codec.SosisonUtils;
 import net.skds.lib2.natives.MemoryAccess;
+import net.skds.lib2.natives.NativeFileUtils;
 import net.skds.lib2.utils.SKDSFiles;
 import net.skds.lib2.utils.SKDSUtils;
 import net.skds.lib2.utils.StringUtils;
@@ -58,7 +59,7 @@ public class ShaderManager {
 		ShaderCache cache = this.cache;
 		log.info("Loading shader cache");
 		if (cacheFile.exists()) {
-			cache = JsonUtils.readJson(cacheFile, ShaderCache.class);
+			cache = SosisonUtils.readJson(cacheFile, ShaderCache.class);
 		}
 		if (cache == null) {
 			cache = new ShaderCache();
@@ -99,7 +100,7 @@ public class ShaderManager {
 					}
 				}
 				try {
-					MemorySegment segment = SKDSFiles.readToNativeMemory(dst);
+					MemorySegment segment = NativeFileUtils.readToNativeMemory(dst);
 					sce.spirv = new SpirvPointer(segment);
 				} catch (IOException ex) {
 					throw new RuntimeException(ex);
@@ -128,7 +129,7 @@ public class ShaderManager {
 			}
 		}
 		if (dirty) {
-			JsonUtils.saveJson(cacheFile, cache);
+			SosisonUtils.saveJson(cacheFile, cache);
 		}
 	}
 
@@ -153,7 +154,7 @@ public class ShaderManager {
 			sce.spirv = shader;
 			e.cache.cacheEntryMap.put(e.key, sce);
 			MemoryAccess.getByteArray(MemoryAccess.ALL_MEMORY, shader.address(), shader.size());
-			SKDSFiles.writeFromNativeMemory(e.dst().toPath(), shader.address(), shader.size());
+			NativeFileUtils.writeFromNativeMemory(e.dst().toPath(), shader.address(), shader.size());
 		}
 	}
 

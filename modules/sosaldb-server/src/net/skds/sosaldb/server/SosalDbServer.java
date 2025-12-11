@@ -2,7 +2,7 @@ package net.skds.sosaldb.server;
 
 import lombok.CustomLog;
 import lombok.Getter;
-import net.skds.lib2.io.json.JsonUtils;
+import net.skds.lib2.io.codec.SosisonUtils;
 import net.skds.lib2.utils.Console;
 import net.skds.lib2.utils.SKDSUtils;
 import net.skds.lib2.utils.Types;
@@ -37,22 +37,22 @@ public class SosalDbServer {
 	public void start() {
 		SKDSLogger.replaceOuts();
 		console.start();
-		Config cfg = JsonUtils.readJson(cfgFile, Config.class);
+		Config cfg = SosisonUtils.readJson(cfgFile, Config.class);
 		if (cfg == null) {
 			cfg = new Config();
-			JsonUtils.saveJson(cfgFile, cfg);
+			SosisonUtils.saveJson(cfgFile, cfg);
 		}
 		this.config = cfg;
 
-		List<UserInfo> urs = JsonUtils.readJson(cfg.getUsersFile(), Types.parameterizedType(List.class, UserInfo.class));
+		List<UserInfo> urs = SosisonUtils.readJson(cfg.getUsersFile(), Types.parameterizedType(List.class, UserInfo.class));
 		if (urs == null) {
 			urs = List.of(new UserInfo("admin", "admin"));
-			JsonUtils.saveJson(cfg.getUsersFile(), urs);
+			SosisonUtils.saveJson(cfg.getUsersFile(), urs);
 		}
-		List<DatabaseInfo> dbs = JsonUtils.readJson(cfg.getDatabasesFile(), Types.parameterizedType(List.class, DatabaseInfo.class));
+		List<DatabaseInfo> dbs = SosisonUtils.readJson(cfg.getDatabasesFile(), Types.parameterizedType(List.class, DatabaseInfo.class));
 		if (dbs == null) {
 			dbs = List.of();
-			JsonUtils.saveJson(cfg.getDatabasesFile(), dbs);
+			SosisonUtils.saveJson(cfg.getDatabasesFile(), dbs);
 		}
 
 		Map<String, UserInfo> users = new HashMap<>();
@@ -66,7 +66,7 @@ public class SosalDbServer {
 		this.users = users;
 		this.databases = databases;
 
-		this.netServer.start(cfg.getPort());
+		//this.netServer.start(cfg.getPort());
 	}
 
 	public static void main(String[] args) {
